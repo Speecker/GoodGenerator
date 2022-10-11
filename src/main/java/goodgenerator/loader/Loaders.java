@@ -12,6 +12,7 @@ import goodgenerator.blocks.tileEntity.GTMetaTileEntity.DieselGenerator;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronAccelerator;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronSensor;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.YOTTAHatch;
+import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_Cyclotron;
 import goodgenerator.client.render.BlockRenderHandler;
 import goodgenerator.crossmod.LoadedList;
 import goodgenerator.crossmod.ic2.CropsLoader;
@@ -35,6 +36,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class Loaders {
 
     public static final int IDOffset = 32001;
@@ -194,6 +196,7 @@ public class Loaders {
     public static ItemStack LES;
     public static ItemStack CT;
     public static ItemStack[] LFC = new ItemStack[5];
+    public static ItemStack Cyclotron;
 
     public static ItemStack[] NeutronAccelerators = new ItemStack[9];
     public static ItemStack[] Generator_Diesel = new ItemStack[2];
@@ -204,54 +207,59 @@ public class Loaders {
         Loaders.MAR = new MultiNqGenerator(12732, "NaG", "Large Naquadah Reactor").getStackForm(1L);
         Loaders.FRF = new FuelRefineFactory(16999, "FRF", "Naquadah Fuel Refinery").getStackForm(1L);
         Loaders.UCFE = new UniversalChemicalFuelEngine(
-                        IDOffset, "UniversalChemicalFuelEngine", "Universal Chemical Fuel Engine")
-                .getStackForm(1L);
+            IDOffset, "UniversalChemicalFuelEngine", "Universal Chemical Fuel Engine")
+            .getStackForm(1L);
         for (int i = 0; i < 9; i++) {
             Loaders.NeutronAccelerators[i] = new NeutronAccelerator(
-                            IDOffset + 2 + i,
-                            "Neutron Accelerator " + GT_Values.VN[i],
-                            "Neutron Accelerator " + GT_Values.VN[i],
-                            i)
-                    .getStackForm(1L);
+                IDOffset + 2 + i,
+                "Neutron Accelerator " + GT_Values.VN[i],
+                "Neutron Accelerator " + GT_Values.VN[i],
+                i)
+                .getStackForm(1L);
         }
         Loaders.NS = new NeutronSensor(IDOffset + 11, "Neutron Sensor", "Neutron Sensor", 5).getStackForm(1L);
         Loaders.NA = new NeutronActivator(IDOffset + 12, "NeutronActivator", "Neutron Activator").getStackForm(1L);
         Loaders.YFT = new YottaFluidTank(IDOffset + 13, "YottaFluidTank", "YOTTank").getStackForm(1L);
         Loaders.YFH = new YOTTAHatch(IDOffset + 14, "YottaFluidTankHatch", "YOTHatch", 5).getStackForm(1L);
         Loaders.SCTurbine = new SupercriticalFluidTurbine(
-                        IDOffset + 15, "SupercriticalSteamTurbine", "SC Steam Turbine")
-                .getStackForm(1L);
+            IDOffset + 15, "SupercriticalSteamTurbine", "SC Steam Turbine")
+            .getStackForm(1L);
         Loaders.XHE = new ExtremeHeatExchanger(IDOffset + 16, "ExtremeHeatExchanger", "Extreme Heat Exchanger")
-                .getStackForm(1L);
+            .getStackForm(1L);
         Loaders.PA = new PreciseAssembler(IDOffset + 17, "PreciseAssembler", "Precise Auto-Assembler MT-3662")
-                .getStackForm(1L);
+            .getStackForm(1L);
         Loaders.LFC[0] = new LargeFusionComputer1(
-                        IDOffset + 18, "LargeFusionComputer1", "Compact Fusion Computer MK-I Prototype")
-                .getStackForm(1);
+            IDOffset + 18, "LargeFusionComputer1", "Compact Fusion Computer MK-I Prototype")
+            .getStackForm(1);
         Loaders.LFC[1] = new LargeFusionComputer2(
-                        IDOffset + 19, "LargeFusionComputer2", "Compact Fusion Computer MK-II")
-                .getStackForm(1L);
+            IDOffset + 19, "LargeFusionComputer2", "Compact Fusion Computer MK-II")
+            .getStackForm(1L);
         Loaders.LFC[2] = new LargeFusionComputer3(
-                        IDOffset + 20, "LargeFusionComputer3", "Compact Fusion Computer MK-III")
-                .getStackForm(1L);
+            IDOffset + 20, "LargeFusionComputer3", "Compact Fusion Computer MK-III")
+            .getStackForm(1L);
         if (LoadedList.GTPP) {
             Loaders.LFC[3] = new LargeFusionComputer4(
-                            IDOffset + 21, "LargeFusionComputer4", "Compact Fusion Computer MK-IV Prototype")
-                    .getStackForm(1L);
+                IDOffset + 21, "LargeFusionComputer4", "Compact Fusion Computer MK-IV Prototype")
+                .getStackForm(1L);
             Loaders.LFC[4] = new LargeFusionComputer5(
-                            IDOffset + 22, "LargeFusionComputer5", "Compact Fusion Computer MK-V")
-                    .getStackForm(1L);
+                IDOffset + 22, "LargeFusionComputer5", "Compact Fusion Computer MK-V")
+                .getStackForm(1L);
         }
         Loaders.Generator_Diesel[0] = new DieselGenerator(
-                        1113, "basicgenerator.diesel.tier.04", "Turbo Supercharging Combustion Generator", 4)
-                .getStackForm(1L);
+            1113, "basicgenerator.diesel.tier.04", "Turbo Supercharging Combustion Generator", 4)
+            .getStackForm(1L);
         Loaders.Generator_Diesel[1] = new DieselGenerator(
-                        1114, "basicgenerator.diesel.tier.05", "Ultimate Chemical Energy Releaser", 5)
-                .getStackForm(1L);
+            1114, "basicgenerator.diesel.tier.05", "Ultimate Chemical Energy Releaser", 5)
+            .getStackForm(1L);
         Loaders.CT = new CoolantTower(IDOffset + 24, "CoolantTower", "Coolant Tower").getStackForm(1L);
         CrackRecipeAdder.registerPipe(30995, MyMaterial.incoloy903, 15000, 8000, true);
         CrackRecipeAdder.registerWire(32749, MyMaterial.signalium, 12, 131072, 16, true);
         CrackRecipeAdder.registerWire(32737, MyMaterial.lumiium, 8, 524288, 64, true);
+        if (LoadedList.GTPP) {
+            Loaders.Cyclotron = new GT_MetaTileEntity_Cyclotron(
+                IDOffset + 26, "GT_MetaTileEntity_Cyclotron", "Dynamic Cyclotron")
+                .getStackForm(1L);
+        }
     }
 
     public static void Register() {
