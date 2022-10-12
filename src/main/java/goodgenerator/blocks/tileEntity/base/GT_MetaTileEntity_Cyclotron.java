@@ -46,6 +46,7 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.*;
 import static java.lang.Math.*;
 
+@SuppressWarnings("SpellCheckingInspection")
 public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron> implements ISurvivalConstructable {
 
     private static final int min_input_hatch = 0;
@@ -117,8 +118,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         return result;
     }
 
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] CORNER_SEGMENT_0 = new String[][] {{
+    private static final String[][] CORNER_SEGMENT_0 = new String[][] {{ // Front right of controller.
         "        ",
         "        ",
         "        ",
@@ -200,7 +200,9 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         "        "
     }};
 
-    private static final String[][] CORNER_SEGMENT_1 = new String[][] {{
+
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String[][] CORNER_SEGMENT_1 = new String[][] {{ // Front left of controller
         "         ",
         "       CC",
         "       CC",
@@ -294,6 +296,85 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         },
     };
 
+
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String[][] AWAY_RING_SEGMENT = new String[][] {{
+        "  CCC  ",
+        " CZZZC ",
+        "CZXXXZC",
+        "CZXXXZC",
+        "CZXXXZC",
+        " CZZZC ",
+        "  CCC  "
+    }};
+
+
+    @SuppressWarnings("SpellCheckingInspection")
+    private static final String[][] AWAY_MID_SEGMENT = new String[][] {{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        "     "
+    },{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        "     "
+    },{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        " F F "
+    },{
+        " CGC ",
+        "CWWWC",
+        "GWXWG",
+        "CWWWC",
+        " CGC ",
+        "     "
+    },{
+        " CGC ",
+        "CWRWC",
+        "GRXRG",
+        "CWRWC",
+        " CGC ",
+        "     "
+    },{
+        " CGC ",
+        "CWWWC",
+        "GWXWG",
+        "CWWWC",
+        " CGC ",
+        "     "
+    },{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        " F F "
+    },{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        "     "
+    },{
+        " CCC ",
+        "CWWWC",
+        "CWXWC",
+        "CWWWC",
+        " CCC ",
+        "     "
+    }};
+
     @SuppressWarnings("SpellCheckingInspection")
     private static final String[][] CONTROLLER_SEGMENT = new String[][] {{
         "         ",
@@ -374,7 +455,9 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     protected static final String CORNER_SEGMENT_IDENTITY_3 = "CORNER_IDENTITY_3";
     protected static final String CONTROLLER_SEGMENT_IDENTITY = "CONTROLLER_SEGMENT";
     protected static final String MID_SEGMENT_IDENTITY = "MID_SEGMENT";
+    protected static final String AWAY_MID_SEGMENT_IDENTITY_1 = "AWAY_MID_SEGMENT";
     protected static final String RING_SEGMENT_IDENTITY = "RING_SEGMENT";
+    protected static final String AWAY_RING_SEGMENT_IDENTITY = "AWAY_RING_SEGMENT";
 
     private int CompactFusionCoilMetadata = -1;
 
@@ -383,6 +466,8 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
             .addShape(CONTROLLER_SEGMENT_IDENTITY, CONTROLLER_SEGMENT)
             .addShape(MID_SEGMENT_IDENTITY, MID_SEGMENT)
             .addShape(RING_SEGMENT_IDENTITY, RING_SEGMENT)
+            .addShape(AWAY_RING_SEGMENT_IDENTITY, AWAY_RING_SEGMENT)
+            .addShape(AWAY_MID_SEGMENT_IDENTITY_1, AWAY_MID_SEGMENT)
             .addShape(CORNER_SEGMENT_IDENTITY_0, CORNER_SEGMENT_0)
             .addShape(CORNER_SEGMENT_IDENTITY_1, CORNER_SEGMENT_1)
             .addShape(CORNER_SEGMENT_IDENTITY_2, CORNER_SEGMENT_2)
@@ -787,28 +872,52 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         buildPiece(CONTROLLER_SEGMENT_IDENTITY, stackSize, hintsOnly, 4, 3, 1);
-        int tLength = Math.min(stackSize.stackSize + 1, 16);
-        for (int i = 1; i < tLength; i++) {
+
+        int tLength = (stackSize.stackSize - 1);
+
+        for (int i = 1; i < tLength + 1; i++) {
             buildPiece(MID_SEGMENT_IDENTITY, stackSize, hintsOnly, 4 - i * 10, 3, 0);
             buildPiece(MID_SEGMENT_IDENTITY, stackSize, hintsOnly, 4 + i * 10, 3, 0);
         }
-        int a = 5;
-        int b = -5;
-        for (int i = 1; i < tLength + 1; i++) {
-            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, a - i * 10, 3, 1);
-            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, b + i * 10, 3, 1); // a = 5
+
+        if (tLength == 0) {
+            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 5, 3, 1);
+            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, -5, 3, 1);
+        } else {
+            for (int i = 0; i < tLength + 2; i++) {
+                buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 5 - i * 10, 3, 1);
+                buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, -5 + i * 10, 3, 1);
+            }
         }
 
-        int x_0 = -6 -10 * stackSize.stackSize; // -4 - 11
-        int y_0 = 3; // 2
-        int z_0 = 1;
-        buildPiece(CORNER_SEGMENT_IDENTITY_0, stackSize, hintsOnly, x_0, y_0, z_0);
+        buildPiece(CORNER_SEGMENT_IDENTITY_0, stackSize, hintsOnly,
+            -6 -10 * tLength,
+            3,
+            1);
 
-        int x_1 = 14 + 10 * stackSize.stackSize; // -4 - 11
-        int y_1 = 2;
-        int z_1 = 0;
-        buildPiece(CORNER_SEGMENT_IDENTITY_1, stackSize, hintsOnly, x_1, y_1, z_1);
+        buildPiece(CORNER_SEGMENT_IDENTITY_1, stackSize, hintsOnly,
+            14 + 10 * tLength,
+            2,
+            0);
 
+        // LEFT
+        for (int i = 0; i < tLength * 2 + 1; i++) {
+            buildPiece(AWAY_MID_SEGMENT_IDENTITY_1, stackSize, hintsOnly, 14 + 10 * tLength, 2, -10 - 10 * i);
+        }
+
+        for(int i = 0; i < 2 * tLength + 2; i++) {
+            buildPiece(AWAY_RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 15 + 10 * tLength, 3, -9 - 10 * i);
+        }
+
+        // RIGHT
+        for (int i = 0; i < tLength * 2 + 1; i++) {
+            buildPiece(AWAY_MID_SEGMENT_IDENTITY_1, stackSize, hintsOnly, -9 - 10 * tLength, 2, -10 - 10 * i);
+        }
+
+        int x = -9 - 10 * tLength;
+        for(int i = 0; i < 2 * tLength + 2; i++) {
+            buildPiece(AWAY_RING_SEGMENT_IDENTITY, stackSize, hintsOnly, x, 3, -9 - 10 * i);
+        }
     }
 
     @Override
