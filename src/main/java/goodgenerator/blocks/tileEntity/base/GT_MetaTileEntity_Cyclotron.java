@@ -2,9 +2,9 @@ package goodgenerator.blocks.tileEntity.base;
 
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
-import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import goodgenerator.util.cyclotron.*;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
 import gregtech.api.enums.Materials;
@@ -14,27 +14,21 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
-import gregtech.api.objects.GT_ChunkManager;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ExoticEnergyInputHelper;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_AbstractMultiFurnace;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
@@ -49,395 +43,10 @@ import static java.lang.Math.*;
 @SuppressWarnings("SpellCheckingInspection")
 public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron> implements ISurvivalConstructable {
 
-    private static final int min_input_hatch = 0;
-    private static final int max_input_hatch = 6;
-    private static final int min_output_hatch = 0;
-    private static final int max_output_hatch = 2;
-    private static final int min_input_bus = 0;
-    private static final int max_input_bus = 6;
-    private static final int min_output_bus = 0;
-    private static final int max_output_bus = 1;
-
     private static final double log4 = Math.log(4);
-
-    // Current discount rate. 1 = 0%, 0 = 100%.
-    private double discount = 1;
-    private int mHeatingCapacity = 0;
-    private long running_time = 0;
-    // Custom long EU per tick value given that mEUt is an int. Required to overclock beyond MAX voltage.
-    private long EU_per_tick = 0;
-
-    private static final String[][] MID_SEGMENT = new String[][] {
-        {
-            "         ",
-            "         ",
-            "CCCCCCCCC",
-            "CCCGGGCCC",
-            "CCCCCCCCC",
-            "         ",
-            "         ",
-        },
-        {
-            "         ", "CCCCCCCCC", "WWWWWWWWW", "WWWWRWWWW", "WWWWWWWWW", "CCCCCCCCC", "  F   F  ",
-        },
-        {
-            "         ", "CCCGGGCCC", "WWWWRWWWW", "XXXXXXXXX", "WWWWRWWWW", "CCCGGGCCC", "         ",
-        },
-        {
-            "         ", "CCCCCCCCC", "WWWWWWWWW", "WWWWRWWWW", "WWWWWWWWW", "CCCCCCCCC", "  F   F  ",
-        },
-        {
-            "         ", "         ", "CCCCCCCCC", "CCCGGGCCC", "CCCCCCCCC", "         ", "         ",
-        }
-    };
-
-    static String[][] rotateCW(String[][] mat) {
-        String[][] out = new String[mat.length][mat[0].length];
-
-        int i = 0;
-        for (String[] string: mat) {
-            out[i] = rotate(string);
-            i++;
-        }
-        return out;
-    }
-
-    public static String[] rotate(String [] toRotate)
-    {
-        String [] returnChar = new String[toRotate[0].length()];
-        String [] result = new String[toRotate[0].length()];
-        Arrays.fill(returnChar, "");
-
-        for (String s : toRotate)
-            for (int cols = 0; cols < s.length(); cols++)
-                returnChar[cols] = returnChar[cols] + s.charAt(cols);
-
-        for(int i = 0; i < returnChar.length; i++)
-            result[i] =  new StringBuffer(returnChar[i]).reverse().toString();
-
-        return result;
-    }
-
-    private static final String[][] CORNER_SEGMENT_0 = new String[][] {{ // Front right of controller.
-        "        ",
-        "        ",
-        "        ",
-        "        ",
-        "        ",
-        "        ",
-        "        "
-    },{
-        "        ",
-        "        ",
-        "C       ",
-        "C       ",
-        "C       ",
-        "        ",
-        "        "
-    },{
-        "        ",
-        "C       ",
-        "WCC     ",
-        "WCC     ",
-        "WCC     ",
-        "C       ",
-        "        "
-    },{
-        "        ",
-        "CCC     ",
-        "WWWC    ",
-        "XWWC    ",
-        "WWWC    ",
-        "CCCF    ",
-        "   F    "
-    },{
-        "        ",
-        "CCCC    ",
-        "WWWWC   ",
-        "WXXWC   ",
-        "WWWWC   ",
-        "CCCC    ",
-        "        "
-    },{
-        "        ",
-        " CCCC   ",
-        "CWWWWC  ",
-        "CWWXWC  ",
-        "CWWWWC  ",
-        "FCCCCF  ",
-        "F    F  "
-    },{
-        "        ",
-        "   CCC  ",
-        " CCWWWC ",
-        " CCWXWC ",
-        " CCWWWC ",
-        "   CCC  ",
-        "        "
-    },{
-        "        ",
-        "   CCC  ",
-        "  CWWWC ",
-        "  CWXWC ",
-        "  CWWWC ",
-        "   CCC  ",
-        "        "
-    },{
-        "        ",
-        "    CCC ",
-        "   CWWWC",
-        "   CWXWC",
-        "   CWWWC",
-        "   FCCC ",
-        "   F    "
-    },{
-        "        ",
-        "    CCC ",
-        "   CWWWC",
-        "   CWXWC",
-        "   CWWWC",
-        "    CCC ",
-        "        "
-    }};
-
-
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] CORNER_SEGMENT_1 = new String[][] {{ // Front left of controller
-        "         ",
-        "       CC",
-        "       CC",
-        "       CC",
-        "         ",
-        "         "
-    },{
-        "       CC",
-        "     CCWW",
-        "     CCWW",
-        "     CCWW",
-        "       CC",
-        "         "
-    },{
-        "     CCCC",
-        "    CWWWW",
-        "    CWWXX",
-        "    CWWWW",
-        "    FCCCC",
-        "    F    "
-    },{
-        "    CCCCC",
-        "   CWWWWW",
-        "   CWXXWW",
-        "   CWWWWW",
-        "    CCCCC",
-        "         "
-    },{
-        "   CCCC  ",
-        "  CWWWWCC",
-        "  CWXWWCC",
-        "  CWWWWCC",
-        "  FCCCCF ",
-        "  F    F "
-    },{
-        "  CCC    ",
-        " CWWWCC  ",
-        " CWXWCC  ",
-        " CWWWCC  ",
-        "  CCC    ",
-        "         "
-    },{
-        "  CCC    ",
-        " CWWWC   ",
-        " CWXWC   ",
-        " CWWWC   ",
-        "  CCC    ",
-        "         "
-    },{
-        " CCC     ",
-        "CWWWC    ",
-        "CWXWC    ",
-        "CWWWC    ",
-        " CCCF    ",
-        "    F    "
-    },{
-        " CCC     ",
-        "CWWWC    ",
-        "CWXWC    ",
-        "CWWWC    ",
-        " CCC     ",
-        "         "
-    }};
-
-
-    private static final String[][] CORNER_SEGMENT_2 = rotateCW(CORNER_SEGMENT_1);
-    private static final String[][] CORNER_SEGMENT_3 = rotateCW(CORNER_SEGMENT_2);
-
-
-    private static final String[][] RING_SEGMENT = new String[][] {
-        {
-            " ", " ", "C", "C", "C", " ", " ",
-        },
-        {
-            " ", "C", "Z", "Z", "Z", "C", " ",
-        },
-        {
-            "C", "Z", "X", "X", "X", "Z", "C",
-        },
-        {
-            "C", "Z", "X", "X", "X", "Z", "C",
-        },
-        {
-            "C", "Z", "X", "X", "X", "Z", "C",
-        },
-        {
-            " ", "C", "Z", "Z", "Z", "C", " ",
-        },
-        {
-            " ", " ", "C", "C", "C", " ", " ",
-        },
-    };
-
-
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] AWAY_RING_SEGMENT = new String[][] {{
-        "  CCC  ",
-        " CZZZC ",
-        "CZXXXZC",
-        "CZXXXZC",
-        "CZXXXZC",
-        " CZZZC ",
-        "  CCC  "
-    }};
-
-
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] AWAY_MID_SEGMENT = new String[][] {{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        "     "
-    },{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        "     "
-    },{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        " F F "
-    },{
-        " CGC ",
-        "CWWWC",
-        "GWXWG",
-        "CWWWC",
-        " CGC ",
-        "     "
-    },{
-        " CGC ",
-        "CWRWC",
-        "GRXRG",
-        "CWRWC",
-        " CGC ",
-        "     "
-    },{
-        " CGC ",
-        "CWWWC",
-        "GWXWG",
-        "CWWWC",
-        " CGC ",
-        "     "
-    },{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        " F F "
-    },{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        "     "
-    },{
-        " CCC ",
-        "CWWWC",
-        "CWXWC",
-        "CWWWC",
-        " CCC ",
-        "     "
-    }};
-
-    @SuppressWarnings("SpellCheckingInspection")
-    private static final String[][] CONTROLLER_SEGMENT = new String[][] {{
-        "         ",
-        "         ",
-        "  C   C  ",
-        "  C   C  ",
-        "  C   C  ",
-        "         ",
-        "         "
-    },{
-        "         ",
-        "  CCCCC  ",
-        "CCCIIICCC",
-        "CCCG~GCCC",
-        "CCCIIICCC",
-        " FCCCCCF ",
-        " F     F "
-    },{
-        "  C   C  ",
-        "CCCIIICCC",
-        "WWWWWWWWW",
-        "WWWXXXWWW",
-        "WWWWWWWWW",
-        "CCCIIICCC",
-        "  C   C  "
-    },{
-        "  C   C  ",
-        "CCCGGGCCC",
-        "WWWXXXWWW",
-        "XXXXXXXXX",
-        "WWWXXXWWW",
-        "CCCGGGCCC",
-        "  C   C  "
-    },{
-        "  C   C  ",
-        "CCCIIICCC",
-        "WWWWWWWWW",
-        "WWWXXXWWW",
-        "WWWWWWWWW",
-        "CCCIIICCC",
-        "  C   C  "
-    },{
-        "         ",
-        "  CCCCC  ",
-        "CCCIIICCC",
-        "CCCGGGCCC",
-        "CCCIIICCC",
-        " FCCCCCF ",
-        " F     F "
-    },{
-        "         ",
-        "         ",
-        "  C   C  ",
-        "  C   C  ",
-        "  C   C  ",
-        "         ",
-        "         "
-    }};
 
     protected static final int DIM_INJECTION_CASING = 13;
     protected static final int DIM_BRIDGE_CASING = 14;
-
-    private boolean isMultiChunkloaded = true;
 
     private HeatingCoilLevel mCoilLevel;
 
@@ -449,31 +58,15 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         mCoilLevel = aCoilLevel;
     }
 
-    protected static final String CORNER_SEGMENT_IDENTITY_0 = "CORNER_IDENTITY_0";
-    protected static final String CORNER_SEGMENT_IDENTITY_1 = "CORNER_IDENTITY_1";
-    protected static final String CORNER_SEGMENT_IDENTITY_2 = "CORNER_IDENTITY_2";
-    protected static final String CORNER_SEGMENT_IDENTITY_3 = "CORNER_IDENTITY_3";
-    protected static final String CONTROLLER_SEGMENT_IDENTITY = "CONTROLLER_SEGMENT";
-    protected static final String MID_SEGMENT_IDENTITY = "MID_SEGMENT";
-    protected static final String AWAY_MID_SEGMENT_IDENTITY_1 = "AWAY_MID_SEGMENT";
-    protected static final String RING_SEGMENT_IDENTITY = "RING_SEGMENT";
-    protected static final String AWAY_RING_SEGMENT_IDENTITY = "AWAY_RING_SEGMENT";
-
     private int CompactFusionCoilMetadata = -1;
+
+    protected static final String[] CYCLOTRON_IDENTITY = new String[] {"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63",};
 
     private static final IStructureDefinition<GT_MetaTileEntity_Cyclotron> STRUCTURE_DEFINITION =
         StructureDefinition.<GT_MetaTileEntity_Cyclotron>builder()
-            .addShape(CONTROLLER_SEGMENT_IDENTITY, CONTROLLER_SEGMENT)
-            .addShape(MID_SEGMENT_IDENTITY, MID_SEGMENT)
-            .addShape(RING_SEGMENT_IDENTITY, RING_SEGMENT)
-            .addShape(AWAY_RING_SEGMENT_IDENTITY, AWAY_RING_SEGMENT)
-            .addShape(AWAY_MID_SEGMENT_IDENTITY_1, AWAY_MID_SEGMENT)
-            .addShape(CORNER_SEGMENT_IDENTITY_0, CORNER_SEGMENT_0)
-            .addShape(CORNER_SEGMENT_IDENTITY_1, CORNER_SEGMENT_1)
-            .addShape(CORNER_SEGMENT_IDENTITY_2, CORNER_SEGMENT_2)
-            .addShape(CORNER_SEGMENT_IDENTITY_3, CORNER_SEGMENT_3)
+            .addShape(CYCLOTRON_IDENTITY[0], CYCLOTRON_SHAPE_FILE_0.CYCLOTRON_SHAPE_0_IDENTITY).addShape(CYCLOTRON_IDENTITY[1], CYCLOTRON_SHAPE_FILE_1.CYCLOTRON_SHAPE_1_IDENTITY).addShape(CYCLOTRON_IDENTITY[2], CYCLOTRON_SHAPE_FILE_2.CYCLOTRON_SHAPE_2_IDENTITY).addShape(CYCLOTRON_IDENTITY[3], CYCLOTRON_SHAPE_FILE_3.CYCLOTRON_SHAPE_3_IDENTITY).addShape(CYCLOTRON_IDENTITY[4], CYCLOTRON_SHAPE_FILE_4.CYCLOTRON_SHAPE_4_IDENTITY).addShape(CYCLOTRON_IDENTITY[5], CYCLOTRON_SHAPE_FILE_5.CYCLOTRON_SHAPE_5_IDENTITY).addShape(CYCLOTRON_IDENTITY[6], CYCLOTRON_SHAPE_FILE_6.CYCLOTRON_SHAPE_6_IDENTITY).addShape(CYCLOTRON_IDENTITY[7], CYCLOTRON_SHAPE_FILE_7.CYCLOTRON_SHAPE_7_IDENTITY).addShape(CYCLOTRON_IDENTITY[8], CYCLOTRON_SHAPE_FILE_8.CYCLOTRON_SHAPE_8_IDENTITY).addShape(CYCLOTRON_IDENTITY[9], CYCLOTRON_SHAPE_FILE_9.CYCLOTRON_SHAPE_9_IDENTITY).addShape(CYCLOTRON_IDENTITY[10], CYCLOTRON_SHAPE_FILE_10.CYCLOTRON_SHAPE_10_IDENTITY).addShape(CYCLOTRON_IDENTITY[11], CYCLOTRON_SHAPE_FILE_11.CYCLOTRON_SHAPE_11_IDENTITY).addShape(CYCLOTRON_IDENTITY[12], CYCLOTRON_SHAPE_FILE_12.CYCLOTRON_SHAPE_12_IDENTITY).addShape(CYCLOTRON_IDENTITY[13], CYCLOTRON_SHAPE_FILE_13.CYCLOTRON_SHAPE_13_IDENTITY).addShape(CYCLOTRON_IDENTITY[14], CYCLOTRON_SHAPE_FILE_14.CYCLOTRON_SHAPE_14_IDENTITY).addShape(CYCLOTRON_IDENTITY[15], CYCLOTRON_SHAPE_FILE_15.CYCLOTRON_SHAPE_15_IDENTITY).addShape(CYCLOTRON_IDENTITY[16], CYCLOTRON_SHAPE_FILE_16.CYCLOTRON_SHAPE_16_IDENTITY).addShape(CYCLOTRON_IDENTITY[17], CYCLOTRON_SHAPE_FILE_17.CYCLOTRON_SHAPE_17_IDENTITY).addShape(CYCLOTRON_IDENTITY[18], CYCLOTRON_SHAPE_FILE_18.CYCLOTRON_SHAPE_18_IDENTITY).addShape(CYCLOTRON_IDENTITY[19], CYCLOTRON_SHAPE_FILE_19.CYCLOTRON_SHAPE_19_IDENTITY).addShape(CYCLOTRON_IDENTITY[20], CYCLOTRON_SHAPE_FILE_20.CYCLOTRON_SHAPE_20_IDENTITY).addShape(CYCLOTRON_IDENTITY[21], CYCLOTRON_SHAPE_FILE_21.CYCLOTRON_SHAPE_21_IDENTITY).addShape(CYCLOTRON_IDENTITY[22], CYCLOTRON_SHAPE_FILE_22.CYCLOTRON_SHAPE_22_IDENTITY).addShape(CYCLOTRON_IDENTITY[23], CYCLOTRON_SHAPE_FILE_23.CYCLOTRON_SHAPE_23_IDENTITY).addShape(CYCLOTRON_IDENTITY[24], CYCLOTRON_SHAPE_FILE_24.CYCLOTRON_SHAPE_24_IDENTITY).addShape(CYCLOTRON_IDENTITY[25], CYCLOTRON_SHAPE_FILE_25.CYCLOTRON_SHAPE_25_IDENTITY).addShape(CYCLOTRON_IDENTITY[26], CYCLOTRON_SHAPE_FILE_26.CYCLOTRON_SHAPE_26_IDENTITY).addShape(CYCLOTRON_IDENTITY[27], CYCLOTRON_SHAPE_FILE_27.CYCLOTRON_SHAPE_27_IDENTITY).addShape(CYCLOTRON_IDENTITY[28], CYCLOTRON_SHAPE_FILE_28.CYCLOTRON_SHAPE_28_IDENTITY).addShape(CYCLOTRON_IDENTITY[29], CYCLOTRON_SHAPE_FILE_29.CYCLOTRON_SHAPE_29_IDENTITY).addShape(CYCLOTRON_IDENTITY[30], CYCLOTRON_SHAPE_FILE_30.CYCLOTRON_SHAPE_30_IDENTITY).addShape(CYCLOTRON_IDENTITY[31], CYCLOTRON_SHAPE_FILE_31.CYCLOTRON_SHAPE_31_IDENTITY).addShape(CYCLOTRON_IDENTITY[32], CYCLOTRON_SHAPE_FILE_32.CYCLOTRON_SHAPE_32_IDENTITY).addShape(CYCLOTRON_IDENTITY[33], CYCLOTRON_SHAPE_FILE_33.CYCLOTRON_SHAPE_33_IDENTITY).addShape(CYCLOTRON_IDENTITY[34], CYCLOTRON_SHAPE_FILE_34.CYCLOTRON_SHAPE_34_IDENTITY).addShape(CYCLOTRON_IDENTITY[35], CYCLOTRON_SHAPE_FILE_35.CYCLOTRON_SHAPE_35_IDENTITY).addShape(CYCLOTRON_IDENTITY[36], CYCLOTRON_SHAPE_FILE_36.CYCLOTRON_SHAPE_36_IDENTITY).addShape(CYCLOTRON_IDENTITY[37], CYCLOTRON_SHAPE_FILE_37.CYCLOTRON_SHAPE_37_IDENTITY).addShape(CYCLOTRON_IDENTITY[38], CYCLOTRON_SHAPE_FILE_38.CYCLOTRON_SHAPE_38_IDENTITY).addShape(CYCLOTRON_IDENTITY[39], CYCLOTRON_SHAPE_FILE_39.CYCLOTRON_SHAPE_39_IDENTITY).addShape(CYCLOTRON_IDENTITY[40], CYCLOTRON_SHAPE_FILE_40.CYCLOTRON_SHAPE_40_IDENTITY).addShape(CYCLOTRON_IDENTITY[41], CYCLOTRON_SHAPE_FILE_41.CYCLOTRON_SHAPE_41_IDENTITY).addShape(CYCLOTRON_IDENTITY[42], CYCLOTRON_SHAPE_FILE_42.CYCLOTRON_SHAPE_42_IDENTITY).addShape(CYCLOTRON_IDENTITY[43], CYCLOTRON_SHAPE_FILE_43.CYCLOTRON_SHAPE_43_IDENTITY).addShape(CYCLOTRON_IDENTITY[44], CYCLOTRON_SHAPE_FILE_44.CYCLOTRON_SHAPE_44_IDENTITY).addShape(CYCLOTRON_IDENTITY[45], CYCLOTRON_SHAPE_FILE_45.CYCLOTRON_SHAPE_45_IDENTITY).addShape(CYCLOTRON_IDENTITY[46], CYCLOTRON_SHAPE_FILE_46.CYCLOTRON_SHAPE_46_IDENTITY).addShape(CYCLOTRON_IDENTITY[47], CYCLOTRON_SHAPE_FILE_47.CYCLOTRON_SHAPE_47_IDENTITY).addShape(CYCLOTRON_IDENTITY[48], CYCLOTRON_SHAPE_FILE_48.CYCLOTRON_SHAPE_48_IDENTITY).addShape(CYCLOTRON_IDENTITY[49], CYCLOTRON_SHAPE_FILE_49.CYCLOTRON_SHAPE_49_IDENTITY).addShape(CYCLOTRON_IDENTITY[50], CYCLOTRON_SHAPE_FILE_50.CYCLOTRON_SHAPE_50_IDENTITY).addShape(CYCLOTRON_IDENTITY[51], CYCLOTRON_SHAPE_FILE_51.CYCLOTRON_SHAPE_51_IDENTITY).addShape(CYCLOTRON_IDENTITY[52], CYCLOTRON_SHAPE_FILE_52.CYCLOTRON_SHAPE_52_IDENTITY).addShape(CYCLOTRON_IDENTITY[53], CYCLOTRON_SHAPE_FILE_53.CYCLOTRON_SHAPE_53_IDENTITY).addShape(CYCLOTRON_IDENTITY[54], CYCLOTRON_SHAPE_FILE_54.CYCLOTRON_SHAPE_54_IDENTITY).addShape(CYCLOTRON_IDENTITY[55], CYCLOTRON_SHAPE_FILE_55.CYCLOTRON_SHAPE_55_IDENTITY).addShape(CYCLOTRON_IDENTITY[56], CYCLOTRON_SHAPE_FILE_56.CYCLOTRON_SHAPE_56_IDENTITY).addShape(CYCLOTRON_IDENTITY[57], CYCLOTRON_SHAPE_FILE_57.CYCLOTRON_SHAPE_57_IDENTITY).addShape(CYCLOTRON_IDENTITY[58], CYCLOTRON_SHAPE_FILE_58.CYCLOTRON_SHAPE_58_IDENTITY).addShape(CYCLOTRON_IDENTITY[59], CYCLOTRON_SHAPE_FILE_59.CYCLOTRON_SHAPE_59_IDENTITY).addShape(CYCLOTRON_IDENTITY[60], CYCLOTRON_SHAPE_FILE_60.CYCLOTRON_SHAPE_60_IDENTITY).addShape(CYCLOTRON_IDENTITY[61], CYCLOTRON_SHAPE_FILE_61.CYCLOTRON_SHAPE_61_IDENTITY).addShape(CYCLOTRON_IDENTITY[62], CYCLOTRON_SHAPE_FILE_62.CYCLOTRON_SHAPE_62_IDENTITY).addShape(CYCLOTRON_IDENTITY[63], CYCLOTRON_SHAPE_FILE_63.CYCLOTRON_SHAPE_63_IDENTITY)
             .addElement(
-                'Z',
+                'B',
                 ofBlocksTiered(
                     (block, meta) -> block == compactFusionCoil ? meta : -1,
                     ImmutableList.of(
@@ -485,13 +78,13 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                     -1,
                     (t, meta) -> t.CompactFusionCoilMetadata = meta,
                     t -> t.CompactFusionCoilMetadata))
+//            .addElement(
+//                'B',
+//                ofCoil(
+//                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
+//                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
             .addElement(
-                'X',
-                ofCoil(
-                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
-                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
-            .addElement(
-                'I',
+                'A',
                 buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
                     .atLeast(
                         InputHatch,
@@ -501,15 +94,13 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                         Energy,
                         ExoticEnergy,
                         Maintenance)
-                    .casingIndex(DIM_INJECTION_CASING)
+                    .casingIndex(5)
                     .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings1, DIM_INJECTION_CASING))
-            .addElement('R', ofBlockUnlocalizedName("IC2", "blockAlloyGlass", 0, true)) // Reinforced glass.
-            .addElement('C', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
-            .addElement(
-                'W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true)) // Winding coil.
-            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) // Cosmic glass.
-            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
+                    .buildAndChain(GregTech_API.sBlockCasings8, 5))
+//            .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
+//            .addElement('W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true)) // Winding coil.
+//            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) // Cosmic glass.
+//            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
             .build();
 
     @Override
@@ -560,7 +151,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         if (aSide == aFacing) {
             if (aActive)
                 return new ITexture[] {
-                    casingTexturePages[0][DIM_BRIDGE_CASING],
+                    casingTexturePages[0][14],
                     TextureFactory.builder()
                         .addIcon(OVERLAY_DTPF_ON)
                         .extFacing()
@@ -607,15 +198,10 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     @Override
     public boolean checkRecipe(ItemStack aStack) {
-        boolean recipe_process = processRecipe(getCompactedInputs(), getCompactedFluids());
-
-        // If recipe cannot be found then continuity is broken and reset running time to 0.
-        if (!recipe_process) {
-            resetDiscount();
-        }
-
-        return recipe_process;
+        return processRecipe(getCompactedInputs(), getCompactedFluids());
     }
+
+    long EU_per_tick = 0;
 
     protected boolean processRecipe(ItemStack[] tItems, FluidStack[] tFluids) {
 
@@ -638,7 +224,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         if (tRecipe_0 == null) return false;
 
         // If coil heat capacity is too low, refuse to start recipe.
-        if (mHeatingCapacity <= tRecipe_0.mSpecialValue) return false;
+//        if (mHeatingCapacity <= tRecipe_0.mSpecialValue) return false;
 
         // Reduce fuel quantity if machine has been running for long enough.
         GT_Recipe tRecipe_1 = tRecipe_0.copy();
@@ -664,67 +250,33 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         mOutputFluids = tRecipe_0.mFluidOutputs.clone();
         updateSlots();
 
-        // All conditions met so increment running_time.
-        running_time += mMaxProgresstime;
         return true;
     }
+
+    int cachedIndex = -1;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 
-        // Reset heating capacity.
-        mHeatingCapacity = 0;
-
-        // Get heating capacity from coils in structure.
-        setCoilLevel(HeatingCoilLevel.None);
-
-        // Check the main structure
-        if (!checkPiece(CONTROLLER_SEGMENT_IDENTITY, 16, 21, 16)) {
-            return false;
-        }
-
-        if (getCoilLevel() == HeatingCoilLevel.None) return false;
-
-        // Item input bus check.
-        if ((mInputBusses.size() < min_input_bus) || (mInputBusses.size() > max_input_bus)) return false;
-
-        // Item output bus check.
-        if ((mOutputBusses.size() < min_output_bus) || (mOutputBusses.size() > max_output_bus)) return false;
-
-        // Fluid input hatch check.
-        if ((mInputHatches.size() < min_input_hatch) || (mInputHatches.size() > max_input_hatch)) return false;
-
-        // Fluid output hatch check.
-        if ((mOutputHatches.size() < min_output_hatch) || (mOutputHatches.size() > max_output_hatch)) return false;
-
-        // If there is more than 1 TT energy hatch, the structure check will fail.
-        // If there is a TT hatch and a normal hatch, the structure check will fail.
-        if (mExoticEnergyHatches.size() > 0) {
-            if (mEnergyHatches.size() > 0) return false;
-            if (mExoticEnergyHatches.size() > 1) return false;
-        }
-
-        // If there is 0 or more than 2 energy hatches structure check will fail.
-        if (mEnergyHatches.size() > 0) {
-            if (mEnergyHatches.size() > 2) return false;
-
-            // Check will also fail if energy hatches are not of the same tier.
-            byte tier_of_hatch = mEnergyHatches.get(0).mTier;
-            for (GT_MetaTileEntity_Hatch_Energy energyHatch : mEnergyHatches) {
-                if (energyHatch.mTier != tier_of_hatch) {
-                    return false;
+        outside:
+        if (cachedIndex == -1) {
+            for(int size = 0; size < 64; size++) {
+                System.out.println("TRYING SIZE: " + size + ".");
+                if(checkPiece(CYCLOTRON_IDENTITY[size], 15 + (size * 5) + 1, 1, 0)) {
+                    cachedIndex = size;
+                    System.out.println("SIZE " + size + " FOUND.");
+                    break outside;
                 }
             }
+            return false;
+        } else {
+            System.out.println("CACHED SIZE: " + cachedIndex + ".");
+            if(!checkPiece(CYCLOTRON_IDENTITY[cachedIndex], 15 + (cachedIndex * 5) + 1, 1, 0)) {
+                System.out.println("CACHED: FAIL.");
+                return false;
+            }
+            System.out.println("CACHED: SUCCESS.");
         }
-
-        // If there are no energy hatches or TT energy hatches, structure will fail to form.
-        if ((mEnergyHatches.size() == 0) && (mExoticEnergyHatches.size() == 0)) return false;
-
-        // One maintenance hatch only. Mandatory.
-        if (mMaintenanceHatches.size() != 1) return false;
-
-        // Heat capacity of coils used on multi. No free heat from extra EU!
-        mHeatingCapacity = (int) getCoilLevel().getHeat();
 
         // All structure checks passed, return true.
         return true;
@@ -752,7 +304,6 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     public boolean onRunningTick(ItemStack aStack) {
         if (EU_per_tick < 0) {
             if (!drainEnergyInput(-EU_per_tick)) {
-                resetDiscount();
                 EU_per_tick = 0;
                 criticalStopMachine();
                 return false;
@@ -799,11 +350,6 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                 GT_Utility.getTier(GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(
                     getExoticAndNormalEnergyHatchList()))]
                 + EnumChatFormatting.RESET,
-            StatCollector.translateToLocal("GT5U.EBF.heat") + ": " + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(mHeatingCapacity) + EnumChatFormatting.RESET + " K",
-            "Ticks run: " + EnumChatFormatting.GREEN + GT_Utility.formatNumbers(running_time) + EnumChatFormatting.RESET
-                + ", Fuel Discount: " + EnumChatFormatting.RED + GT_Utility.formatNumbers(100 * (1 - discount))
-                + EnumChatFormatting.RESET + "%",
             "-----------------------------------------"
         };
     }
@@ -815,131 +361,20 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         return tHatches;
     }
 
-    // Reset running time and discount.
-    public void resetDiscount() {
-        running_time = 0;
-        discount = 1;
-    }
-
-    public void onPostTick(IGregTechTileEntity aBaseMetaTileEntity, long aTick) {
-        if (aBaseMetaTileEntity.isServerSide() && !aBaseMetaTileEntity.isAllowedToWork()) {
-            // Reset running time and discount.
-            resetDiscount();
-            // If machine has stopped, stop chunkloading.
-            GT_ChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
-            isMultiChunkloaded = false;
-        } else if (aBaseMetaTileEntity.isServerSide() && aBaseMetaTileEntity.isAllowedToWork() && !isMultiChunkloaded) {
-            // Load a 3x3 area centered on controller when machine is running.
-            GT_ChunkManager.releaseTicket((TileEntity) aBaseMetaTileEntity);
-
-            int ControllerXCoordinate = ((TileEntity) aBaseMetaTileEntity).xCoord;
-            int ControllerZCoordinate = ((TileEntity) aBaseMetaTileEntity).zCoord;
-
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate, ControllerZCoordinate - 16));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate + 16, ControllerZCoordinate - 16));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate + 16));
-            GT_ChunkManager.requestChunkLoad(
-                (TileEntity) aBaseMetaTileEntity,
-                new ChunkCoordIntPair(ControllerXCoordinate - 16, ControllerZCoordinate - 16));
-
-            isMultiChunkloaded = true;
-        }
-
-        super.onPostTick(aBaseMetaTileEntity, aTick);
-    }
-
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
-        buildPiece(CONTROLLER_SEGMENT_IDENTITY, stackSize, hintsOnly, 4, 3, 1);
-
-        int tLength = (stackSize.stackSize - 1);
-
-        for (int i = 1; i < tLength + 1; i++) {
-            buildPiece(MID_SEGMENT_IDENTITY, stackSize, hintsOnly, 4 - i * 10, 3, 0);
-            buildPiece(MID_SEGMENT_IDENTITY, stackSize, hintsOnly, 4 + i * 10, 3, 0);
-        }
-
-        if (tLength == 0) {
-            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 5, 3, 1);
-            buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, -5, 3, 1);
-        } else {
-            for (int i = 0; i < tLength + 2; i++) {
-                buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 5 - i * 10, 3, 1);
-                buildPiece(RING_SEGMENT_IDENTITY, stackSize, hintsOnly, -5 + i * 10, 3, 1);
-            }
-        }
-
-        buildPiece(CORNER_SEGMENT_IDENTITY_0, stackSize, hintsOnly,
-            -6 -10 * tLength,
-            3,
-            1);
-
-        buildPiece(CORNER_SEGMENT_IDENTITY_1, stackSize, hintsOnly,
-            14 + 10 * tLength,
-            2,
-            0);
-
-        // LEFT
-        for (int i = 0; i < tLength * 2 + 1; i++) {
-            buildPiece(AWAY_MID_SEGMENT_IDENTITY_1, stackSize, hintsOnly, 14 + 10 * tLength, 2, -10 - 10 * i);
-        }
-
-        for(int i = 0; i < 2 * tLength + 2; i++) {
-            buildPiece(AWAY_RING_SEGMENT_IDENTITY, stackSize, hintsOnly, 15 + 10 * tLength, 3, -9 - 10 * i);
-        }
-
-        // RIGHT
-        for (int i = 0; i < tLength * 2 + 1; i++) {
-            buildPiece(AWAY_MID_SEGMENT_IDENTITY_1, stackSize, hintsOnly, -9 - 10 * tLength, 2, -10 - 10 * i);
-        }
-
-        int x = -9 - 10 * tLength;
-        for(int i = 0; i < 2 * tLength + 2; i++) {
-            buildPiece(AWAY_RING_SEGMENT_IDENTITY, stackSize, hintsOnly, x, 3, -9 - 10 * i);
-        }
-    }
-
-    @Override
-    public int survivalConstruct(ItemStack stackSize, int elementBudget, IItemSource source, EntityPlayerMP actor) {
-        if (mMachine) return -1;
-        int realBudget = elementBudget >= 200 ? elementBudget : Math.min(200, elementBudget * 5);
-        return survivialBuildPiece(
-            CONTROLLER_SEGMENT_IDENTITY, stackSize, 16, 21, 16, realBudget, source, actor, false, true);
+        int size = min(stackSize.stackSize, 63);
+        buildPiece(CYCLOTRON_IDENTITY[size], stackSize, hintsOnly, 15 + (size * 5) + 1, 1, 0);
     }
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setLong("eRunningTime", running_time);
-        aNBT.setDouble("eLongDiscountValue", discount);
         aNBT.setLong("eLongEUPerTick", EU_per_tick);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
-        running_time = aNBT.getLong("eRunningTime");
-        discount = aNBT.getDouble("eLongDiscountValue");
         EU_per_tick = aNBT.getLong("eLongEUPerTick");
         super.loadNBTData(aNBT);
     }
