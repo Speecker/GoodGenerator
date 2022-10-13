@@ -1,5 +1,14 @@
 package goodgenerator.blocks.tileEntity.base;
 
+import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static goodgenerator.loader.Loaders.compactFusionCoil;
+import static gregtech.api.enums.GT_HatchElement.*;
+import static gregtech.api.enums.GT_Values.AuthorColen;
+import static gregtech.api.enums.GT_Values.VN;
+import static gregtech.api.enums.Textures.BlockIcons.*;
+import static gregtech.api.util.GT_StructureUtility.*;
+import static java.lang.Math.*;
+
 import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -7,7 +16,6 @@ import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import goodgenerator.util.cyclotron.*;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
-import gregtech.api.enums.Materials;
 import gregtech.api.gui.GT_GUIContainer_MultiMachine;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
@@ -20,6 +28,8 @@ import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.tileentities.machines.multi.GT_MetaTileEntity_AbstractMultiFurnace;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,20 +38,9 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static goodgenerator.loader.Loaders.compactFusionCoil;
-import static gregtech.api.enums.GT_HatchElement.*;
-import static gregtech.api.enums.GT_Values.AuthorColen;
-import static gregtech.api.enums.GT_Values.VN;
-import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.util.GT_StructureUtility.*;
-import static java.lang.Math.*;
-
 @SuppressWarnings("SpellCheckingInspection")
-public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron> implements ISurvivalConstructable {
+public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron>
+        implements ISurvivalConstructable {
 
     private static final double log4 = Math.log(4);
 
@@ -60,48 +59,118 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     private int CompactFusionCoilMetadata = -1;
 
-    protected static final String[] CYCLOTRON_IDENTITY = new String[] {"0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63",};
+    protected static final String[] CYCLOTRON_IDENTITY = new String[] {
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+        "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
+        "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55",
+        "56", "57", "58", "59", "60", "61", "62", "63",
+    };
 
     private static final IStructureDefinition<GT_MetaTileEntity_Cyclotron> STRUCTURE_DEFINITION =
-        StructureDefinition.<GT_MetaTileEntity_Cyclotron>builder()
-            .addShape(CYCLOTRON_IDENTITY[0], CYCLOTRON_SHAPE_FILE_0.CYCLOTRON_SHAPE_0_IDENTITY).addShape(CYCLOTRON_IDENTITY[1], CYCLOTRON_SHAPE_FILE_1.CYCLOTRON_SHAPE_1_IDENTITY).addShape(CYCLOTRON_IDENTITY[2], CYCLOTRON_SHAPE_FILE_2.CYCLOTRON_SHAPE_2_IDENTITY).addShape(CYCLOTRON_IDENTITY[3], CYCLOTRON_SHAPE_FILE_3.CYCLOTRON_SHAPE_3_IDENTITY).addShape(CYCLOTRON_IDENTITY[4], CYCLOTRON_SHAPE_FILE_4.CYCLOTRON_SHAPE_4_IDENTITY).addShape(CYCLOTRON_IDENTITY[5], CYCLOTRON_SHAPE_FILE_5.CYCLOTRON_SHAPE_5_IDENTITY).addShape(CYCLOTRON_IDENTITY[6], CYCLOTRON_SHAPE_FILE_6.CYCLOTRON_SHAPE_6_IDENTITY).addShape(CYCLOTRON_IDENTITY[7], CYCLOTRON_SHAPE_FILE_7.CYCLOTRON_SHAPE_7_IDENTITY).addShape(CYCLOTRON_IDENTITY[8], CYCLOTRON_SHAPE_FILE_8.CYCLOTRON_SHAPE_8_IDENTITY).addShape(CYCLOTRON_IDENTITY[9], CYCLOTRON_SHAPE_FILE_9.CYCLOTRON_SHAPE_9_IDENTITY).addShape(CYCLOTRON_IDENTITY[10], CYCLOTRON_SHAPE_FILE_10.CYCLOTRON_SHAPE_10_IDENTITY).addShape(CYCLOTRON_IDENTITY[11], CYCLOTRON_SHAPE_FILE_11.CYCLOTRON_SHAPE_11_IDENTITY).addShape(CYCLOTRON_IDENTITY[12], CYCLOTRON_SHAPE_FILE_12.CYCLOTRON_SHAPE_12_IDENTITY).addShape(CYCLOTRON_IDENTITY[13], CYCLOTRON_SHAPE_FILE_13.CYCLOTRON_SHAPE_13_IDENTITY).addShape(CYCLOTRON_IDENTITY[14], CYCLOTRON_SHAPE_FILE_14.CYCLOTRON_SHAPE_14_IDENTITY).addShape(CYCLOTRON_IDENTITY[15], CYCLOTRON_SHAPE_FILE_15.CYCLOTRON_SHAPE_15_IDENTITY).addShape(CYCLOTRON_IDENTITY[16], CYCLOTRON_SHAPE_FILE_16.CYCLOTRON_SHAPE_16_IDENTITY).addShape(CYCLOTRON_IDENTITY[17], CYCLOTRON_SHAPE_FILE_17.CYCLOTRON_SHAPE_17_IDENTITY).addShape(CYCLOTRON_IDENTITY[18], CYCLOTRON_SHAPE_FILE_18.CYCLOTRON_SHAPE_18_IDENTITY).addShape(CYCLOTRON_IDENTITY[19], CYCLOTRON_SHAPE_FILE_19.CYCLOTRON_SHAPE_19_IDENTITY).addShape(CYCLOTRON_IDENTITY[20], CYCLOTRON_SHAPE_FILE_20.CYCLOTRON_SHAPE_20_IDENTITY).addShape(CYCLOTRON_IDENTITY[21], CYCLOTRON_SHAPE_FILE_21.CYCLOTRON_SHAPE_21_IDENTITY).addShape(CYCLOTRON_IDENTITY[22], CYCLOTRON_SHAPE_FILE_22.CYCLOTRON_SHAPE_22_IDENTITY).addShape(CYCLOTRON_IDENTITY[23], CYCLOTRON_SHAPE_FILE_23.CYCLOTRON_SHAPE_23_IDENTITY).addShape(CYCLOTRON_IDENTITY[24], CYCLOTRON_SHAPE_FILE_24.CYCLOTRON_SHAPE_24_IDENTITY).addShape(CYCLOTRON_IDENTITY[25], CYCLOTRON_SHAPE_FILE_25.CYCLOTRON_SHAPE_25_IDENTITY).addShape(CYCLOTRON_IDENTITY[26], CYCLOTRON_SHAPE_FILE_26.CYCLOTRON_SHAPE_26_IDENTITY).addShape(CYCLOTRON_IDENTITY[27], CYCLOTRON_SHAPE_FILE_27.CYCLOTRON_SHAPE_27_IDENTITY).addShape(CYCLOTRON_IDENTITY[28], CYCLOTRON_SHAPE_FILE_28.CYCLOTRON_SHAPE_28_IDENTITY).addShape(CYCLOTRON_IDENTITY[29], CYCLOTRON_SHAPE_FILE_29.CYCLOTRON_SHAPE_29_IDENTITY).addShape(CYCLOTRON_IDENTITY[30], CYCLOTRON_SHAPE_FILE_30.CYCLOTRON_SHAPE_30_IDENTITY).addShape(CYCLOTRON_IDENTITY[31], CYCLOTRON_SHAPE_FILE_31.CYCLOTRON_SHAPE_31_IDENTITY).addShape(CYCLOTRON_IDENTITY[32], CYCLOTRON_SHAPE_FILE_32.CYCLOTRON_SHAPE_32_IDENTITY).addShape(CYCLOTRON_IDENTITY[33], CYCLOTRON_SHAPE_FILE_33.CYCLOTRON_SHAPE_33_IDENTITY).addShape(CYCLOTRON_IDENTITY[34], CYCLOTRON_SHAPE_FILE_34.CYCLOTRON_SHAPE_34_IDENTITY).addShape(CYCLOTRON_IDENTITY[35], CYCLOTRON_SHAPE_FILE_35.CYCLOTRON_SHAPE_35_IDENTITY).addShape(CYCLOTRON_IDENTITY[36], CYCLOTRON_SHAPE_FILE_36.CYCLOTRON_SHAPE_36_IDENTITY).addShape(CYCLOTRON_IDENTITY[37], CYCLOTRON_SHAPE_FILE_37.CYCLOTRON_SHAPE_37_IDENTITY).addShape(CYCLOTRON_IDENTITY[38], CYCLOTRON_SHAPE_FILE_38.CYCLOTRON_SHAPE_38_IDENTITY).addShape(CYCLOTRON_IDENTITY[39], CYCLOTRON_SHAPE_FILE_39.CYCLOTRON_SHAPE_39_IDENTITY).addShape(CYCLOTRON_IDENTITY[40], CYCLOTRON_SHAPE_FILE_40.CYCLOTRON_SHAPE_40_IDENTITY).addShape(CYCLOTRON_IDENTITY[41], CYCLOTRON_SHAPE_FILE_41.CYCLOTRON_SHAPE_41_IDENTITY).addShape(CYCLOTRON_IDENTITY[42], CYCLOTRON_SHAPE_FILE_42.CYCLOTRON_SHAPE_42_IDENTITY).addShape(CYCLOTRON_IDENTITY[43], CYCLOTRON_SHAPE_FILE_43.CYCLOTRON_SHAPE_43_IDENTITY).addShape(CYCLOTRON_IDENTITY[44], CYCLOTRON_SHAPE_FILE_44.CYCLOTRON_SHAPE_44_IDENTITY).addShape(CYCLOTRON_IDENTITY[45], CYCLOTRON_SHAPE_FILE_45.CYCLOTRON_SHAPE_45_IDENTITY).addShape(CYCLOTRON_IDENTITY[46], CYCLOTRON_SHAPE_FILE_46.CYCLOTRON_SHAPE_46_IDENTITY).addShape(CYCLOTRON_IDENTITY[47], CYCLOTRON_SHAPE_FILE_47.CYCLOTRON_SHAPE_47_IDENTITY).addShape(CYCLOTRON_IDENTITY[48], CYCLOTRON_SHAPE_FILE_48.CYCLOTRON_SHAPE_48_IDENTITY).addShape(CYCLOTRON_IDENTITY[49], CYCLOTRON_SHAPE_FILE_49.CYCLOTRON_SHAPE_49_IDENTITY).addShape(CYCLOTRON_IDENTITY[50], CYCLOTRON_SHAPE_FILE_50.CYCLOTRON_SHAPE_50_IDENTITY).addShape(CYCLOTRON_IDENTITY[51], CYCLOTRON_SHAPE_FILE_51.CYCLOTRON_SHAPE_51_IDENTITY).addShape(CYCLOTRON_IDENTITY[52], CYCLOTRON_SHAPE_FILE_52.CYCLOTRON_SHAPE_52_IDENTITY).addShape(CYCLOTRON_IDENTITY[53], CYCLOTRON_SHAPE_FILE_53.CYCLOTRON_SHAPE_53_IDENTITY).addShape(CYCLOTRON_IDENTITY[54], CYCLOTRON_SHAPE_FILE_54.CYCLOTRON_SHAPE_54_IDENTITY).addShape(CYCLOTRON_IDENTITY[55], CYCLOTRON_SHAPE_FILE_55.CYCLOTRON_SHAPE_55_IDENTITY).addShape(CYCLOTRON_IDENTITY[56], CYCLOTRON_SHAPE_FILE_56.CYCLOTRON_SHAPE_56_IDENTITY).addShape(CYCLOTRON_IDENTITY[57], CYCLOTRON_SHAPE_FILE_57.CYCLOTRON_SHAPE_57_IDENTITY).addShape(CYCLOTRON_IDENTITY[58], CYCLOTRON_SHAPE_FILE_58.CYCLOTRON_SHAPE_58_IDENTITY).addShape(CYCLOTRON_IDENTITY[59], CYCLOTRON_SHAPE_FILE_59.CYCLOTRON_SHAPE_59_IDENTITY).addShape(CYCLOTRON_IDENTITY[60], CYCLOTRON_SHAPE_FILE_60.CYCLOTRON_SHAPE_60_IDENTITY).addShape(CYCLOTRON_IDENTITY[61], CYCLOTRON_SHAPE_FILE_61.CYCLOTRON_SHAPE_61_IDENTITY).addShape(CYCLOTRON_IDENTITY[62], CYCLOTRON_SHAPE_FILE_62.CYCLOTRON_SHAPE_62_IDENTITY).addShape(CYCLOTRON_IDENTITY[63], CYCLOTRON_SHAPE_FILE_63.CYCLOTRON_SHAPE_63_IDENTITY)
-            .addElement(
-                'B',
-                ofBlocksTiered(
-                    (block, meta) -> block == compactFusionCoil ? meta : -1,
-                    ImmutableList.of(
-                        Pair.of(compactFusionCoil, 0),
-                        Pair.of(compactFusionCoil, 1),
-                        Pair.of(compactFusionCoil, 2),
-                        Pair.of(compactFusionCoil, 3),
-                        Pair.of(compactFusionCoil, 4)),
-                    -1,
-                    (t, meta) -> t.CompactFusionCoilMetadata = meta,
-                    t -> t.CompactFusionCoilMetadata))
-//            .addElement(
-//                'B',
-//                ofCoil(
-//                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
-//                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
-            .addElement(
-                'A',
-                buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
-                    .atLeast(
-                        InputHatch,
-                        OutputHatch,
-                        InputBus,
-                        OutputBus,
-                        Energy,
-                        ExoticEnergy,
-                        Maintenance)
-                    .casingIndex(5)
-                    .dot(1)
-                    .buildAndChain(GregTech_API.sBlockCasings8, 5))
-//            .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
-//            .addElement('W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true)) // Winding coil.
-//            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) // Cosmic glass.
-//            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
-            .build();
+            StructureDefinition.<GT_MetaTileEntity_Cyclotron>builder()
+                    .addShape(CYCLOTRON_IDENTITY[0], CYCLOTRON_SHAPE_FILE_0.CYCLOTRON_SHAPE_0_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[1], CYCLOTRON_SHAPE_FILE_1.CYCLOTRON_SHAPE_1_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[2], CYCLOTRON_SHAPE_FILE_2.CYCLOTRON_SHAPE_2_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[3], CYCLOTRON_SHAPE_FILE_3.CYCLOTRON_SHAPE_3_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[4], CYCLOTRON_SHAPE_FILE_4.CYCLOTRON_SHAPE_4_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[5], CYCLOTRON_SHAPE_FILE_5.CYCLOTRON_SHAPE_5_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[6], CYCLOTRON_SHAPE_FILE_6.CYCLOTRON_SHAPE_6_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[7], CYCLOTRON_SHAPE_FILE_7.CYCLOTRON_SHAPE_7_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[8], CYCLOTRON_SHAPE_FILE_8.CYCLOTRON_SHAPE_8_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[9], CYCLOTRON_SHAPE_FILE_9.CYCLOTRON_SHAPE_9_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[10], CYCLOTRON_SHAPE_FILE_10.CYCLOTRON_SHAPE_10_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[11], CYCLOTRON_SHAPE_FILE_11.CYCLOTRON_SHAPE_11_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[12], CYCLOTRON_SHAPE_FILE_12.CYCLOTRON_SHAPE_12_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[13], CYCLOTRON_SHAPE_FILE_13.CYCLOTRON_SHAPE_13_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[14], CYCLOTRON_SHAPE_FILE_14.CYCLOTRON_SHAPE_14_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[15], CYCLOTRON_SHAPE_FILE_15.CYCLOTRON_SHAPE_15_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[16], CYCLOTRON_SHAPE_FILE_16.CYCLOTRON_SHAPE_16_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[17], CYCLOTRON_SHAPE_FILE_17.CYCLOTRON_SHAPE_17_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[18], CYCLOTRON_SHAPE_FILE_18.CYCLOTRON_SHAPE_18_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[19], CYCLOTRON_SHAPE_FILE_19.CYCLOTRON_SHAPE_19_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[20], CYCLOTRON_SHAPE_FILE_20.CYCLOTRON_SHAPE_20_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[21], CYCLOTRON_SHAPE_FILE_21.CYCLOTRON_SHAPE_21_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[22], CYCLOTRON_SHAPE_FILE_22.CYCLOTRON_SHAPE_22_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[23], CYCLOTRON_SHAPE_FILE_23.CYCLOTRON_SHAPE_23_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[24], CYCLOTRON_SHAPE_FILE_24.CYCLOTRON_SHAPE_24_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[25], CYCLOTRON_SHAPE_FILE_25.CYCLOTRON_SHAPE_25_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[26], CYCLOTRON_SHAPE_FILE_26.CYCLOTRON_SHAPE_26_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[27], CYCLOTRON_SHAPE_FILE_27.CYCLOTRON_SHAPE_27_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[28], CYCLOTRON_SHAPE_FILE_28.CYCLOTRON_SHAPE_28_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[29], CYCLOTRON_SHAPE_FILE_29.CYCLOTRON_SHAPE_29_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[30], CYCLOTRON_SHAPE_FILE_30.CYCLOTRON_SHAPE_30_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[31], CYCLOTRON_SHAPE_FILE_31.CYCLOTRON_SHAPE_31_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[32], CYCLOTRON_SHAPE_FILE_32.CYCLOTRON_SHAPE_32_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[33], CYCLOTRON_SHAPE_FILE_33.CYCLOTRON_SHAPE_33_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[34], CYCLOTRON_SHAPE_FILE_34.CYCLOTRON_SHAPE_34_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[35], CYCLOTRON_SHAPE_FILE_35.CYCLOTRON_SHAPE_35_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[36], CYCLOTRON_SHAPE_FILE_36.CYCLOTRON_SHAPE_36_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[37], CYCLOTRON_SHAPE_FILE_37.CYCLOTRON_SHAPE_37_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[38], CYCLOTRON_SHAPE_FILE_38.CYCLOTRON_SHAPE_38_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[39], CYCLOTRON_SHAPE_FILE_39.CYCLOTRON_SHAPE_39_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[40], CYCLOTRON_SHAPE_FILE_40.CYCLOTRON_SHAPE_40_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[41], CYCLOTRON_SHAPE_FILE_41.CYCLOTRON_SHAPE_41_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[42], CYCLOTRON_SHAPE_FILE_42.CYCLOTRON_SHAPE_42_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[43], CYCLOTRON_SHAPE_FILE_43.CYCLOTRON_SHAPE_43_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[44], CYCLOTRON_SHAPE_FILE_44.CYCLOTRON_SHAPE_44_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[45], CYCLOTRON_SHAPE_FILE_45.CYCLOTRON_SHAPE_45_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[46], CYCLOTRON_SHAPE_FILE_46.CYCLOTRON_SHAPE_46_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[47], CYCLOTRON_SHAPE_FILE_47.CYCLOTRON_SHAPE_47_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[48], CYCLOTRON_SHAPE_FILE_48.CYCLOTRON_SHAPE_48_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[49], CYCLOTRON_SHAPE_FILE_49.CYCLOTRON_SHAPE_49_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[50], CYCLOTRON_SHAPE_FILE_50.CYCLOTRON_SHAPE_50_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[51], CYCLOTRON_SHAPE_FILE_51.CYCLOTRON_SHAPE_51_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[52], CYCLOTRON_SHAPE_FILE_52.CYCLOTRON_SHAPE_52_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[53], CYCLOTRON_SHAPE_FILE_53.CYCLOTRON_SHAPE_53_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[54], CYCLOTRON_SHAPE_FILE_54.CYCLOTRON_SHAPE_54_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[55], CYCLOTRON_SHAPE_FILE_55.CYCLOTRON_SHAPE_55_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[56], CYCLOTRON_SHAPE_FILE_56.CYCLOTRON_SHAPE_56_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[57], CYCLOTRON_SHAPE_FILE_57.CYCLOTRON_SHAPE_57_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[58], CYCLOTRON_SHAPE_FILE_58.CYCLOTRON_SHAPE_58_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[59], CYCLOTRON_SHAPE_FILE_59.CYCLOTRON_SHAPE_59_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[60], CYCLOTRON_SHAPE_FILE_60.CYCLOTRON_SHAPE_60_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[61], CYCLOTRON_SHAPE_FILE_61.CYCLOTRON_SHAPE_61_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[62], CYCLOTRON_SHAPE_FILE_62.CYCLOTRON_SHAPE_62_IDENTITY)
+                    .addShape(CYCLOTRON_IDENTITY[63], CYCLOTRON_SHAPE_FILE_63.CYCLOTRON_SHAPE_63_IDENTITY)
+                    .addElement(
+                            'B',
+                            ofBlocksTiered(
+                                    (block, meta) -> block == compactFusionCoil ? meta : -1,
+                                    ImmutableList.of(
+                                            Pair.of(compactFusionCoil, 0),
+                                            Pair.of(compactFusionCoil, 1),
+                                            Pair.of(compactFusionCoil, 2),
+                                            Pair.of(compactFusionCoil, 3),
+                                            Pair.of(compactFusionCoil, 4)),
+                                    -1,
+                                    (t, meta) -> t.CompactFusionCoilMetadata = meta,
+                                    t -> t.CompactFusionCoilMetadata))
+                    //            .addElement(
+                    //                'B',
+                    //                ofCoil(
+                    //                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
+                    //                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
+                    .addElement(
+                            'A',
+                            buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
+                                    .atLeast(
+                                            InputHatch,
+                                            OutputHatch,
+                                            InputBus,
+                                            OutputBus,
+                                            Energy,
+                                            ExoticEnergy,
+                                            Maintenance)
+                                    .casingIndex(5)
+                                    .dot(1)
+                                    .buildAndChain(GregTech_API.sBlockCasings8, 5))
+                    //            .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
+                    //            .addElement('W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true))
+                    // // Winding coil.
+                    //            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) //
+                    // Cosmic glass.
+                    //            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
+                    .build();
 
     @Override
     protected boolean addBottomHatch(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
@@ -126,11 +195,11 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
         tt.addInfo("Transcending Dimensional Boundaries.")
-            .addInfo("")
-            .addInfo(AuthorColen)
-            .addSeparator()
-            .beginStructureBlock(0, 0, 0, false)
-            .toolTipFinisher("Gregtech");
+                .addInfo("")
+                .addInfo(AuthorColen)
+                .addSeparator()
+                .beginStructureBlock(0, 0, 0, false)
+                .toolTipFinisher("Gregtech");
         return tt;
     }
 
@@ -142,25 +211,25 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     @Override
     public ITexture[] getTexture(
-        IGregTechTileEntity aBaseMetaTileEntity,
-        byte aSide,
-        byte aFacing,
-        byte aColorIndex,
-        boolean aActive,
-        boolean aRedstone) {
+            IGregTechTileEntity aBaseMetaTileEntity,
+            byte aSide,
+            byte aFacing,
+            byte aColorIndex,
+            boolean aActive,
+            boolean aRedstone) {
         if (aSide == aFacing) {
             if (aActive)
                 return new ITexture[] {
                     casingTexturePages[0][14],
                     TextureFactory.builder()
-                        .addIcon(OVERLAY_DTPF_ON)
-                        .extFacing()
-                        .build(),
+                            .addIcon(OVERLAY_DTPF_ON)
+                            .extFacing()
+                            .build(),
                     TextureFactory.builder()
-                        .addIcon(OVERLAY_FUSION1_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build()
+                            .addIcon(OVERLAY_FUSION1_GLOW)
+                            .extFacing()
+                            .glow()
+                            .build()
                 };
             return new ITexture[] {
                 casingTexturePages[0][DIM_BRIDGE_CASING],
@@ -173,7 +242,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     @Override
     public Object getClientGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_GUIContainer_MultiMachine(
-            aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "PlasmaForge.png");
+                aPlayerInventory, aBaseMetaTileEntity, getLocalName(), "PlasmaForge.png");
     }
 
     @Override
@@ -218,13 +287,13 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
         // Look up recipe. If not found it will return null.
         GT_Recipe tRecipe_0 = GT_Recipe.GT_Recipe_Map.sPlasmaForgeRecipes.findRecipe(
-            getBaseMetaTileEntity(), false, tTotalEU, tFluids, tItems);
+                getBaseMetaTileEntity(), false, tTotalEU, tFluids, tItems);
 
         // Check if recipe found.
         if (tRecipe_0 == null) return false;
 
         // If coil heat capacity is too low, refuse to start recipe.
-//        if (mHeatingCapacity <= tRecipe_0.mSpecialValue) return false;
+        //        if (mHeatingCapacity <= tRecipe_0.mSpecialValue) return false;
 
         // Reduce fuel quantity if machine has been running for long enough.
         GT_Recipe tRecipe_1 = tRecipe_0.copy();
@@ -260,9 +329,9 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
         outside:
         if (cachedIndex == -1) {
-            for(int size = 0; size < 64; size++) {
+            for (int size = 0; size < 64; size++) {
                 System.out.println("TRYING SIZE: " + size + ".");
-                if(checkPiece(CYCLOTRON_IDENTITY[size], 15 + (size * 5) + 1, 1, 0)) {
+                if (checkPiece(CYCLOTRON_IDENTITY[size], 15 + (size * 5) + 1, 1, 0)) {
                     cachedIndex = size;
                     System.out.println("SIZE " + size + " FOUND.");
                     break outside;
@@ -271,7 +340,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
             return false;
         } else {
             System.out.println("CACHED SIZE: " + cachedIndex + ".");
-            if(!checkPiece(CYCLOTRON_IDENTITY[cachedIndex], 15 + (cachedIndex * 5) + 1, 1, 0)) {
+            if (!checkPiece(CYCLOTRON_IDENTITY[cachedIndex], 15 + (cachedIndex * 5) + 1, 1, 0)) {
                 System.out.println("CACHED: FAIL.");
                 return false;
             }
@@ -329,27 +398,27 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         return new String[] {
             "------------ Critical Information ------------",
             StatCollector.translateToLocal("GT5U.multiblock.Progress") + ": " + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(mProgresstime) + EnumChatFormatting.RESET + "t / "
-                + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(mMaxProgresstime) + EnumChatFormatting.RESET + "t",
+                    + GT_Utility.formatNumbers(mProgresstime) + EnumChatFormatting.RESET + "t / "
+                    + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(mMaxProgresstime) + EnumChatFormatting.RESET + "t",
             StatCollector.translateToLocal("GT5U.multiblock.energy") + ": " + EnumChatFormatting.GREEN
-                + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / "
-                + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
+                    + GT_Utility.formatNumbers(storedEnergy) + EnumChatFormatting.RESET + " EU / "
+                    + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
             StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " + EnumChatFormatting.RED
-                + GT_Utility.formatNumbers(-EU_per_tick) + EnumChatFormatting.RESET + " EU/t",
+                    + GT_Utility.formatNumbers(-EU_per_tick) + EnumChatFormatting.RESET + " EU/t",
             StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(
-                GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(getExoticAndNormalEnergyHatchList()))
-                + EnumChatFormatting.RESET + " EU/t(*" + EnumChatFormatting.YELLOW
-                + GT_Utility.formatNumbers(
-                GT_ExoticEnergyInputHelper.getMaxInputAmpsMulti(getExoticAndNormalEnergyHatchList()))
-                + EnumChatFormatting.RESET + "A) " + StatCollector.translateToLocal("GT5U.machines.tier")
-                + ": " + EnumChatFormatting.YELLOW
-                + VN[
-                GT_Utility.getTier(GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(
-                    getExoticAndNormalEnergyHatchList()))]
-                + EnumChatFormatting.RESET,
+                    + GT_Utility.formatNumbers(
+                            GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(getExoticAndNormalEnergyHatchList()))
+                    + EnumChatFormatting.RESET + " EU/t(*" + EnumChatFormatting.YELLOW
+                    + GT_Utility.formatNumbers(
+                            GT_ExoticEnergyInputHelper.getMaxInputAmpsMulti(getExoticAndNormalEnergyHatchList()))
+                    + EnumChatFormatting.RESET + "A) " + StatCollector.translateToLocal("GT5U.machines.tier")
+                    + ": " + EnumChatFormatting.YELLOW
+                    + VN[
+                            GT_Utility.getTier(GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(
+                                    getExoticAndNormalEnergyHatchList()))]
+                    + EnumChatFormatting.RESET,
             "-----------------------------------------"
         };
     }
