@@ -1,7 +1,6 @@
 package goodgenerator.blocks.tileEntity.base;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
-import static goodgenerator.loader.Loaders.compactFusionCoil;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.GT_Values.AuthorColen;
 import static gregtech.api.enums.GT_Values.VN;
@@ -9,7 +8,9 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.*;
 import static java.lang.Math.*;
 
-import com.google.common.collect.ImmutableList;
+import com.github.technus.tectech.thing.CustomItemList;
+import com.github.technus.tectech.thing.casing.GT_Block_CasingsTT;
+
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
@@ -36,7 +37,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
-import org.apache.commons.lang3.tuple.Pair;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron>
@@ -66,8 +66,25 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         "56", "57", "58", "59", "60", "61", "62", "63",
     };
 
+
+    protected static final String controller_segment_identity = "controller_segment_identity";
+    protected static final String[][] controller_segment = new String[][]{{
+            "IIIII",
+            "II~II",
+            "IIIII"
+        },{
+            "IIIII",
+            "     ",
+            "IIIII"
+        },{
+            "IIIII",
+            "IIIII",
+            "IIIII"
+        }};
+
     private static final IStructureDefinition<GT_MetaTileEntity_Cyclotron> STRUCTURE_DEFINITION =
             StructureDefinition.<GT_MetaTileEntity_Cyclotron>builder()
+                .addShape(controller_segment_identity, controller_segment)
                     .addShape(CYCLOTRON_IDENTITY[0], CYCLOTRON_SHAPE_FILE_0.CYCLOTRON_SHAPE_0_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[1], CYCLOTRON_SHAPE_FILE_1.CYCLOTRON_SHAPE_1_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[2], CYCLOTRON_SHAPE_FILE_2.CYCLOTRON_SHAPE_2_IDENTITY)
@@ -132,41 +149,41 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                     .addShape(CYCLOTRON_IDENTITY[61], CYCLOTRON_SHAPE_FILE_61.CYCLOTRON_SHAPE_61_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[62], CYCLOTRON_SHAPE_FILE_62.CYCLOTRON_SHAPE_62_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[63], CYCLOTRON_SHAPE_FILE_63.CYCLOTRON_SHAPE_63_IDENTITY)
+                    //                    .addElement(
+                    //                            'B',
+                    //                            ofBlocksTiered(
+                    //                                    (block, meta) -> block == compactFusionCoil ? meta : -1,
+                    //                                    ImmutableList.of(
+                    //                                            Pair.of(compactFusionCoil, 0),
+                    //                                            Pair.of(compactFusionCoil, 1),
+                    //                                            Pair.of(compactFusionCoil, 2),
+                    //                                            Pair.of(compactFusionCoil, 3),
+                    //                                            Pair.of(compactFusionCoil, 4)),
+                    //                                    -1,
+                    //                                    (t, meta) -> t.CompactFusionCoilMetadata = meta,
+                    //                                    t -> t.CompactFusionCoilMetadata))
                     .addElement(
-                            'B',
-                            ofBlocksTiered(
-                                    (block, meta) -> block == compactFusionCoil ? meta : -1,
-                                    ImmutableList.of(
-                                            Pair.of(compactFusionCoil, 0),
-                                            Pair.of(compactFusionCoil, 1),
-                                            Pair.of(compactFusionCoil, 2),
-                                            Pair.of(compactFusionCoil, 3),
-                                            Pair.of(compactFusionCoil, 4)),
-                                    -1,
-                                    (t, meta) -> t.CompactFusionCoilMetadata = meta,
-                                    t -> t.CompactFusionCoilMetadata))
-                    //            .addElement(
-                    //                'B',
-                    //                ofCoil(
-                    //                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
-                    //                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
+                            'X',
+                            ofCoil(
+                                    GT_MetaTileEntity_Cyclotron::setCoilLevel,
+                                    GT_MetaTileEntity_Cyclotron::getCoilLevel))
+                                        .addElement(
+                                                'I',
+                                                buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
+                                                        .atLeast(
+                                                                InputHatch,
+                                                                OutputHatch,
+                                                                InputBus,
+                                                                OutputBus,
+                                                                Energy,
+                                                                ExoticEnergy,
+                                                                Maintenance)
+                                                        .casingIndex(5)
+                                                        .dot(1)
+                                                        .buildAndChain(CustomItemList.eM_Power.getBlock(), 0))
+                    .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
                     .addElement(
-                            'A',
-                            buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
-                                    .atLeast(
-                                            InputHatch,
-                                            OutputHatch,
-                                            InputBus,
-                                            OutputBus,
-                                            Energy,
-                                            ExoticEnergy,
-                                            Maintenance)
-                                    .casingIndex(5)
-                                    .dot(1)
-                                    .buildAndChain(GregTech_API.sBlockCasings8, 5))
-                    //            .addElement('A', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
-                    //            .addElement('W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true))
-                    // // Winding coil.
+                            'W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true)) // Winding coil.
                     //            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) //
                     // Cosmic glass.
                     //            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
@@ -433,7 +450,8 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     @Override
     public void construct(ItemStack stackSize, boolean hintsOnly) {
         int size = min(stackSize.stackSize, 63);
-        buildPiece(CYCLOTRON_IDENTITY[size], stackSize, hintsOnly, 15 + (size * 5) + 1, 1, 0);
+        buildPiece(CYCLOTRON_IDENTITY[size], stackSize, hintsOnly, 17 + (size * 5), 2, 1);
+        buildPiece(controller_segment_identity, stackSize, hintsOnly, 2, 1, 0);
     }
 
     @Override
