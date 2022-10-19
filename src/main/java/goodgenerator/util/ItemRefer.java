@@ -151,6 +151,7 @@ public final class ItemRefer {
     public static ItemRefer Compact_Fusion_MK5 = getItemStack(LFC[4]);
     public static ItemRefer Large_Essentia_Smeltery = getItemStack(LES);
     public static ItemRefer Coolant_Tower = getItemStack(CT);
+    public static ItemRefer Component_Assembly_Line = getItemStack(CompAssline);
 
     private Item mItem = null;
     private Block mBlock = null;
