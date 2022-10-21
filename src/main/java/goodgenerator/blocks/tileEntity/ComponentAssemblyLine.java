@@ -8,6 +8,7 @@ import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 import goodgenerator.loader.Loaders;
+import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.Textures;
@@ -576,7 +577,6 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        // return GT_Recipe.GT_Recipe_Map.sComponentAssemblyLineRecipes;
-        return null;
+        return MyRecipeAdder.COMPASSLINE_RECIPES;
     }
 }

@@ -419,5 +419,6 @@ public class Loaders {
         RecipeLoader.Fixer();
         RecipeLoader_02.RecipeLoad();
         NeutronActivatorLoader.NARecipeLoad();
+        ComponentAssemblyLineRecipeLoader.run();
     }
 }

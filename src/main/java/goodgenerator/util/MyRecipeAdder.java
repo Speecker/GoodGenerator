@@ -469,6 +469,7 @@ public class MyRecipeAdder {
             return addRecipe(tRecipe);
         }
     }
+
     @SuppressWarnings("deprecation")
     public static class PreciseAssemblerRecipe extends GT_Recipe {
         public PreciseAssemblerRecipe(
@@ -566,15 +567,11 @@ public class MyRecipeAdder {
             }
             if (recipe.mFluidInputs != null) {
                 for (int j = 0; j < recipe.mFluidInputs.length; j++) {
-                    if (j == 0) {
-                        inputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(
-                                GT_Utility.getFluidDisplayStack(recipe.mFluidInputs[j], true), 138, 45));
-                    } else {
-                        inputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(
-                                GT_Utility.getFluidDisplayStack(recipe.mFluidInputs[j], true),
-                                95 + 18 * (j % 2),
-                                80 + 18 * (j / 2)));
-                    }
+
+                    inputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(
+                            GT_Utility.getFluidDisplayStack(recipe.mFluidInputs[j], true),
+                            84 + 18 * (j % 4),
+                            27 + 18 * (j / 2)));
                 }
             }
             return inputStacks;
@@ -587,6 +584,17 @@ public class MyRecipeAdder {
                 outputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(recipe.mOutputs[0].copy(), 138, 5));
             }
             return outputStacks;
+        }
+
+        public void addCompAsslineRecipe(
+                ItemStack[] itemInputs,
+                ItemStack output,
+                FluidStack[] fluidInputs,
+                int duration,
+                int EUt,
+                int casingTier) {
+            super.addRecipe(
+                    false, itemInputs, new ItemStack[] {output}, null, null, fluidInputs, duration, EUt, casingTier);
         }
     }
 
