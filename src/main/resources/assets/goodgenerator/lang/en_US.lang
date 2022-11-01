@@ -121,6 +121,7 @@ item.huiCircuit.1.name=Hi-Computation Station MK-II
 item.huiCircuit.2.name=Hi-Computation Station MK-III
 item.huiCircuit.3.name=Hi-Computation Station MK-IV Prototype
 item.huiCircuit.4.name=Hi-Computation Station MK-V Finaltype
+item.nuclearStar.name=Nuclear Star
 
 #Crops
 crops.saltroot=Salty Root

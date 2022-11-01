@@ -571,7 +571,7 @@ public class MyRecipeAdder {
                     inputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(
                             GT_Utility.getFluidDisplayStack(recipe.mFluidInputs[j], true),
                             84 + 18 * (j % 4),
-                            27 + 18 * (j / 2)));
+                            27 + 18 * (j / 4)));
                 }
             }
             return inputStacks;
@@ -584,17 +584,6 @@ public class MyRecipeAdder {
                 outputStacks.add(new GT_NEI_DefaultHandler.FixedPositionedStack(recipe.mOutputs[0].copy(), 138, 5));
             }
             return outputStacks;
-        }
-
-        public void addCompAsslineRecipe(
-                ItemStack[] itemInputs,
-                ItemStack output,
-                FluidStack[] fluidInputs,
-                int duration,
-                int EUt,
-                int casingTier) {
-            super.addRecipe(
-                    false, itemInputs, new ItemStack[] {output}, null, null, fluidInputs, duration, EUt, casingTier);
         }
     }
 
@@ -615,14 +604,14 @@ public class MyRecipeAdder {
             false,
             true);
 
-    public void addComponentAssemblyLineRecipe(
+    public GT_Recipe addComponentAssemblyLineRecipe(
             ItemStack[] ItemInputArray,
             FluidStack[] FluidInputArray,
             ItemStack OutputItem,
             int aDuration,
             int aEUt,
             int casingLevel) {
-        COMPASSLINE_RECIPES.addRecipe(
+        return COMPASSLINE_RECIPES.addRecipe(
                 false,
                 ItemInputArray,
                 new ItemStack[] {OutputItem},

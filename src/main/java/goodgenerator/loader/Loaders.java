@@ -111,7 +111,11 @@ public class Loaders {
                 GoodGenerator.MOD_ID + ":ciruits/4",
                 GoodGenerator.MOD_ID + ":ciruits/5"
             });
-
+    public static final Item nuclearStar = new MyItems(
+            "nuclearStar",
+            new String[] {"BY THE POWERS OF NAUGHTINESS,", "I COMMAND THIS PARTICULAR STAR", "TO BE REALLY, REALLY HOT"
+            },
+            GoodGenerator.GG);
     public static final Block MAR_Casing =
             new Casing("MAR_Casing", new String[] {GoodGenerator.MOD_ID + ":MAR_Casing"});
     public static final Block FRF_Casings =
@@ -327,6 +331,7 @@ public class Loaders {
         GameRegistry.registerItem(highEnergyMixture, "highEnergyMixture", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(saltyRoot, "saltyRoot", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(huiCircuit, "huiCircuit", GoodGenerator.MOD_ID);
+        GameRegistry.registerItem(nuclearStar, "nuclearStar", GoodGenerator.MOD_ID);
     }
 
     public static void compactMod() {
@@ -405,6 +410,7 @@ public class Loaders {
     public static void completeLoad() {
         RecipeLoader_02.FinishLoadRecipe();
         MaterialFix.addRecipeForMultiItems();
+        ComponentAssemblyLineRecipeLoader.run();
     }
 
     public static void initLoadRecipes() {
@@ -419,6 +425,5 @@ public class Loaders {
         RecipeLoader.Fixer();
         RecipeLoader_02.RecipeLoad();
         NeutronActivatorLoader.NARecipeLoad();
-        ComponentAssemblyLineRecipeLoader.run();
     }
 }

@@ -1574,6 +1574,13 @@ public class RecipeLoader {
                 new int[] {10000, 9500, 8000, 2500, 2000, 2000},
                 100,
                 120);
+        GT_Values.RA.addAutoclaveRecipe(
+                ItemList.Gravistar.get(16L),
+                Materials.Infinity.getMolten(288L),
+                ItemRefer.Nuclear_Star.get(1),
+                10000,
+                480,
+                7864320);
     }
 
     public static void Fixer() {
