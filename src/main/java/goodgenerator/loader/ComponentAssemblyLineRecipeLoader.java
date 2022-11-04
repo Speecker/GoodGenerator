@@ -109,7 +109,6 @@ public class ComponentAssemblyLineRecipeLoader {
                         currFluid.amount = currFluid.amount * 16;
                         fixedFluids.add(currFluid);
                     }
-                    LOGGER.printf(Level.INFO, asslineStr(recipe));
                     for (ItemStack input : recipe.mInputs) {
                         if (GT_Utility.isStackValid(input)) {
                             int count = input.stackSize;
@@ -334,33 +333,6 @@ public class ComponentAssemblyLineRecipeLoader {
                 }
             }
         }
-    }
-
-    private static String asslineStr(GT_Recipe.GT_Recipe_AssemblyLine recipe) {
-        StringBuilder top = new StringBuilder("Assline Recipe 4komp:");
-        top.append(String.format("Output: %s\n", recipe.mOutput.getDisplayName()));
-        top.append("Inputs: ");
-        for (ItemStack is : recipe.mInputs) {
-            top.append(is.stackSize + "x " + is.getDisplayName() + ", ");
-        }
-        top.append("\nFluids: ");
-        for (FluidStack fs : recipe.mFluidInputs) {
-            top.append(fs.getLocalizedName() + " " + fs.amount + "L, ");
-        }
-        top.append(String.format("\nEnergy: %dEU/t\nDuration: %d\n", recipe.mEUt, recipe.mDuration));
-        top.append("OreDict Alts: ");
-        for (ItemStack[] isl : recipe.mOreDictAlt) {
-            if (isl != null) {
-                String s = "{";
-                for (ItemStack is : isl) {
-                    if (is != null) {
-                        s += is.getDisplayName() + " x" + is.stackSize + ", ";
-                    }
-                }
-                top.append("}, ");
-            }
-        }
-        return top.toString();
     }
 
     private static ArrayList<ItemStack> mergeStacks(List<ItemStack> stacks) {
