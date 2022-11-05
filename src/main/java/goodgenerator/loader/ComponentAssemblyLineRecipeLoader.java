@@ -155,7 +155,7 @@ public class ComponentAssemblyLineRecipeLoader {
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
-                            info.getLeft().get(16L),
+                            info.getLeft().get(20L),
                             recipe.mDuration,
                             recipe.mEUt,
                             info.getRight());
