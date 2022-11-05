@@ -443,7 +443,13 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "BBBBBBBBB"
                         }
                     })
-                    .addElement('A', ofBlockUnlocalizedName("IC2", "blockAlloyGlass", 0, true))
+                    .addElement(
+                            'A',
+                            ofChain(
+                                    ofBlockUnlocalizedName("IC2", "blockAlloyGlass", 0, true),
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 0, true),
+                                    // warded glass
+                                    ofBlockUnlocalizedName("Thaumcraft", "blockCosmeticOpaque", 2, false)))
                     .addElement('B', ofBlock(GregTech_API.sBlockCasings2, 0))
                     .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 3))
                     .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 5))
