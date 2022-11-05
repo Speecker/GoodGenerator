@@ -101,6 +101,23 @@ public class MyRecipeAdder {
             true,
             false);
 
+    public static final CyclotronMap CM = new CyclotronMap(
+            new HashSet<>(120),
+            "gg.recipe.goodgen_cyclotron",
+            StatCollector.translateToLocal("tile.goodgen_cyclotron"),
+            null,
+            "goodgenerator:textures/gui/precise_assembler",
+            4,
+            1,
+            1,
+            0,
+            1,
+            StatCollector.translateToLocal("value.precise_assembler.0"),
+            1,
+            StatCollector.translateToLocal("value.precise_assembler.1"),
+            true,
+            true);
+
     public static class liquidMentalFuelMapper extends GT_Recipe.GT_Recipe_Map_Fuel {
         public liquidMentalFuelMapper(
                 Collection<GT_Recipe> aRecipeList,
@@ -467,8 +484,82 @@ public class MyRecipeAdder {
         }
     }
 
+    public static class CyclotronMap extends GT_Recipe.GT_Recipe_Map {
+        public CyclotronMap(
+                Collection<GT_Recipe> aRecipeList,
+                String aUnlocalizedName,
+                String aLocalName,
+                String aNEIName,
+                String aNEIGUIPath,
+                int aUsualInputCount,
+                int aUsualOutputCount,
+                int aMinimalInputItems,
+                int aMinimalInputFluids,
+                int aAmperage,
+                String aNEISpecialValuePre,
+                int aNEISpecialValueMultiplier,
+                String aNEISpecialValuePost,
+                boolean aShowVoltageAmperageInNEI,
+                boolean aNEIAllowed) {
+            super(
+                    aRecipeList,
+                    aUnlocalizedName,
+                    aLocalName,
+                    aNEIName,
+                    aNEIGUIPath,
+                    aUsualInputCount,
+                    aUsualOutputCount,
+                    aMinimalInputItems,
+                    aMinimalInputFluids,
+                    aAmperage,
+                    aNEISpecialValuePre,
+                    aNEISpecialValueMultiplier,
+                    aNEISpecialValuePost,
+                    aShowVoltageAmperageInNEI,
+                    aNEIAllowed);
+        }
+    }
+
     public static class PreciseAssemblerRecipe extends GT_Recipe {
         public PreciseAssemblerRecipe(
+                ItemStack[] input1, FluidStack[] input2, ItemStack output, int EUt, int ticks, int tier) {
+            super(false, input1, new ItemStack[] {output}, null, null, input2, null, ticks, EUt, tier);
+        }
+
+        @Override
+        public ArrayList<PositionedStack> getInputPositionedStacks() {
+            ArrayList<PositionedStack> inputStacks = new ArrayList<>();
+            if (this.mFluidInputs != null) {
+                int index = 0;
+                for (FluidStack inFluid : mFluidInputs) {
+                    if (inFluid == null) continue;
+                    inputStacks.add(
+                            new PositionedStack(GT_Utility.getFluidDisplayStack(inFluid, true), 4 + index * 18, 38));
+                    index++;
+                }
+            }
+            if (this.mInputs != null) {
+                int index = 0;
+                for (ItemStack inItem : mInputs) {
+                    if (inItem == null) continue;
+                    inputStacks.add(new PositionedStack(inItem, 4 + index * 18, 3));
+                    index++;
+                }
+            }
+            return inputStacks;
+        }
+
+        @Override
+        public ArrayList<PositionedStack> getOutputPositionedStacks() {
+            ArrayList<PositionedStack> outputStacks = new ArrayList<>();
+            if (this.mOutputs != null && this.mOutputs.length > 0)
+                outputStacks.add(new PositionedStack(this.mOutputs[0], 111, 20));
+            return outputStacks;
+        }
+    }
+
+    public static class CyclotronRecipe extends GT_Recipe {
+        public CyclotronRecipe(
                 ItemStack[] input1, FluidStack[] input2, ItemStack output, int EUt, int ticks, int tier) {
             super(false, input1, new ItemStack[] {output}, null, null, input2, null, ticks, EUt, tier);
         }
@@ -510,5 +601,28 @@ public class MyRecipeAdder {
         if (aOutput == null) return;
         PA.addRecipe(
                 false, aItemInputs, new ItemStack[] {aOutput}, null, null, aFluidInputs, null, aDuration, aEUt, aTier);
+    }
+
+    public void addCyclotronRecipe(
+            ItemStack[] aItemInputs,
+            FluidStack[] aFluidInputs,
+            ItemStack[] aItemOutputs,
+            FluidStack[] aFluidOutputs,
+            int aEUt,
+            int aDuration,
+            int aTier,
+            int aCyclotronTierRequirement) {
+
+        CM.addRecipe(
+                false,
+                aItemInputs,
+                aItemOutputs,
+                aCyclotronTierRequirement,
+                null,
+                aFluidInputs,
+                aFluidOutputs,
+                aDuration,
+                aEUt,
+                aTier);
     }
 }

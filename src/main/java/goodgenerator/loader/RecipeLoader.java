@@ -1078,6 +1078,16 @@ public class RecipeLoader {
                 40,
                 1);
 
+        MyRecipeAdder.instance.addCyclotronRecipe(
+                new ItemStack[] {ItemList.Robot_Arm_UMV.get(2)},
+                new FluidStack[] {Materials.Aluminium.getMolten(144)},
+                new ItemStack[] {ItemRefer.Micro_Heater.get(2)},
+                new FluidStack[] {Materials.Steel.getMolten(144)},
+                30,
+                40,
+                1,
+                3);
+
         GT_Values.RA.addAutoclaveRecipe(
                 GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Quartzite, 1),
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 4),

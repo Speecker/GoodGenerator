@@ -1,5 +1,6 @@
 package goodgenerator.blocks.tileEntity.base;
 
+import static com.github.technus.tectech.thing.casing.GT_Block_CasingsTT.textureOffset;
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.GT_Values.AuthorColen;
@@ -9,11 +10,11 @@ import static gregtech.api.util.GT_StructureUtility.*;
 import static java.lang.Math.*;
 
 import com.github.technus.tectech.thing.CustomItemList;
-import com.github.technus.tectech.thing.casing.GT_Block_CasingsTT;
-
+import com.google.common.collect.ImmutableList;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import goodgenerator.util.MyRecipeAdder;
 import goodgenerator.util.cyclotron.*;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.HeatingCoilLevel;
@@ -22,7 +23,6 @@ import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_ExoticEnergyInputHelper;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
@@ -37,6 +37,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
 
 @SuppressWarnings("SpellCheckingInspection")
 public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMultiFurnace<GT_MetaTileEntity_Cyclotron>
@@ -57,8 +58,6 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         mCoilLevel = aCoilLevel;
     }
 
-    private int CompactFusionCoilMetadata = -1;
-
     protected static final String[] CYCLOTRON_IDENTITY = new String[] {
         "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
         "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37",
@@ -66,25 +65,13 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         "56", "57", "58", "59", "60", "61", "62", "63",
     };
 
-
     protected static final String controller_segment_identity = "controller_segment_identity";
-    protected static final String[][] controller_segment = new String[][]{{
-            "IIIII",
-            "II~II",
-            "IIIII"
-        },{
-            "IIIII",
-            "     ",
-            "IIIII"
-        },{
-            "IIIII",
-            "IIIII",
-            "IIIII"
-        }};
+    protected static final String[][] controller_segment =
+            new String[][] {{"IIIII", "II~II", "IIIII"}, {"IIIII", "     ", "IIIII"}, {"IIIII", "IIIII", "IIIII"}};
 
     private static final IStructureDefinition<GT_MetaTileEntity_Cyclotron> STRUCTURE_DEFINITION =
             StructureDefinition.<GT_MetaTileEntity_Cyclotron>builder()
-                .addShape(controller_segment_identity, controller_segment)
+                    .addShape(controller_segment_identity, controller_segment)
                     .addShape(CYCLOTRON_IDENTITY[0], CYCLOTRON_SHAPE_FILE_0.CYCLOTRON_SHAPE_0_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[1], CYCLOTRON_SHAPE_FILE_1.CYCLOTRON_SHAPE_1_IDENTITY)
                     .addShape(CYCLOTRON_IDENTITY[2], CYCLOTRON_SHAPE_FILE_2.CYCLOTRON_SHAPE_2_IDENTITY)
@@ -167,24 +154,40 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                             ofCoil(
                                     GT_MetaTileEntity_Cyclotron::setCoilLevel,
                                     GT_MetaTileEntity_Cyclotron::getCoilLevel))
-                                        .addElement(
-                                                'I',
-                                                buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
-                                                        .atLeast(
-                                                                InputHatch,
-                                                                OutputHatch,
-                                                                InputBus,
-                                                                OutputBus,
-                                                                Energy,
-                                                                ExoticEnergy,
-                                                                Maintenance)
-                                                        .casingIndex(5)
-                                                        .dot(1)
-                                                        .buildAndChain(CustomItemList.eM_Power.getBlock(), 0))
+                    .addElement(
+                            'I',
+                            buildHatchAdder(GT_MetaTileEntity_Cyclotron.class)
+                                    .atLeast(
+                                            InputHatch,
+                                            OutputHatch,
+                                            InputBus,
+                                            OutputBus,
+                                            Energy,
+                                            ExoticEnergy,
+                                            Maintenance)
+                                    .casingIndex(textureOffset)
+                                    .dot(1)
+                                    .buildAndChain(CustomItemList.eM_Power.getBlock(), 0))
                     .addElement('B', ofBlock(GregTech_API.sBlockCasings8, 5)) // Radiation proof casing.
                     .addElement(
-                            'W', ofBlockUnlocalizedName("bartworks", "BW_Machinery_Casings", 1, true)) // Winding coil.
-                    //            .addElement('G', ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14, true)) //
+                            'W',
+                            ofBlocksTiered(
+                                    (block, meta) -> block == GregTech_API.sSolenoidCoilCasings ? meta : -1,
+                                    ImmutableList.of(
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 0),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 1),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 2),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 3),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 4),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 5),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 6),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 7),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 8),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 9),
+                                            Pair.of(GregTech_API.sSolenoidCoilCasings, 10)),
+                                    -1,
+                                    (t, meta) -> t.SolenoidCoilTier = meta,
+                                    t -> t.SolenoidCoilTier))
                     // Cosmic glass.
                     //            .addElement('F', ofFrame(Materials.Infinity)) // Infinity frame.
                     .build();
@@ -211,11 +214,12 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
     @Override
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
         GT_Multiblock_Tooltip_Builder tt = new GT_Multiblock_Tooltip_Builder();
-        tt.addInfo("Transcending Dimensional Boundaries.")
+        tt.addInfo("Accelerating since 1929")
                 .addInfo("")
                 .addInfo(AuthorColen)
                 .addSeparator()
-                .beginStructureBlock(0, 0, 0, false)
+                .addInfo("Dimensions: WxHxL: (35*10*N)x5x(35*10*N), 0 <= N <= 63")
+                .beginStructureBlock(0, 5, 0, false)
                 .toolTipFinisher("Gregtech");
         return tt;
     }
@@ -269,7 +273,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return GT_Recipe.GT_Recipe_Map.sPlasmaForgeRecipes;
+        return MyRecipeAdder.CM;
     }
 
     @Override
@@ -287,7 +291,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
         return processRecipe(getCompactedInputs(), getCompactedFluids());
     }
 
-    long EU_per_tick = 0;
+    long LongEUPerTick = 0;
 
     protected boolean processRecipe(ItemStack[] tItems, FluidStack[] tFluids) {
 
@@ -297,75 +301,62 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
         long tTotalEU = tVoltage * tAmps;
 
-        // Hacky method to determine if double energy hatches are being used.
-        if (getExoticAndNormalEnergyHatchList().get(0) instanceof GT_MetaTileEntity_Hatch_Energy) {
-            tTotalEU /= 2L;
-        }
-
         // Look up recipe. If not found it will return null.
-        GT_Recipe tRecipe_0 = GT_Recipe.GT_Recipe_Map.sPlasmaForgeRecipes.findRecipe(
-                getBaseMetaTileEntity(), false, tTotalEU, tFluids, tItems);
+        GT_Recipe tRecipe = getRecipeMap().findRecipe(getBaseMetaTileEntity(), false, tTotalEU, tFluids, tItems);
 
         // Check if recipe found.
-        if (tRecipe_0 == null) return false;
+        if (tRecipe == null) return false;
 
-        // If coil heat capacity is too low, refuse to start recipe.
-        //        if (mHeatingCapacity <= tRecipe_0.mSpecialValue) return false;
-
-        // Reduce fuel quantity if machine has been running for long enough.
-        GT_Recipe tRecipe_1 = tRecipe_0.copy();
-
-        // Break out to the outermost for loop when fuel found and discounted. Only 1 fuel per recipe is intended.
+        // Check if coil tier is high enough.
+        if (tRecipe.mSpecialValue >= SolenoidCoilTier) return false;
 
         // Takes items/fluids from hatches/busses.
-        if (!tRecipe_1.isRecipeInputEqual(true, tFluids, tItems)) return false;
+        if (!tRecipe.isRecipeInputEqual(true, tFluids, tItems)) return false;
 
         // Logic for overclocking calculations.
         double EU_input_tier = log(tTotalEU) / log4;
-        double EU_recipe_tier = log(tRecipe_0.mEUt) / log4;
+        double EU_recipe_tier = log(tRecipe.mEUt) / log4;
         long overclock_count = (long) floor(EU_input_tier - EU_recipe_tier);
 
         // Vital recipe info. Calculate overclocks here if necessary.
-        EU_per_tick = (long) -(tRecipe_0.mEUt * pow(4, overclock_count));
+        LongEUPerTick = (long) -(tRecipe.mEUt * pow(4, overclock_count));
 
-        mMaxProgresstime = (int) (tRecipe_0.mDuration / pow(2, overclock_count));
-        mMaxProgresstime = Math.max(1, mMaxProgresstime);
+        mMaxProgresstime = (int) (tRecipe.mDuration / pow(2, overclock_count));
+        mMaxProgresstime = max(1, mMaxProgresstime);
 
         // Output items/fluids.
-        mOutputItems = tRecipe_0.mOutputs.clone();
-        mOutputFluids = tRecipe_0.mFluidOutputs.clone();
+        mOutputItems = tRecipe.mOutputs.clone();
+        mOutputFluids = tRecipe.mFluidOutputs.clone();
         updateSlots();
 
         return true;
     }
 
-    int cachedIndex = -1;
+    int CyclotronSizeTier = -1;
+    int SolenoidCoilTier = -1;
 
     @Override
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
 
         outside:
-        if (cachedIndex == -1) {
+        if (CyclotronSizeTier == -1) {
             for (int size = 0; size < 64; size++) {
-                System.out.println("TRYING SIZE: " + size + ".");
-                if (checkPiece(CYCLOTRON_IDENTITY[size], 15 + (size * 5) + 1, 1, 0)) {
-                    cachedIndex = size;
-                    System.out.println("SIZE " + size + " FOUND.");
+                if (checkPiece(CYCLOTRON_IDENTITY[size], 17 + (size * 5), 2, 1)) {
+                    CyclotronSizeTier = size;
                     break outside;
                 }
             }
             return false;
         } else {
-            System.out.println("CACHED SIZE: " + cachedIndex + ".");
-            if (!checkPiece(CYCLOTRON_IDENTITY[cachedIndex], 15 + (cachedIndex * 5) + 1, 1, 0)) {
-                System.out.println("CACHED: FAIL.");
+            if (!checkPiece(CYCLOTRON_IDENTITY[CyclotronSizeTier], 17 + (CyclotronSizeTier * 5), 2, 1)) {
+                // Failed to find a cyclotron structure.
+                CyclotronSizeTier = -1;
                 return false;
             }
-            System.out.println("CACHED: SUCCESS.");
         }
 
         // All structure checks passed, return true.
-        return true;
+        return checkPiece(controller_segment_identity, 2, 1, 0);
     }
 
     public void clearHatches() {
@@ -388,9 +379,9 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     @Override
     public boolean onRunningTick(ItemStack aStack) {
-        if (EU_per_tick < 0) {
-            if (!drainEnergyInput(-EU_per_tick)) {
-                EU_per_tick = 0;
+        if (LongEUPerTick < 0) {
+            if (!drainEnergyInput(-LongEUPerTick)) {
+                LongEUPerTick = 0;
                 criticalStopMachine();
                 return false;
             }
@@ -423,7 +414,7 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
                     + EnumChatFormatting.YELLOW
                     + GT_Utility.formatNumbers(maxEnergy) + EnumChatFormatting.RESET + " EU",
             StatCollector.translateToLocal("GT5U.multiblock.usage") + ": " + EnumChatFormatting.RED
-                    + GT_Utility.formatNumbers(-EU_per_tick) + EnumChatFormatting.RESET + " EU/t",
+                    + GT_Utility.formatNumbers(-LongEUPerTick) + EnumChatFormatting.RESET + " EU/t",
             StatCollector.translateToLocal("GT5U.multiblock.mei") + ": " + EnumChatFormatting.YELLOW
                     + GT_Utility.formatNumbers(
                             GT_ExoticEnergyInputHelper.getMaxInputVoltageMulti(getExoticAndNormalEnergyHatchList()))
@@ -456,13 +447,17 @@ public class GT_MetaTileEntity_Cyclotron extends GT_MetaTileEntity_AbstractMulti
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setLong("eLongEUPerTick", EU_per_tick);
+        aNBT.setLong("eLongEUPerTick", LongEUPerTick);
+        aNBT.setInteger("eSolenoidCoilTier", SolenoidCoilTier);
+        aNBT.setInteger("eCyclotronSizeTier", CyclotronSizeTier);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
-        EU_per_tick = aNBT.getLong("eLongEUPerTick");
+        LongEUPerTick = aNBT.getLong("eLongEUPerTick");
+        SolenoidCoilTier = aNBT.getInteger("eSolenoidCoilTier");
+        CyclotronSizeTier = aNBT.getInteger("eCyclotronSizeTier");
         super.loadNBTData(aNBT);
     }
 }
