@@ -528,6 +528,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                 .addInfo("limits the recipes the machine can perform. See the NEI pages for details.")
                 .addInfo("Supports " + EnumChatFormatting.BLUE + "Tec" + EnumChatFormatting.DARK_BLUE + "Tech"
                         + EnumChatFormatting.GRAY + " laser and multi-amp hatches!")
+                .addInfo("Supports overclocking beyond MAX!")
                 .addInfo(EnumChatFormatting.ITALIC + "Much more efficient than other competing brands!")
                 .beginStructureBlock(9, 10, 33, false)
                 .addStructureInfo("This structure is too complex! See schematic for details.")
