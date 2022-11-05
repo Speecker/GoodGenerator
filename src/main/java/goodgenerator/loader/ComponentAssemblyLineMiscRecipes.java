@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Level;
 public class ComponentAssemblyLineMiscRecipes {
 
     public static void run() {
+
         generateCasingRecipes();
 
         // Try and find the ZPM Fluid solidifier

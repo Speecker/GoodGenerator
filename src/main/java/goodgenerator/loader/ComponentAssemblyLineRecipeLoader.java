@@ -113,6 +113,8 @@ public class ComponentAssemblyLineRecipeLoader {
                             boolean isConvertedAndFluidFound = false;
                             if (OreDictionary.getOreIDs(input).length > 0 && count > 7 && !isCompactable(input)) {
                                 FluidStack foundFluidStack = tryConvertItemStackToFluidMaterial(input);
+                                // Looks for a matching fluid stack and merges the amount of the converted fluid with
+                                // the one it found. Otherwise it will add the converted to the fluid inputs.
                                 if (foundFluidStack != null) {
                                     boolean alreadyHasFluid = false;
                                     for (FluidStack fluidstack : fixedFluids) {
@@ -128,16 +130,17 @@ public class ComponentAssemblyLineRecipeLoader {
                                     isConvertedAndFluidFound = true;
                                 }
                             }
-                            // Converts Gravi Stars to Nuclear Stars
+                            // Converts Gravi Stars to Nuclear Stars for UEV+ recipes
                             if (GT_Utility.areStacksEqual(input, ItemList.Gravistar.get(count))
                                     && info.getRight() > 9) {
                                 fixedInputs.add(ItemRefer.Nuclear_Star.get(count));
                             }
-                            // Mulitplies the input by 16 and adjusts the stacks accordingly
+                            // Mulitplies the input by 16, and adjusts the stacks accordingly
                             else if (!(input.getItem() instanceof GT_IntegratedCircuit_Item)
                                     && !isConvertedAndFluidFound) {
                                 ItemData data = GT_OreDictUnificator.getAssociation(input);
                                 if (data != null) {
+                                    // trying to fix some circuit oredicting issues
                                     if (data.mPrefix == OrePrefixes.circuit) {
                                         fixedInputs.addAll(multiplyAndSplitIntoStacks(
                                                 GT_OreDictUnificator.get(data.mPrefix, data.mMaterial.mMaterial, count),
@@ -160,7 +163,10 @@ public class ComponentAssemblyLineRecipeLoader {
             }
         });
     }
-
+    /**
+     * Returns {@code true} if the {@code ItemStack} is able to be compacted
+     * into its respective gear/wire/etc.
+     * */
     private static boolean isCompactable(ItemStack toCompact) {
         ItemData data = GT_OreDictUnificator.getAssociation(toCompact);
         if (data != null) {
@@ -174,6 +180,10 @@ public class ComponentAssemblyLineRecipeLoader {
         return false;
     }
 
+    /** Tries to convert {@code input} into its molten form.
+     * Because the internal names for material fluids in GT5u, GT++, and BartWorks follow the same naming scheme,
+     * this method should work for any {@code ItemStack} from any of the 3 material systems.
+     * */
     private static FluidStack tryConvertItemStackToFluidMaterial(ItemStack input) {
         ArrayList<String> oreDicts = new ArrayList<>();
         for (int id : OreDictionary.getOreIDs(input)) {
@@ -209,7 +219,9 @@ public class ComponentAssemblyLineRecipeLoader {
         return null;
     }
     /**
-     *
+     * Gives the longest Ore Prefix that the OreDictionary string starts with. This makes it the most accurate prefix.
+     * For example: If your OreDictionary is something like {@code gearGtSmallSpaceTime}, a conventional search would
+     * return something like {@code gearGt} instead of {@code gearGtSmall}. This makes the longer String the most accurate.
      * @param oreDict The Ore Dictionary entry
      * @return The longest ore prefix that the OreDict string starts with. This makes it the most accurate prefix.
      */
@@ -227,9 +239,14 @@ public class ComponentAssemblyLineRecipeLoader {
         }
         return matchingPrefix;
     }
-
+    /**
+     * Transforms each {@code ItemStack}, if possible, into a more compact form.
+     * For example, a stack of 16 1x cables, when passed into the {@code items} array,
+     * will be converted into a single 16x cable.
+     * */
     private static ArrayList<ItemStack> compactItems(ItemStack[] items) {
         ArrayList<ItemStack> stacks = new ArrayList<>();
+        // yeah i know this messy :\
         for (ItemStack item : items) {
             ItemData data = GT_OreDictUnificator.getItemData(item);
             if (data != null) {
@@ -257,7 +274,7 @@ public class ComponentAssemblyLineRecipeLoader {
         stacks = mergeStacks(stacks);
         return stacks;
     }
-
+    /** A helper method for compacting items */
     private static void compactorHelper(
             ItemStack input, ItemData data, OrePrefixes compactInto, ArrayList<ItemStack> output) {
         int materialRatio = (int) ((double) compactInto.mMaterialAmount / data.mPrefix.mMaterialAmount);
@@ -287,7 +304,7 @@ public class ComponentAssemblyLineRecipeLoader {
     }
 
     /**
-     * Searches the Assembler and Assembly line registry for all of the base component recipes.
+     * Searches the Assembler and Assembly line registry for all the base component recipes.
      */
     private static void findAllRecipes() {
         allAssemblerRecipes = new LinkedHashMap<>();
@@ -315,7 +332,9 @@ public class ComponentAssemblyLineRecipeLoader {
             }
         }
     }
-
+    /**
+     * Merges the ItemStacks in the array into full stacks.
+     * */
     private static ArrayList<ItemStack> mergeStacks(List<ItemStack> stacks) {
         ArrayList<ItemStack> output = new ArrayList<>();
         for (int index = 0; index < stacks.size(); index++) {
