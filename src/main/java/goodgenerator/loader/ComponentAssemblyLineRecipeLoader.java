@@ -1,7 +1,5 @@
 package goodgenerator.loader;
 
-import static goodgenerator.util.Log.LOGGER;
-
 import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.GT_Values;
@@ -12,15 +10,15 @@ import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Level;
 
 public class ComponentAssemblyLineRecipeLoader {
     private static final String[] compPrefixes = {
@@ -45,13 +43,14 @@ public class ComponentAssemblyLineRecipeLoader {
         findAllRecipes();
         generateAssemblerRecipes();
         generateAsslineRecipes();
+        ComponentAssemblyLineMiscRecipes.run();
     }
-    /** Normal assembler recipes (LV-IV) **/
+
+    /** Normal assembler recipes (LV-IV) */
     private static void generateAssemblerRecipes() {
         allAssemblerRecipes.forEach((recipeList, info) -> {
             for (GT_Recipe recipe : recipeList) {
                 if (recipe != null) {
-                    // LOGGER.printf(Level.INFO, "RECIPE: %s", info.getLeft().name());
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
                     ArrayList<FluidStack> fixedFluids = new ArrayList<>();
 
@@ -72,13 +71,12 @@ public class ComponentAssemblyLineRecipeLoader {
                     }
 
                     int tier = info.getRight();
-                    int energy = (int) Math.min(
-                            Integer.MAX_VALUE - 7, ((GT_Values.V[tier] - GT_Values.V[tier > 1 ? tier - 2 : 0]) * 16));
+                    int energy = (int) Math.min(Integer.MAX_VALUE - 7, (GT_Values.V[tier] - (GT_Values.V[tier] >> 4)));
 
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
-                            info.getLeft().get(16L),
+                            info.getLeft().get(20L),
                             recipe.mDuration * 16,
                             energy,
                             info.getRight());
@@ -151,7 +149,7 @@ public class ComponentAssemblyLineRecipeLoader {
                     }
 
                     fixedInputs = compactItems(fixedInputs.toArray(new ItemStack[0]));
-                    GT_Recipe added = MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
+                    MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
                             info.getLeft().get(16L),
@@ -204,15 +202,6 @@ public class ComponentAssemblyLineRecipeLoader {
 
             // Prevents things like AnyCopper or AnyIron from messing the search up.
             if (strippedOreDict.contains("Any")) continue;
-            Fluid foundFluid = FluidRegistry.getFluid("molten." + strippedOreDict.toLowerCase());
-
-            LOGGER.printf(
-                    Level.INFO,
-                    "Dict information: Prefix: %s, Stripped: %s, Fluid: %s",
-                    orePrefix,
-                    strippedOreDict,
-                    foundFluid.getUnlocalizedName());
-
             return FluidRegistry.getFluidStack(
                     "molten." + strippedOreDict.toLowerCase(),
                     (int) (orePrefix.mMaterialAmount / (GT_Values.M / 144)) * input.stackSize);
@@ -308,10 +297,6 @@ public class ComponentAssemblyLineRecipeLoader {
             for (int t = 1; t <= 12; t++) {
                 String vName = GT_Values.VN[t];
                 ItemList currentComponent = ItemList.valueOf(compPrefix + vName);
-                LOGGER.printf(
-                        Level.INFO,
-                        "Current Component: %s",
-                        currentComponent.get(1).getDisplayName());
                 if (currentComponent.hasBeenSet()) {
                     if (t < 6) {
                         allAssemblerRecipes.put(
@@ -322,11 +307,7 @@ public class ComponentAssemblyLineRecipeLoader {
                     } else {
                         allAsslineRecipes.put(
                                 GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes.stream()
-                                        .filter(rec -> {
-                                            boolean found = rec.mOutput.isItemEqual(currentComponent.get(1));
-                                            if (found) LOGGER.log(Level.INFO, "Found");
-                                            return found;
-                                        })
+                                        .filter(rec -> rec.mOutput.isItemEqual(currentComponent.get(1)))
                                         .collect(Collectors.toList()),
                                 Pair.of(currentComponent, t));
                     }

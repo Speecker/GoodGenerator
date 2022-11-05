@@ -5,7 +5,6 @@ import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
-import static java.lang.Math.*;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
@@ -39,7 +38,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
         implements ISurvivalConstructable {
 
     private int casingTier;
-    private double log4 = Math.log(4);
+    private final double log4 = Math.log(4);
     private long EU_per_tick = 0;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<ComponentAssemblyLine> STRUCTURE_DEFINITION =
