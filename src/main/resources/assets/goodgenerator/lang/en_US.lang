@@ -41,6 +41,21 @@ compactFusionCoil.4.name=Compact Fusion Coil MK-II Finaltype
 essentiaFilterCasing.0.name=Essentia Filter Casing
 essentiaOutputHatch.0.name=Essentia Output Hatch
 essentiaOutputHatch_ME.0.name=Essentia Output Hatch (ME)
+componentAssemblyLineCasing.0.name=Component Assembly Line Casing (LV)
+componentAssemblyLineCasing.1.name=Component Assembly Line Casing (MV)
+componentAssemblyLineCasing.2.name=Component Assembly Line Casing (HV)
+componentAssemblyLineCasing.3.name=Component Assembly Line Casing (EV)
+componentAssemblyLineCasing.4.name=Component Assembly Line Casing (IV)
+componentAssemblyLineCasing.5.name=Component Assembly Line Casing (LuV)
+componentAssemblyLineCasing.6.name=Component Assembly Line Casing (ZPM)
+componentAssemblyLineCasing.7.name=Component Assembly Line Casing (UV)
+componentAssemblyLineCasing.8.name=Component Assembly Line Casing (UHV)
+componentAssemblyLineCasing.9.name=Component Assembly Line Casing (UEV)
+componentAssemblyLineCasing.10.name=Component Assembly Line Casing (UIV)
+componentAssemblyLineCasing.11.name=Component Assembly Line Casing (UMV)
+componentAssemblyLineCasing.12.name=Component Assembly Line Casing (UXV)
+componentAssemblyLineCasing.13.name=Component Assembly Line Casing (MAX)
+
 
 #Items
 item.radiationProtectionPlate.name=Radiation Proof Plate
@@ -121,6 +136,7 @@ item.huiCircuit.1.name=Hi-Computation Station MK-II
 item.huiCircuit.2.name=Hi-Computation Station MK-III
 item.huiCircuit.3.name=Hi-Computation Station MK-IV Prototype
 item.huiCircuit.4.name=Hi-Computation Station MK-V Finaltype
+item.nuclearStar.name=Nuclear Star
 
 #Crops
 crops.saltroot=Salty Root
@@ -255,6 +271,7 @@ scanner.info.YOTTank.2=Current Used:
 scanner.info.XHE.0=Steam Output is equal to
 scanner.info.XHE.1=Overheated Threshold:
 scanner.info.UX.0=Running Parallel
+scanner.info.CASS.tier=Casing Tier:
 
 #GUI Info
 gui.NeutronSensor.0=Input the value of Neutron Kinetic Energy.
