@@ -727,7 +727,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
 
     @Override
     public GT_Recipe.GT_Recipe_Map getRecipeMap() {
-        return MyRecipeAdder.COMPASSLINE_RECIPES;
+        return MyRecipeAdder.instance.COMPASSLINE_RECIPES;
     }
 
     @Override
