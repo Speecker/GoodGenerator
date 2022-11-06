@@ -12,9 +12,8 @@ import gregtech.common.power.EUPower;
 import gregtech.common.power.Power;
 import gregtech.common.power.UnspecifiedEUPower;
 import gregtech.nei.GT_NEI_DefaultHandler;
-import net.minecraft.util.EnumChatFormatting;
-
 import java.awt.*;
+import net.minecraft.util.EnumChatFormatting;
 
 public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
     public ComponentAssemblyLineHandler(GT_Recipe.GT_Recipe_Map aRecipeMap) {
@@ -24,14 +23,15 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
         this.transferRects.add(new RecipeTransferRect(new Rectangle(69, 18, 9, 34), getOverlayIdentifier()));
         if (!NEI_Config.isAdded) {
             FMLInterModComms.sendRuntimeMessage(
-                GT_Values.GT,
-                "NEIPlugins",
-                "register-crafting-handler",
-                "gregtech@" + this.getRecipeName() + "@" + this.getOverlayIdentifier());
+                    GT_Values.GT,
+                    "NEIPlugins",
+                    "register-crafting-handler",
+                    "gregtech@" + this.getRecipeName() + "@" + this.getOverlayIdentifier());
             GuiCraftingRecipe.craftinghandlers.add(this);
             GuiUsageRecipe.usagehandlers.add(this);
         }
     }
+
     @Override
     public TemplateRecipeHandler newInstance() {
         return new ComponentAssemblyLineHandler(this.mRecipeMap);
@@ -65,8 +65,8 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
                     if (!(originalPower instanceof UnspecifiedEUPower)) {
                         originalPower.computePowerUsageAndDuration(recipe.mEUt, recipe.mDuration);
                         drawLine(
-                            lineCounter,
-                            GT_Utility.trans("275", "Original voltage: ") + originalPower.getVoltageString());
+                                lineCounter,
+                                GT_Utility.trans("275", "Original voltage: ") + originalPower.getVoltageString());
                         lineCounter++;
                     }
                 }
@@ -92,10 +92,10 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
                     drawLine(lineCounter, GT_Utility.trans("158", "Time: ") + mPower.getDurationStringSeconds());
                 } else {
                     drawLine(
-                        lineCounter,
-                        GT_Utility.trans("158", "Time: ")
-                            + mPower.getDurationStringSeconds()
-                            + String.format(" (%s)", mPower.getDurationStringTicks()));
+                            lineCounter,
+                            GT_Utility.trans("158", "Time: ")
+                                    + mPower.getDurationStringSeconds()
+                                    + String.format(" (%s)", mPower.getDurationStringTicks()));
                 }
             } else {
                 drawLine(lineCounter, GT_Utility.trans("158", "Time: ") + mPower.getDurationStringTicks());
@@ -104,8 +104,8 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
         }
 
         if (GT_Utility.isStringValid(this.mRecipeMap.mNEISpecialValuePre)
-            && this.mRecipeMap.mNEISpecialValuePre.toLowerCase().contains("casing tier")) {
-            drawLine(lineCounter, this.mRecipeMap.mNEISpecialValuePre+GT_Values.VN[recipe.mSpecialValue]);
+                && this.mRecipeMap.mNEISpecialValuePre.toLowerCase().contains("casing tier")) {
+            drawLine(lineCounter, this.mRecipeMap.mNEISpecialValuePre + GT_Values.VN[recipe.mSpecialValue]);
             lineCounter++;
         } else if (drawOptionalLine(lineCounter, getSpecialInfo(recipe.mSpecialValue))) {
             lineCounter++;
@@ -113,31 +113,31 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
         if (GT_Mod.gregtechproxy.mNEIRecipeOwner) {
             if (recipe.owners.size() > 1) {
                 drawLine(
-                    lineCounter,
-                    EnumChatFormatting.ITALIC
-                        + GT_Utility.trans("273", "Original Recipe by: ")
-                        + recipe.owners.get(0).getName());
+                        lineCounter,
+                        EnumChatFormatting.ITALIC
+                                + GT_Utility.trans("273", "Original Recipe by: ")
+                                + recipe.owners.get(0).getName());
                 lineCounter++;
                 for (int i = 1; i < recipe.owners.size(); i++) {
                     drawLine(
-                        lineCounter,
-                        EnumChatFormatting.ITALIC
-                            + GT_Utility.trans("274", "Modified by: ")
-                            + recipe.owners.get(i).getName());
+                            lineCounter,
+                            EnumChatFormatting.ITALIC
+                                    + GT_Utility.trans("274", "Modified by: ")
+                                    + recipe.owners.get(i).getName());
                     lineCounter++;
                 }
             } else if (recipe.owners.size() > 0) {
                 drawLine(
-                    lineCounter,
-                    EnumChatFormatting.ITALIC
-                        + GT_Utility.trans("272", "Recipe by: ")
-                        + recipe.owners.get(0).getName());
+                        lineCounter,
+                        EnumChatFormatting.ITALIC
+                                + GT_Utility.trans("272", "Recipe by: ")
+                                + recipe.owners.get(0).getName());
                 lineCounter++;
             }
         }
         if (GT_Mod.gregtechproxy.mNEIRecipeOwnerStackTrace
-            && recipe.stackTraces != null
-            && !recipe.stackTraces.isEmpty()) {
+                && recipe.stackTraces != null
+                && !recipe.stackTraces.isEmpty()) {
             drawLine(lineCounter, "stackTrace:");
             lineCounter++;
             for (StackTraceElement stackTrace : recipe.stackTraces.get(0)) {
@@ -146,6 +146,7 @@ public class ComponentAssemblyLineHandler extends GT_NEI_DefaultHandler {
             }
         }
     }
+
     private Power getPowerFromRecipeMap() {
         Power power;
         if (this.mRecipeMap.mShowVoltageAmperageInNEI) {

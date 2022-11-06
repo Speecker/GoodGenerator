@@ -56,7 +56,6 @@ public class IMCForNEI {
         FMLInterModComms.sendMessage("NotEnoughItems", "registerHandlerInfo", aNBT);
     }
 
-
     private static void sendCatalyst(String aName, String aStack, int aPriority) {
         NBTTagCompound aNBT = new NBTTagCompound();
         aNBT.setString("handlerID", aName);
