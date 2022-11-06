@@ -587,7 +587,7 @@ public class MyRecipeAdder {
         }
     }
 
-    public static final ComponentAssemblyLineMapper COMPASSLINE_RECIPES = new ComponentAssemblyLineMapper(
+    public final ComponentAssemblyLineMapper COMPASSLINE_RECIPES = new ComponentAssemblyLineMapper(
             new HashSet<>(110),
             "gg.recipe.componentassemblyline",
             "Component Assembly Line",
@@ -602,7 +602,7 @@ public class MyRecipeAdder {
             1,
             "",
             false,
-            true);
+            false);
 
     public GT_Recipe addComponentAssemblyLineRecipe(
             ItemStack[] ItemInputArray,

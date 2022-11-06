@@ -34,21 +34,15 @@ public class IMCForNEI {
         //        sendCatalyst("gt.recipe.complexfusionreactor", "gregtech:gt.blockmachines:32023", -10); // Compact
         // Fusion MK-V
 
-        NBTTagCompound NBTCompoundForCassline = new NBTTagCompound();
-        NBTCompoundForCassline.setString("handler", "gg.recipe.componentassemblyline");
-        NBTCompoundForCassline.setString("modName", "Good Generator");
-        NBTCompoundForCassline.setString("modId", "GoodGenerator");
-        NBTCompoundForCassline.setBoolean("modRequired", true);
-        NBTCompoundForCassline.setString("itemName", "gregtech:gt.blockmachines:32026");
-        NBTCompoundForCassline.setInteger("handlerHeight", 135);
-        NBTCompoundForCassline.setInteger("handlerWidth", 166);
-        NBTCompoundForCassline.setInteger("maxRecipesPerPage", 2);
-        NBTCompoundForCassline.setInteger("yShift", 6);
-        FMLInterModComms.sendMessage("NotEnoughItems", "registerHandlerInfo", NBTCompoundForCassline);
-        sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:32026", -11);
+        sendHandler("goodgenerator.crossmod.nei.ComponentAssemblyLineHandler", "gregtech:gt.blockmachines:32026", 2);
+        sendCatalyst("gg.recipe.componentassemblyline", "gregtech:gt.blockmachines:32026");
     }
 
     private static void sendHandler(String aName, String aBlock) {
+        sendHandler(aName, aBlock, 1);
+    }
+
+    private static void sendHandler(String aName, String aBlock, int maxRecipesPerPage) {
         NBTTagCompound aNBT = new NBTTagCompound();
         aNBT.setString("handler", aName);
         aNBT.setString("modName", "Good Generator");
@@ -57,7 +51,7 @@ public class IMCForNEI {
         aNBT.setString("itemName", aBlock);
         aNBT.setInteger("handlerHeight", 135);
         aNBT.setInteger("handlerWidth", 166);
-        aNBT.setInteger("maxRecipesPerPage", 1);
+        aNBT.setInteger("maxRecipesPerPage", maxRecipesPerPage);
         aNBT.setInteger("yShift", 6);
         FMLInterModComms.sendMessage("NotEnoughItems", "registerHandlerInfo", aNBT);
     }
