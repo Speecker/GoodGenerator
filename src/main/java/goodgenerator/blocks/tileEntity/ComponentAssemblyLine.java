@@ -4,13 +4,11 @@ import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.GT_Values.VN;
 import static gregtech.api.enums.Textures.BlockIcons.*;
-import static gregtech.api.enums.Textures.BlockIcons.OVERLAY_FRONT_ASSEMBLY_LINE_GLOW;
 
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
-import cpw.mods.fml.common.registry.GameRegistry;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
@@ -25,13 +23,9 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -48,379 +42,412 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<ComponentAssemblyLine> STRUCTURE_DEFINITION =
             StructureDefinition.<ComponentAssemblyLine>builder()
-                    .addShape(STRUCTURE_PIECE_MAIN, new String[][]{{
-                        "         ",
-                        "   III   ",
-                        " HHI~IHH ",
-                        "HH III HH",
-                        "H       H",
-                        "H       H",
-                        "H  JJJ  H",
-                        "H  N N  H",
-                        "H  N N  H",
-                        "HHHHHHHHH"
-                    },{
-                        "         ",
-                        " EHHHHHE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A  HHH  A",
-                        "A       A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HHH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "AG  C  GA",
-                        "AG     GA",
-                        "AG     GA",
-                        "AG HFH GA",
-                        "AG     GA",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "HG  C  GH",
-                        "HG     GH",
-                        "HG     GH",
-                        "HG HFH GH",
-                        "HG     GH",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "AG  C  GA",
-                        "AG     GA",
-                        "AG     GA",
-                        "AG HFH GA",
-                        "AG     GA",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "HG  C  GH",
-                        "HG     GH",
-                        "HG     GH",
-                        "HG HFH GH",
-                        "HG     GH",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "AG  C  GA",
-                        "AG     GA",
-                        "AG     GA",
-                        "AG HFH GA",
-                        "AG     GA",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "HG  C  GH",
-                        "HG     GH",
-                        "HG     GH",
-                        "HG HFH GH",
-                        "HG     GH",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "   BBB   ",
-                        " EL   LE ",
-                        "E GGDGG E",
-                        "HGG D GGH",
-                        "AG  C  GA",
-                        "AG     GA",
-                        "AG     GA",
-                        "AG HFH GA",
-                        "AG     GA",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HFH  A",
-                        "A  N N  A",
-                        "MHHHHHHHM"
-                    },{
-                        "   HBH   ",
-                        " EL   LE ",
-                        "E       E",
-                        "HC     CH",
-                        "AC     CA",
-                        "AC     CA",
-                        "A D   D A",
-                        "A  HFH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "         ",
-                        " EHHHHHE ",
-                        "E       E",
-                        "H       H",
-                        "A       A",
-                        "A       A",
-                        "A       A",
-                        "A  HHH  A",
-                        "A       A",
-                        "MHHHHHHHM"
-                    },{
-                        "         ",
-                        "         ",
-                        " HHHHHHH ",
-                        "HH     HH",
-                        "H       H",
-                        "H       H",
-                        "H       H",
-                        "H       H",
-                        "H  KKK  H",
-                        "HHHHHHHHH"
-                    }})
+                    .addShape(STRUCTURE_PIECE_MAIN, new String[][] {
+                        {
+                            "         ",
+                            "   III   ",
+                            " HHI~IHH ",
+                            "HH III HH",
+                            "H       H",
+                            "H       H",
+                            "H  JJJ  H",
+                            "H  N N  H",
+                            "H  N N  H",
+                            "HHHHHHHHH"
+                        },
+                        {
+                            "         ",
+                            " EHHHHHE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A  HHH  A",
+                            "A       A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HHH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "AG  C  GA",
+                            "AG     GA",
+                            "AG     GA",
+                            "AG HFH GA",
+                            "AG     GA",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "HG  C  GH",
+                            "HG     GH",
+                            "HG     GH",
+                            "HG HFH GH",
+                            "HG     GH",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "AG  C  GA",
+                            "AG     GA",
+                            "AG     GA",
+                            "AG HFH GA",
+                            "AG     GA",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "HG  C  GH",
+                            "HG     GH",
+                            "HG     GH",
+                            "HG HFH GH",
+                            "HG     GH",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "AG  C  GA",
+                            "AG     GA",
+                            "AG     GA",
+                            "AG HFH GA",
+                            "AG     GA",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "HG  C  GH",
+                            "HG     GH",
+                            "HG     GH",
+                            "HG HFH GH",
+                            "HG     GH",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   BBB   ",
+                            " EL   LE ",
+                            "E GGDGG E",
+                            "HGG D GGH",
+                            "AG  C  GA",
+                            "AG     GA",
+                            "AG     GA",
+                            "AG HFH GA",
+                            "AG     GA",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HFH  A",
+                            "A  N N  A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "   HBH   ",
+                            " EL   LE ",
+                            "E       E",
+                            "HC     CH",
+                            "AC     CA",
+                            "AC     CA",
+                            "A D   D A",
+                            "A  HFH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "         ",
+                            " EHHHHHE ",
+                            "E       E",
+                            "H       H",
+                            "A       A",
+                            "A       A",
+                            "A       A",
+                            "A  HHH  A",
+                            "A       A",
+                            "MHHHHHHHM"
+                        },
+                        {
+                            "         ",
+                            "         ",
+                            " HHHHHHH ",
+                            "HH     HH",
+                            "H       H",
+                            "H       H",
+                            "H       H",
+                            "H       H",
+                            "H  KKK  H",
+                            "HHHHHHHHH"
+                        }
+                    })
                     .addElement(
                             'A',
                             ofChain(
-                                ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 5),
-                                ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 13),
-                                ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14),
-                                ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 15),
-                                ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks2", 0))
-                        )
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 5),
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 13),
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 14),
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks", 15),
+                                    ofBlockUnlocalizedName("bartworks", "BW_GlasBlocks2", 0)))
                     .addElement('H', ofBlock(GregTech_API.sBlockCasings8, 7))
                     .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
                     .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 9))
@@ -570,37 +597,37 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
 
     @Override
     public ITexture[] getTexture(
-        IGregTechTileEntity aBaseMetaTileEntity,
-        byte aSide,
-        byte aFacing,
-        byte aColorIndex,
-        boolean aActive,
-        boolean aRedstone) {
+            IGregTechTileEntity aBaseMetaTileEntity,
+            byte aSide,
+            byte aFacing,
+            byte aColorIndex,
+            boolean aActive,
+            boolean aRedstone) {
         if (aSide == aFacing) {
             if (aActive)
                 return new ITexture[] {
                     Textures.BlockIcons.getCasingTextureForId(183),
                     TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
-                        .extFacing()
-                        .build(),
+                            .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE)
+                            .extFacing()
+                            .build(),
                     TextureFactory.builder()
-                        .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW)
-                        .extFacing()
-                        .glow()
-                        .build()
+                            .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_ACTIVE_GLOW)
+                            .extFacing()
+                            .glow()
+                            .build()
                 };
             return new ITexture[] {
                 Textures.BlockIcons.getCasingTextureForId(183),
                 TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
-                    .extFacing()
-                    .build(),
+                        .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY)
+                        .extFacing()
+                        .build(),
                 TextureFactory.builder()
-                    .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
-                    .extFacing()
-                    .glow()
-                    .build()
+                        .addIcon(OVERLAY_FRONT_PROCESSING_ARRAY_GLOW)
+                        .extFacing()
+                        .glow()
+                        .build()
             };
         }
         return new ITexture[] {Textures.BlockIcons.getCasingTextureForId(183)};
