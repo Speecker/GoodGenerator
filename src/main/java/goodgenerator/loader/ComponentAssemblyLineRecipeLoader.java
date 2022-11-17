@@ -344,7 +344,7 @@ public class ComponentAssemblyLineRecipeLoader {
                     }
                 }
             }
-            if (GT_Utility.areStacksEqual(itemstack, ItemList.Gravistar.get(1)) && tier > 9) {
+            if (GT_Utility.areStacksEqual(itemstack, ItemList.Gravistar.get(1)) && tier >= 9) {
                 stacks.addAll(multiplyAndSplitIntoStacks(ItemRefer.Nuclear_Star.get(1), totalItems / 16));
                 isCompacted = true;
             }
