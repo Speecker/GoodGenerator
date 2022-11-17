@@ -6,6 +6,7 @@ import static goodgenerator.util.Log.LOGGER;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.recipe.TT_recipeAdder;
 import com.google.common.collect.HashBiMap;
+import cpw.mods.fml.common.registry.GameRegistry;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -400,6 +401,27 @@ public class ComponentAssemblyLineMiscRecipes {
                     30 * 20,
                     30);
         }
+        GT_Values.RA.addAssemblerRecipe(
+            new ItemStack[] {GameRegistry.findItemStack("dreamcraft", "item.NanoCircuit", 16)},
+            Materials.SolderingAlloy.getMolten(72L),
+            new ItemStack(Loaders.circuitWrap, 1, 11),
+            30*20,
+            30
+        );
+        GT_Values.RA.addAssemblerRecipe(
+            new ItemStack[] {GameRegistry.findItemStack("dreamcraft", "item.PikoCircuit", 16)},
+            Materials.SolderingAlloy.getMolten(72L),
+            new ItemStack(Loaders.circuitWrap, 1, 12),
+            30*20,
+            30
+        );
+        GT_Values.RA.addAssemblerRecipe(
+            new ItemStack[] {GameRegistry.findItemStack("dreamcraft", "item.QuantumCircuit", 16)},
+            Materials.SolderingAlloy.getMolten(72L),
+            new ItemStack(Loaders.circuitWrap, 1, 13),
+            30*20,
+            30
+        );
     }
 
     @SuppressWarnings("unused")
