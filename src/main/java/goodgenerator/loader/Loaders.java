@@ -109,13 +109,32 @@ public class Loaders {
                 GoodGenerator.MOD_ID + ":ciruits/2",
                 GoodGenerator.MOD_ID + ":ciruits/3",
                 GoodGenerator.MOD_ID + ":ciruits/4",
-                GoodGenerator.MOD_ID + ":ciruits/5"
+                GoodGenerator.MOD_ID + ":ciruits/5",
             });
     public static final Item nuclearStar = new MyItems(
             "nuclearStar",
             new String[] {"BY THE POWERS OF NAUGHTINESS,", "I COMMAND THIS PARTICULAR STAR", "TO BE REALLY, REALLY HOT"
             },
             GoodGenerator.GG);
+
+    public static final Item circuitWrap = new MyItems("circuitWrap", GoodGenerator.GG, new String[] {
+        GoodGenerator.MOD_ID + ":wraps/0",
+        GoodGenerator.MOD_ID + ":wraps/1",
+        GoodGenerator.MOD_ID + ":wraps/2",
+        GoodGenerator.MOD_ID + ":wraps/3",
+        GoodGenerator.MOD_ID + ":wraps/4",
+        GoodGenerator.MOD_ID + ":wraps/5",
+        GoodGenerator.MOD_ID + ":wraps/6",
+        GoodGenerator.MOD_ID + ":wraps/7",
+        GoodGenerator.MOD_ID + ":wraps/8",
+        GoodGenerator.MOD_ID + ":wraps/9",
+        GoodGenerator.MOD_ID + ":wraps/10",
+        GoodGenerator.MOD_ID + ":wraps/11",
+        GoodGenerator.MOD_ID + ":wraps/12",
+        GoodGenerator.MOD_ID + ":wraps/13",
+        GoodGenerator.MOD_ID + ":wraps/14"
+    });
+
     public static final Block MAR_Casing =
             new Casing("MAR_Casing", new String[] {GoodGenerator.MOD_ID + ":MAR_Casing"});
     public static final Block FRF_Casings =
@@ -332,6 +351,7 @@ public class Loaders {
         GameRegistry.registerItem(saltyRoot, "saltyRoot", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(huiCircuit, "huiCircuit", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(nuclearStar, "nuclearStar", GoodGenerator.MOD_ID);
+        GameRegistry.registerItem(circuitWrap, "circuitWrap", GoodGenerator.MOD_ID);
     }
 
     public static void compactMod() {
