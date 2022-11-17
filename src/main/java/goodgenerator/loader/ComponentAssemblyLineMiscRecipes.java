@@ -5,6 +5,7 @@ import static goodgenerator.util.Log.LOGGER;
 
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.recipe.TT_recipeAdder;
+import com.google.common.collect.HashBiMap;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
@@ -12,6 +13,8 @@ import gregtech.api.enums.OrePrefixes;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
 import gtPlusPlus.core.recipe.common.CI;
+import java.util.HashMap;
+import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -20,10 +23,37 @@ import org.apache.logging.log4j.Level;
 
 public class ComponentAssemblyLineMiscRecipes {
 
-    public static void run() {
+    @SuppressWarnings("deprecation")
+    public static final Materials[] circuitTierMaterials = {
+        Materials.Primitive,
+        Materials.Basic,
+        Materials.Good,
+        Materials.Advanced,
+        Materials.Data,
+        Materials.Elite,
+        Materials.Master,
+        Materials.Ultimate,
+        Materials.Superconductor,
+        Materials.Infinite,
+        Materials.Bio,
+        Materials.Nano,
+        Materials.Piko,
+        Materials.Quantum
+    };
+
+    static final HashBiMap<Materials, Integer> MatToTier = HashBiMap.create();
+
+    static final HashMap<ItemStack, Integer> CircuitToTier = new HashMap<>();
+
+    static void run() {
+        for (int i = 0; i < circuitTierMaterials.length; i++) MatToTier.put(circuitTierMaterials[i], i);
+
+        MatToTier.forEach((mat, tier) -> {
+            for (ItemStack item : mat.mMaterialItems) CircuitToTier.put(item, tier);
+        });
 
         generateCasingRecipes();
-
+        generateWrapRecipes();
         // Try and find the ZPM Fluid solidifier
         ItemStack solidifier;
         try {
@@ -79,7 +109,6 @@ public class ComponentAssemblyLineMiscRecipes {
                     ComponentType.Electric_Motor.getComponent(t).get(10),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Steel, 4),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tin, 6),
-                    getCircuit(t + 1, 8),
                     getCircuit(t, 16),
                 },
                 Materials.SolderingAlloy.getMolten(144 * (t + 3)),
@@ -97,8 +126,8 @@ public class ComponentAssemblyLineMiscRecipes {
                     ComponentType.Electric_Motor.getComponent(t).get(10),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Aluminium, 4),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.AnyCopper, 6),
-                    getCircuit(t + 1, 8),
-                    getCircuit(t, 16)
+                    getCircuit(t, 8),
+                    getCircuit(t - 1, 16)
                 },
                 Materials.SolderingAlloy.getMolten(144 * (t + 1)),
                 Compassline_Casing_MV.get(1),
@@ -115,8 +144,8 @@ public class ComponentAssemblyLineMiscRecipes {
                     ComponentType.Electric_Motor.getComponent(t).get(10),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.StainlessSteel, 4),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Gold, 6),
-                    getCircuit(t + 1, 8),
-                    getCircuit(t, 16)
+                    getCircuit(t, 8),
+                    getCircuit(t - 1, 16)
                 },
                 Materials.SolderingAlloy.getMolten(144 * (t + 1)),
                 Compassline_Casing_HV.get(1),
@@ -133,8 +162,8 @@ public class ComponentAssemblyLineMiscRecipes {
                     ComponentType.Electric_Motor.getComponent(t).get(10),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Titanium, 4),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Aluminium, 6),
-                    getCircuit(t + 1, 8),
-                    getCircuit(t, 16)
+                    getCircuit(t, 8),
+                    getCircuit(t - 1, 16)
                 },
                 Materials.SolderingAlloy.getMolten(144 * (t + 1)),
                 Compassline_Casing_EV.get(1),
@@ -151,8 +180,8 @@ public class ComponentAssemblyLineMiscRecipes {
                     ComponentType.Electric_Motor.getComponent(t).get(10),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.TungstenSteel, 4),
                     GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tungsten, 6),
-                    getCircuit(t + 1, 8),
-                    getCircuit(t, 16)
+                    getCircuit(t, 8),
+                    getCircuit(t - 1, 16)
                 },
                 Materials.SolderingAlloy.getMolten(144 * (t + 1)),
                 Compassline_Casing_IV.get(1),
@@ -169,14 +198,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Europium, 1),
                     WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plateDense, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.gearGt, 4),
                     WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.gearGtSmall, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.VanadiumGallium, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -195,14 +224,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Iridium, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Iridium, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Iridium, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Iridium, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Naquadah, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -221,14 +250,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Osmium, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Osmium, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Osmium, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Osmium, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NaquadahAlloy, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -250,14 +279,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.CosmicNeutronium, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.CosmicNeutronium, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.CosmicNeutronium, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Bedrockium, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -280,14 +309,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Infinity, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Infinity, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.Infinity, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Draconium, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -309,14 +338,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TranscendentMetal, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.TranscendentMetal, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.TranscendentMetal, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.TranscendentMetal, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.NetherStar, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -338,14 +367,14 @@ public class ComponentAssemblyLineMiscRecipes {
                 new Object[] {
                     GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.SpaceTime, 1),
                     GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.SpaceTime, 6),
-                    ComponentType.Robot_Arm.getComponent(t).get(16),
-                    ComponentType.Electric_Piston.getComponent(t).get(16),
-                    ComponentType.Electric_Motor.getComponent(t).get(20),
+                    ComponentType.Robot_Arm.getComponent(t).get(8),
+                    ComponentType.Electric_Piston.getComponent(t).get(10),
+                    ComponentType.Electric_Motor.getComponent(t).get(16),
                     GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.SpaceTime, 4),
                     GT_OreDictUnificator.get(OrePrefixes.gearGtSmall, Materials.SpaceTime, 16),
                     GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Quantium, 8),
-                    getALCircuit(t + 1, 8),
-                    getALCircuit(t, 16)
+                    getALCircuit(t, 8),
+                    getALCircuit(t - 1, 16)
                 },
                 new FluidStack[] {
                     new FluidStack(sold, 144 * t * 4),
@@ -360,6 +389,17 @@ public class ComponentAssemblyLineMiscRecipes {
 
     private static int getV(int tier) {
         return (int) (GT_Values.V[tier + 1] - (GT_Values.V[tier + 1] >> 4));
+    }
+
+    private static void generateWrapRecipes() {
+        for (int i = 0; i <= 10; i++) {
+            GT_Values.RA.addAssemblerRecipe(
+                    new ItemStack[] {getCircuit(i, 16)},
+                    Materials.SolderingAlloy.getMolten(72L),
+                    new ItemStack(Loaders.circuitWrap, 1, i),
+                    30 * 20,
+                    30);
+        }
     }
 
     @SuppressWarnings("unused")
@@ -387,54 +427,13 @@ public class ComponentAssemblyLineMiscRecipes {
         return new Object[] {OrePrefixes.circuit.get(getCircuitMaterial(tier)), amount};
     }
 
-    @SuppressWarnings("deprecation")
-    private static Materials getCircuitMaterial(int tier) {
+    @Nullable
+    public static Materials getCircuitMaterial(int tier) {
         Materials circuitMaterial;
-        switch (tier) {
-            case 0:
-                circuitMaterial = Materials.Primitive;
-                break;
-            case 1:
-                circuitMaterial = Materials.Basic;
-                break;
-            case 2:
-                circuitMaterial = Materials.Good;
-                break;
-            case 3:
-                circuitMaterial = Materials.Advanced;
-                break;
-            case 4:
-                circuitMaterial = Materials.Data;
-                break;
-            case 5:
-                circuitMaterial = Materials.Elite;
-                break;
-            case 6:
-                circuitMaterial = Materials.Master;
-                break;
-            case 7:
-                circuitMaterial = Materials.Ultimate;
-                break;
-            case 8:
-                circuitMaterial = Materials.Superconductor;
-                break;
-            case 9:
-                circuitMaterial = Materials.Infinite;
-                break;
-            case 10:
-                circuitMaterial = Materials.Bio;
-                break;
-            case 11:
-                circuitMaterial = Materials.Nano;
-                break;
-            case 12:
-                circuitMaterial = Materials.Piko;
-                break;
-            case 13:
-                circuitMaterial = Materials.Quantum;
-                break;
-            default:
-                return null;
+        try {
+            circuitMaterial = circuitTierMaterials[tier];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return null;
         }
         return circuitMaterial;
     }
