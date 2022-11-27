@@ -87,7 +87,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -99,7 +99,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AG  C  GA",
                             "AG     GA",
                             "AG     GA",
-                            "AG HFH GA",
+                            "AG HHH GA",
                             "AG     GA",
                             "MHHHHHHHM"
                         },
@@ -111,7 +111,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -123,7 +123,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -135,7 +135,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -147,7 +147,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "HG  C  GH",
                             "HG     GH",
                             "HG     GH",
-                            "HG HFH GH",
+                            "HG HHH GH",
                             "HG     GH",
                             "MHHHHHHHM"
                         },
@@ -159,7 +159,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -171,7 +171,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -183,7 +183,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -195,7 +195,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AG  C  GA",
                             "AG     GA",
                             "AG     GA",
-                            "AG HFH GA",
+                            "AG HHH GA",
                             "AG     GA",
                             "MHHHHHHHM"
                         },
@@ -207,7 +207,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -219,7 +219,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -231,7 +231,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -243,7 +243,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "HG  C  GH",
                             "HG     GH",
                             "HG     GH",
-                            "HG HFH GH",
+                            "HG HHH GH",
                             "HG     GH",
                             "MHHHHHHHM"
                         },
@@ -255,7 +255,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -267,7 +267,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -279,7 +279,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -291,7 +291,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AG  C  GA",
                             "AG     GA",
                             "AG     GA",
-                            "AG HFH GA",
+                            "AG HHH GA",
                             "AG     GA",
                             "MHHHHHHHM"
                         },
@@ -303,7 +303,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -315,7 +315,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -327,7 +327,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -339,7 +339,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "HG  C  GH",
                             "HG     GH",
                             "HG     GH",
-                            "HG HFH GH",
+                            "HG HHH GH",
                             "HG     GH",
                             "MHHHHHHHM"
                         },
@@ -351,7 +351,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -363,7 +363,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -375,7 +375,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -387,7 +387,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AG  C  GA",
                             "AG     GA",
                             "AG     GA",
-                            "AG HFH GA",
+                            "AG HHH GA",
                             "AG     GA",
                             "MHHHHHHHM"
                         },
@@ -399,7 +399,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "A       A",
                             "A       A",
                             "A       A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A  N N  A",
                             "MHHHHHHHM"
                         },
@@ -411,7 +411,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                             "AC     CA",
                             "AC     CA",
                             "A D   D A",
-                            "A  HFH  A",
+                            "A  HHH  A",
                             "A       A",
                             "MHHHHHHHM"
                         },
@@ -451,8 +451,8 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_EnhancedMultiBlockB
                     .addElement('H', ofBlock(GregTech_API.sBlockCasings8, 7))
                     .addElement('C', ofBlock(GregTech_API.sBlockCasings2, 5))
                     .addElement('D', ofBlock(GregTech_API.sBlockCasings2, 9))
-                    .addElement('G', ofBlock(GregTech_API.sBlockCasings8, 1))
-                    .addElement('E', ofBlock(GregTech_API.sBlockCasings3, 11))
+                    .addElement('G', ofBlock(GregTech_API.sBlockCasings9, 0))
+                    .addElement('E', ofBlock(GregTech_API.sBlockCasings9, 1))
                     .addElement('F', ofBlock(GregTech_API.sBlockCasings4, 1))
                     .addElement(
                             'B',

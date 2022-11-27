@@ -1,12 +1,12 @@
 package goodgenerator.loader;
 
-import static goodgenerator.util.Log.LOGGER;
 import static goodgenerator.util.StackUtils.*;
 
 import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
+import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
 import gregtech.api.objects.ItemData;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -21,7 +21,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Level;
 
 public class ComponentAssemblyLineRecipeLoader {
     private static final String[] compPrefixes = {
@@ -107,9 +106,6 @@ public class ComponentAssemblyLineRecipeLoader {
         allAsslineRecipes.forEach((recipeList, info) -> {
             for (GT_Recipe.GT_Recipe_AssemblyLine recipe : recipeList) {
                 if (recipe != null) {
-                    LOGGER.log(
-                            Level.INFO,
-                            "Current Recipe: " + info.getLeft().get(1L).getDisplayName());
                     // Arrays of the item and fluid inputs, that are updated to be multiplied and/or condensed in the
                     // following code
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
@@ -132,32 +128,6 @@ public class ComponentAssemblyLineRecipeLoader {
                     for (ItemStack input : recipe.mInputs) {
                         if (GT_Utility.isStackValid(input)) {
                             int count = input.stackSize;
-                            //                            boolean isConvertedAndFluidFound = false;
-                            //                            if (OreDictionary.getOreIDs(input).length > 0 && count > 7 &&
-                            // !isCompactable(input)) {
-                            //                                FluidStack foundFluidStack =
-                            // tryConvertItemStackToFluidMaterial(input);
-                            //                                // Looks for a matching fluid stack and merges the amount
-                            // of the converted fluid with
-                            //                                // the one it found. Otherwise it will add the converted
-                            // to the fluid inputs.
-                            //                                if (foundFluidStack != null) {
-                            //                                    foundFluidStack.amount *= INPUT_MULTIPLIER;
-                            //                                    boolean alreadyHasFluid = false;
-                            //                                    for (FluidStack fluidstack : fixedFluids) {
-                            //                                        if
-                            // (foundFluidStack.getFluid().equals(fluidstack.getFluid())) {
-                            //                                            fluidstack.amount += foundFluidStack.amount;
-                            //                                            alreadyHasFluid = true;
-                            //                                            break;
-                            //                                        }
-                            //                                    }
-                            //                                    if (!alreadyHasFluid) {
-                            //                                        fixedFluids.add(foundFluidStack);
-                            //                                    }
-                            //                                    isConvertedAndFluidFound = true;
-                            //                                }
-                            //                            }
                             // Mulitplies the input by its multiplier, and adjusts the stacks accordingly
                             if (!(input.getItem() instanceof GT_IntegratedCircuit_Item)) {
 
@@ -175,6 +145,8 @@ public class ComponentAssemblyLineRecipeLoader {
 
                     fixedInputs = compactItems(fixedInputs, info.getRight());
                     replaceIntoFluids(fixedInputs, fixedFluids, 128);
+                    // If it overflows then it tries REALLY HARD to cram as much stuff into there.
+                    if (fixedInputs.size() > 9) replaceIntoFluids(fixedInputs, fixedFluids, 32);
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
@@ -201,34 +173,6 @@ public class ComponentAssemblyLineRecipeLoader {
     private static void replaceIntoFluids(List<ItemStack> inputs, List<FluidStack> fluidOutputs, int threshold) {
         HashMap<ItemStack, Integer> totals = getTotalItems(inputs.toArray(new ItemStack[0]));
         ArrayList<ItemStack> newInputs = new ArrayList<>();
-        /*for (int i=0; i<inputs.size(); i++) {
-            ItemStack input = inputs.get(0);
-            int totalCount = totals.get(GT_Utility.copyAmount(1, input));
-            int count = input.stackSize;
-            if (OreDictionary.getOreIDs(input).length > 0 && totalCount >= threshold) {
-                FluidStack foundFluidStack = tryConvertItemStackToFluidMaterial(input);
-                // Looks for a matching fluid stack and merges the amount of the converted fluid with
-                // the one it found. Otherwise it will add the converted to the fluid inputs.
-                if (foundFluidStack != null) {
-                    boolean alreadyHasFluid = false;
-                    for (FluidStack fluidstack : fluidOutputs) {
-                        if (foundFluidStack.getFluid().equals(fluidstack.getFluid())) {
-                            fluidstack.amount += foundFluidStack.amount;
-                            alreadyHasFluid = true;
-                            break;
-                        }
-                    }
-                    if (!alreadyHasFluid) {
-                        fluidOutputs.add(foundFluidStack);
-                        inputs.remove(i);
-                        i--;
-                    }
-
-                }
-
-            }
-        }*/
-
         for (ItemStack input : totals.keySet()) {
             int count = totals.get(input);
             boolean isConverted = false;
@@ -236,6 +180,16 @@ public class ComponentAssemblyLineRecipeLoader {
                 FluidStack foundFluidStack = tryConvertItemStackToFluidMaterial(input);
                 // Looks for a matching fluid stack and merges the amount of the converted fluid with
                 // the one it found. Otherwise it will add the converted to the fluid inputs.
+
+                // Prevents the uncraftable molten magnetic samarium from being converted into fluid during auto
+                // generation
+
+                ItemData data = GT_OreDictUnificator.getAssociation(input);
+                if (data != null && data.mMaterial.mMaterial == Materials.SamariumMagnetic) {
+                    input = GT_OreDictUnificator.get(data.mPrefix, Materials.Samarium, 1);
+                    foundFluidStack = tryConvertItemStackToFluidMaterial(input);
+                }
+
                 if (foundFluidStack != null) {
                     foundFluidStack.amount *= count;
                     boolean alreadyHasFluid = false;
