@@ -1,6 +1,5 @@
 package goodgenerator.loader;
 
-import static goodgenerator.util.Log.LOGGER;
 import static goodgenerator.util.StackUtils.*;
 
 import goodgenerator.util.ItemRefer;
@@ -21,7 +20,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.logging.log4j.Level;
 
 public class ComponentAssemblyLineRecipeLoader {
     private static final String[] compPrefixes = {
@@ -107,9 +105,6 @@ public class ComponentAssemblyLineRecipeLoader {
         allAsslineRecipes.forEach((recipeList, info) -> {
             for (GT_Recipe.GT_Recipe_AssemblyLine recipe : recipeList) {
                 if (recipe != null) {
-                    LOGGER.log(
-                            Level.INFO,
-                            "Current Recipe: " + info.getLeft().get(1L).getDisplayName());
                     // Arrays of the item and fluid inputs, that are updated to be multiplied and/or condensed in the
                     // following code
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
