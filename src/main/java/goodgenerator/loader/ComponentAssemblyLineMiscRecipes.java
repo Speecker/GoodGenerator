@@ -389,7 +389,7 @@ public class ComponentAssemblyLineMiscRecipes {
     }
 
     private static int getV(int tier) {
-        return (int) (GT_Values.V[tier + 1] - (GT_Values.V[tier + 1] >> 4));
+        return (int) (GT_Values.V[tier] - (GT_Values.V[tier] >> 4));
     }
 
     private static void generateWrapRecipes() {
