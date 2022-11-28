@@ -111,11 +111,6 @@ public class Loaders {
                 GoodGenerator.MOD_ID + ":ciruits/4",
                 GoodGenerator.MOD_ID + ":ciruits/5",
             });
-    public static final Item nuclearStar = new MyItems(
-            "nuclearStar",
-            new String[] {"BY THE POWERS OF NAUGHTINESS,", "I COMMAND THIS PARTICULAR STAR", "TO BE REALLY, REALLY HOT"
-            },
-            GoodGenerator.GG);
 
     public static final Item circuitWrap = new MyItems("circuitWrap", GoodGenerator.GG, new String[] {
         GoodGenerator.MOD_ID + ":wraps/0",
@@ -350,7 +345,6 @@ public class Loaders {
         GameRegistry.registerItem(highEnergyMixture, "highEnergyMixture", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(saltyRoot, "saltyRoot", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(huiCircuit, "huiCircuit", GoodGenerator.MOD_ID);
-        GameRegistry.registerItem(nuclearStar, "nuclearStar", GoodGenerator.MOD_ID);
         GameRegistry.registerItem(circuitWrap, "circuitWrap", GoodGenerator.MOD_ID);
     }
 

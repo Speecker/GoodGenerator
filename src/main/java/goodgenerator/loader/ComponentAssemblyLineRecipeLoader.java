@@ -299,7 +299,7 @@ public class ComponentAssemblyLineRecipeLoader {
                 }
             }
             if (GT_Utility.areStacksEqual(itemstack, ItemList.Gravistar.get(1)) && tier >= 9) {
-                stacks.addAll(multiplyAndSplitIntoStacks(ItemRefer.Nuclear_Star.get(1), totalItems / 16));
+                stacks.addAll(multiplyAndSplitIntoStacks(ItemList.NuclearStar.get(1), totalItems / 16));
                 isCompacted = true;
             }
             if (!isCompacted) stacks.addAll(multiplyAndSplitIntoStacks(itemstack, totalItems));
