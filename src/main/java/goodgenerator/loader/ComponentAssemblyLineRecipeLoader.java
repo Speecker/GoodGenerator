@@ -2,7 +2,6 @@ package goodgenerator.loader;
 
 import static goodgenerator.util.StackUtils.*;
 
-import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
