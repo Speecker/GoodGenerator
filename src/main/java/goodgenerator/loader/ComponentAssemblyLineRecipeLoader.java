@@ -13,7 +13,6 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 import gregtech.common.items.GT_IntegratedCircuit_Item;
 import java.util.*;
-import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -67,14 +66,19 @@ public class ComponentAssemblyLineRecipeLoader {
         allAssemblerRecipes.forEach((recipeList, info) -> {
             for (GT_Recipe recipe : recipeList) {
                 if (recipe != null) {
+                    int componentCircuit = -1;
+                    for (int i = 0; i < compPrefixes.length; i++)
+                        if (info.getLeft().toString().startsWith(compPrefixes[i])) {
+                            componentCircuit = i;
+                            break;
+                        }
+                    if (componentCircuit == -1) {
+                        throw new NullPointerException(
+                                "Wrong circuit. Comp: " + info.getLeft().toString());
+                    }
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
                     ArrayList<FluidStack> fixedFluids = new ArrayList<>();
 
-                    // This is done in order to differentiate between emitter and sensor recipes. Without the circuit,
-                    // both components have virtually the same recipe after the inputs are melted.
-                    if (info.getLeft().name().contains("Sensor")) {
-                        fixedInputs.add(GT_Utility.getIntegratedCircuit(1));
-                    }
                     for (int j = 0; j < recipe.mInputs.length; j++) {
                         ItemStack input = recipe.mInputs[j];
                         if (GT_Utility.isStackValid(input) && !(input.getItem() instanceof GT_IntegratedCircuit_Item))
@@ -87,8 +91,9 @@ public class ComponentAssemblyLineRecipeLoader {
                     }
 
                     int tier = info.getRight();
-                    int energy = (int) Math.min(Integer.MAX_VALUE - 7, (GT_Values.V[tier] - (GT_Values.V[tier] >> 4)));
-
+                    int energy =
+                            (int) Math.min(Integer.MAX_VALUE - 7, (GT_Values.V[tier] - (GT_Values.V[tier] >> 4)) * 2);
+                    fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             compactItems(fixedInputs, info.getRight()).toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
@@ -105,16 +110,17 @@ public class ComponentAssemblyLineRecipeLoader {
         allAsslineRecipes.forEach((recipeList, info) -> {
             for (GT_Recipe.GT_Recipe_AssemblyLine recipe : recipeList) {
                 if (recipe != null) {
+                    int componentCircuit = -1;
+                    for (int i = 0; i < compPrefixes.length; i++)
+                        if (info.getLeft().toString().startsWith(compPrefixes[i])) componentCircuit = i;
+                    if (componentCircuit == -1) {
+                        throw new NullPointerException(
+                                "Wrong circuit. Comp: " + info.getLeft().toString());
+                    }
                     // Arrays of the item and fluid inputs, that are updated to be multiplied and/or condensed in the
                     // following code
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
                     ArrayList<FluidStack> fixedFluids = new ArrayList<>();
-
-                    // This is done in order to differentiate between emitter and sensor recipes. Without the circuit,
-                    // both components have virtually the same recipe after the inputs are melted.
-                    if (info.getLeft().name().contains("Sensor")) {
-                        fixedInputs.add(GT_Utility.getIntegratedCircuit(1));
-                    }
 
                     // Multiplies the original fluid inputs
                     for (int j = 0; j < recipe.mFluidInputs.length; j++) {
@@ -141,11 +147,11 @@ public class ComponentAssemblyLineRecipeLoader {
                             }
                         }
                     }
-
                     fixedInputs = compactItems(fixedInputs, info.getRight());
                     replaceIntoFluids(fixedInputs, fixedFluids, 128);
                     // If it overflows then it tries REALLY HARD to cram as much stuff into there.
-                    if (fixedInputs.size() > 9) replaceIntoFluids(fixedInputs, fixedFluids, 32);
+                    if (fixedInputs.size() > 8) replaceIntoFluids(fixedInputs, fixedFluids, 32);
+                    fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
@@ -321,23 +327,27 @@ public class ComponentAssemblyLineRecipeLoader {
         allAssemblerRecipes = new LinkedHashMap<>();
         allAsslineRecipes = new LinkedHashMap<>();
         for (String compPrefix : compPrefixes) {
-
             for (int t = 1; t <= 12; t++) {
                 String vName = GT_Values.VN[t];
                 ItemList currentComponent = ItemList.valueOf(compPrefix + vName);
                 if (currentComponent.hasBeenSet()) {
                     if (t < 6) {
-                        allAssemblerRecipes.put(
-                                GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.mRecipeList.stream()
-                                        .filter(rec -> rec.mOutputs[0].isItemEqual(currentComponent.get(1)))
-                                        .collect(Collectors.toList()),
-                                Pair.of(currentComponent, t));
+                        ArrayList<GT_Recipe> foundRecipes = new ArrayList<>();
+                        for (GT_Recipe recipe : GT_Recipe.GT_Recipe_Map.sAssemblerRecipes.mRecipeList) {
+                            if (GT_Utility.areStacksEqual(currentComponent.get(1), recipe.mOutputs[0])) {
+                                foundRecipes.add(recipe);
+                            }
+                        }
+                        allAssemblerRecipes.put(foundRecipes, Pair.of(currentComponent, t));
                     } else {
-                        allAsslineRecipes.put(
-                                GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes.stream()
-                                        .filter(rec -> rec.mOutput.isItemEqual(currentComponent.get(1)))
-                                        .collect(Collectors.toList()),
-                                Pair.of(currentComponent, t));
+                        ArrayList<GT_Recipe.GT_Recipe_AssemblyLine> foundRecipes = new ArrayList<>();
+                        for (GT_Recipe.GT_Recipe_AssemblyLine recipe :
+                                GT_Recipe.GT_Recipe_AssemblyLine.sAssemblylineRecipes) {
+                            if (GT_Utility.areStacksEqual(currentComponent.get(1), recipe.mOutput)) {
+                                foundRecipes.add(recipe);
+                            }
+                        }
+                        allAsslineRecipes.put(foundRecipes, Pair.of(currentComponent, t));
                     }
                 }
             }
