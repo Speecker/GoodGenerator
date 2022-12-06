@@ -141,7 +141,7 @@ public class ComponentAssemblyLineRecipeLoader {
                     replaceIntoFluids(fixedInputs, fixedFluids, 128);
                     // If it overflows then it tries REALLY HARD to cram as much stuff into there.
                     if (fixedInputs.size() > 8) replaceIntoFluids(fixedInputs, fixedFluids, 32);
-                    if (componentCircuit >= 6) fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
+                    if (componentCircuit <= 6) fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
