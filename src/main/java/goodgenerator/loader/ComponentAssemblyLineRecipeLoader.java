@@ -102,11 +102,12 @@ public class ComponentAssemblyLineRecipeLoader {
                 if (recipe != null) {
                     int componentCircuit = -1;
                     for (int i = 0; i < compPrefixes.length; i++)
-                        if (info.getLeft().toString().startsWith(compPrefixes[i])) componentCircuit = i;
+                        if (info.getLeft().toString().startsWith(compPrefixes[i])) componentCircuit = i + 1;
                     if (componentCircuit == -1) {
                         throw new NullPointerException(
                                 "Wrong circuit. Comp: " + info.getLeft().toString());
                     }
+                    final boolean addProgrammedCircuit = componentCircuit <= 7;
                     // Arrays of the item and fluid inputs, that are updated to be multiplied and/or condensed in the
                     // following code
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
@@ -140,8 +141,9 @@ public class ComponentAssemblyLineRecipeLoader {
                     fixedInputs = compactItems(fixedInputs, info.getRight());
                     replaceIntoFluids(fixedInputs, fixedFluids, 128);
                     // If it overflows then it tries REALLY HARD to cram as much stuff into there.
-                    if (fixedInputs.size() > 8) replaceIntoFluids(fixedInputs, fixedFluids, 32);
-                    if (componentCircuit <= 6) fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
+                    if (fixedInputs.size() > (addProgrammedCircuit ? 8 : 9))
+                        replaceIntoFluids(fixedInputs, fixedFluids, 32);
+                    if (addProgrammedCircuit) fixedInputs.add(GT_Utility.getIntegratedCircuit(componentCircuit));
                     MyRecipeAdder.instance.addComponentAssemblyLineRecipe(
                             fixedInputs.toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
