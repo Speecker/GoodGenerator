@@ -102,12 +102,12 @@ public class ComponentAssemblyLineRecipeLoader {
                 if (recipe != null) {
                     int componentCircuit = -1;
                     for (int i = 0; i < compPrefixes.length; i++)
-                        if (info.getLeft().toString().startsWith(compPrefixes[i])) componentCircuit = i;
+                        if (info.getLeft().toString().startsWith(compPrefixes[i])) componentCircuit = i + 1;
                     if (componentCircuit == -1) {
                         throw new NullPointerException(
                                 "Wrong circuit. Comp: " + info.getLeft().toString());
                     }
-                    final boolean addProgrammedCircuit = componentCircuit <= 6;
+                    final boolean addProgrammedCircuit = componentCircuit <= 7;
                     // Arrays of the item and fluid inputs, that are updated to be multiplied and/or condensed in the
                     // following code
                     ArrayList<ItemStack> fixedInputs = new ArrayList<>();
