@@ -2,18 +2,21 @@ package goodgenerator.blocks.tileEntity;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
 import static goodgenerator.util.DescTextLocalization.BLUE_PRINT_INFO;
+import static gregtech.api.metatileentity.BaseTileEntity.TOOLTIP_DELAY;
 import static gregtech.api.util.GT_StructureUtility.*;
 
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
+import com.github.technus.tectech.TecTech;
+import com.github.technus.tectech.thing.gui.TecTechUITextures;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.*;
-import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
-import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
-import com.gtnewhorizons.modularui.common.widget.SlotWidget;
-import com.gtnewhorizons.modularui.common.widget.TextWidget;
+import com.gtnewhorizons.modularui.api.drawable.IDrawable;
+import com.gtnewhorizons.modularui.api.drawable.UITexture;
+import com.gtnewhorizons.modularui.common.widget.*;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.YOTTAHatch;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
+import goodgenerator.client.GUI.GG_UITextures;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.CharExchanger;
 import goodgenerator.util.DescTextLocalization;
@@ -96,14 +99,16 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
 
     public String getFluidName() {
         if (mFluidName == null || mFluidName.equals("") || FluidRegistry.getFluidStack(mFluidName, 1) == null)
-            return "Empty";
+            return StatCollector.translateToLocal("scanner.info.YOTTank.empty");
         return FluidRegistry.getFluidStack(mFluidName, 1).getLocalizedName();
     }
 
     public String getLockedFluidName() {
-        if (!isFluidLocked && mLockedFluidName == null
+        if (!isFluidLocked) return StatCollector.translateToLocal("scanner.info.YOTTank.none");
+        if (mLockedFluidName == null
                 || mLockedFluidName.equals("")
-                || FluidRegistry.getFluidStack(mLockedFluidName, 1) == null) return "None";
+                || FluidRegistry.getFluidStack(mLockedFluidName, 1) == null)
+            return StatCollector.translateToLocal("scanner.info.YOTTank.next");
         return FluidRegistry.getFluidStack(mLockedFluidName, 1).getLocalizedName();
     }
 
@@ -554,6 +559,55 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                         .setSynced(false)
                         .setDefaultColor(COLOR_TEXT_WHITE.get())
                         .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
-                .widget(new FakeSyncWidget.StringSyncer(() -> mLockedFluidName, val -> mLockedFluidName = val));
+                .widget(new FakeSyncWidget.StringSyncer(() -> mLockedFluidName, val -> mLockedFluidName = val))
+                .widget(new FakeSyncWidget.BooleanSyncer(() -> isFluidLocked, val -> isFluidLocked = val))
+                .widget(new FakeSyncWidget.BooleanSyncer(() -> voidExcessEnabled, val -> voidExcessEnabled = val));
+    }
+
+    @Override
+    protected ButtonWidget createSafeVoidButton() {
+        return (ButtonWidget) new ButtonWidget()
+                .setOnClick((clickData, widget) -> {
+                    TecTech.proxy.playSound(getBaseMetaTileEntity(), "fx_click");
+                    voidExcessEnabled = !voidExcessEnabled;
+                })
+                .setPlayClickSound(false)
+                .setBackground(() -> {
+                    List<UITexture> ret = new ArrayList<>();
+                    ret.add(TecTechUITextures.BUTTON_STANDARD_16x16);
+                    ret.add(
+                            voidExcessEnabled
+                                    ? TecTechUITextures.OVERLAY_BUTTON_SAFE_VOID_ON
+                                    : TecTechUITextures.OVERLAY_BUTTON_SAFE_VOID_OFF);
+                    return ret.toArray(new IDrawable[0]);
+                })
+                .setPos(174, doesBindPlayerInventory() ? 132 : 156)
+                .setSize(16, 16)
+                .addTooltip(StatCollector.translateToLocal("gui.YOTTank.button.void"))
+                .setTooltipShowUpDelay(TOOLTIP_DELAY);
+    }
+
+    @Override
+    protected ButtonWidget createPowerPassButton() {
+        return (ButtonWidget) new ButtonWidget()
+                .setOnClick((clickData, widget) -> {
+                    TecTech.proxy.playSound(getBaseMetaTileEntity(), "fx_click");
+                    isFluidLocked = !isFluidLocked;
+                    if (!widget.getContext().isClient()) mLockedFluidName = isFluidLocked ? mFluidName : "";
+                })
+                .setPlayClickSound(false)
+                .setBackground(() -> {
+                    List<UITexture> ret = new ArrayList<>();
+                    ret.add(TecTechUITextures.BUTTON_STANDARD_16x16);
+                    ret.add(
+                            isFluidLocked
+                                    ? GG_UITextures.OVERLAY_BUTTON_LOCK_ON
+                                    : GG_UITextures.OVERLAY_BUTTON_LOCK_OFF);
+                    return ret.toArray(new IDrawable[0]);
+                })
+                .setPos(174, doesBindPlayerInventory() ? 116 : 140)
+                .setSize(16, 16)
+                .addTooltip(StatCollector.translateToLocal("gui.YOTTank.button.locking"))
+                .setTooltipShowUpDelay(TOOLTIP_DELAY);
     }
 }
