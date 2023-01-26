@@ -69,6 +69,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     public String mLockedFluidName = "";
     protected boolean isFluidLocked = false;
     protected int glassMeta;
+    protected int height = 0;
     protected int maxCell;
     protected final String YOTTANK_BOTTOM = mName + "buttom";
     protected final String YOTTANK_MID = mName + "mid";
@@ -183,10 +184,12 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         mStorage = BigInteger.ZERO;
         glassMeta = 0;
         maxCell = 0;
+        height = 0;
         mYottaHatch.clear();
         if (!structureCheck_EM(YOTTANK_BOTTOM, 2, 0, 0)) return false;
         int cnt = 0;
         while (structureCheck_EM(YOTTANK_MID, 2, cnt + 1, 0)) {
+            height++;
             cnt++;
         }
         if (cnt > 15 || cnt < 1) return false;
@@ -290,6 +293,73 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             }
         }
         return false;
+    }
+
+    private static Tessellator tes = Tessellator.instance;
+
+    @Override
+    public boolean renderInWorld(IBlockAccess aWorld, int x, int y, int z, Block aBlock, RenderBlocks aRenderer) {
+        if (!mMachine || getFluid() == null || getFluid().getFluid() == null) return false;
+
+        GL11.glPushMatrix();
+        GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        double minU, minV, maxU, maxV;
+
+        setColor(getFluid().getFluid().getColor());
+        IIcon fluidIcon = getFluid().getFluid().getIcon();
+        minU = fluidIcon.getMinU();
+        minV = fluidIcon.getMinV();
+        maxU = fluidIcon.getMaxU();
+        maxV = fluidIcon.getMaxV();
+
+        double sizeX = 4.98,
+                sizeZ = 4.98,
+                sizeY = height,
+                offsetX = getExtendedFacing().getRelativeBackInWorld().offsetX * 2.49,
+                offsetZ = getExtendedFacing().getRelativeBackInWorld().offsetZ * 2.49,
+                offsetY = 1;
+
+        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ, minU, minV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ, minU, maxV);
+
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ + sizeZ, minU, maxV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ + sizeZ, minU, minV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ + sizeZ, maxU, minV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ + sizeZ, maxU, maxV);
+
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
+        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + sizeZ + offsetZ, minU, maxV);
+
+        tes.addVertexWithUV(x + offsetX, y + offsetY, z + sizeZ + offsetZ, minU, maxV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
+
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, minU, maxV);
+        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
+        tes.addVertexWithUV(x + offsetX + sizeX, y + offsetY + sizeY, z + sizeZ + offsetZ, maxU, minV);
+        tes.addVertexWithUV(x + offsetX + sizeX, y + offsetY + sizeY, z + offsetZ, maxU, maxV);
+
+        GL11.glPopAttrib();
+        GL11.glPopMatrix();
+
+        return false;
+    }
+
+    public static void setColor(int color) {
+        float red = (float) (color >> 16 & 255) / 255.0F;
+        float green = (float) (color >> 8 & 255) / 255.0F;
+        float blue = (float) (color & 255) / 255.0F;
+        GL11.glColor4f(red, green, blue, 1);
     }
 
     public final boolean addOutput(IGregTechTileEntity aTileEntity, int aBaseCasingIndex) {
