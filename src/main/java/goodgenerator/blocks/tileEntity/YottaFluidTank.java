@@ -48,6 +48,7 @@ import gregtech.api.metatileentity.GregTechTileClientEvents;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe.X;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
@@ -299,7 +300,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return false;
     }
 
-    private static Tessellator tes = Tessellator.instance;
+    private static Tessellator tes;
 
     @Override
     public byte getUpdateData() {
@@ -314,13 +315,16 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     }
 
     @Override
-    public boolean renderInWorld(IBlockAccess aWorld, int x, int y, int z, Block aBlock, RenderBlocks aRenderer) {
+    public boolean renderInWorld(IBlockAccess aWorld, int aX, int aY, int aZ, Block aBlock, RenderBlocks aRenderer) {
         if (!mMachine || mFluidName == null || mFluidName.equals("")) return false;
 
         Fluid fluid = FluidRegistry.getFluid(mFluidName);
 
         if (fluid == null) return false;
 
+        if (tes == null) {
+            tes = Tessellator.instance;
+        }
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_CULL_FACE);
@@ -328,51 +332,60 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        double minU, minV, maxU, maxV;
+        double tMinU, tMinV, tMaxU, tMaxV;
 
         setColor(fluid.getColor());
         IIcon fluidIcon = fluid.getIcon();
-        minU = fluidIcon.getMinU();
-        minV = fluidIcon.getMinV();
-        maxU = fluidIcon.getMaxU();
-        maxV = fluidIcon.getMaxV();
+        tMinU = fluidIcon.getMinU();
+        tMinV = fluidIcon.getMinV();
+        tMaxU = fluidIcon.getMaxU();
+        tMaxV = fluidIcon.getMaxV();
 
         double sizeX = 4.98,
                 sizeZ = 4.98,
-                sizeY = height,
-                offsetX = getExtendedFacing().getRelativeBackInWorld().offsetX * 2.49,
-                offsetZ = getExtendedFacing().getRelativeBackInWorld().offsetZ * 2.49,
+                tHeight = height,
+                offsetX = getExtendedFacing().getRelativeBackInWorld().offsetX * 4,
+                offsetZ = getExtendedFacing().getRelativeBackInWorld().offsetZ * 4,
                 offsetY = 1;
 
-        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ, minU, minV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ, minU, maxV);
-
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ + sizeZ, minU, maxV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ + sizeZ, minU, minV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ + sizeZ, maxU, minV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ + sizeZ, maxU, maxV);
-
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
-        tes.addVertexWithUV(x + sizeX + offsetX, y + offsetY, z + sizeZ + offsetZ, minU, maxV);
-
-        tes.addVertexWithUV(x + offsetX, y + offsetY, z + sizeZ + offsetZ, minU, maxV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, maxU, minV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY, z + offsetZ, maxU, maxV);
-
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + offsetZ, minU, maxV);
-        tes.addVertexWithUV(x + offsetX, y + offsetY + sizeY, z + sizeZ + offsetZ, minU, minV);
-        tes.addVertexWithUV(x + offsetX + sizeX, y + offsetY + sizeY, z + sizeZ + offsetZ, maxU, minV);
-        tes.addVertexWithUV(x + offsetX + sizeX, y + offsetY + sizeY, z + offsetZ, maxU, maxV);
+        renderFluid(aX + offsetX + 0.98, aY + 1, aZ + offsetZ + 0.98, tHeight, tMinU, tMaxU, tMinV, tMaxV, 0);
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
 
         return false;
+    }
+
+    private void renderFluid(double aX, double aY, double aZ, double aHeight, double aMinU, double aMaxU, double aMinV, double aMaxV, int aRotation) {
+        // spotless:off
+        /*
+         *  A----B
+         *  |    |
+         *  |    |
+         *  C----D
+         *  D -> B -> A -> C
+         * 
+         */
+        tes.addVertexWithUV(aX - 2.96, aY          , aZ - 0.96, aMaxU, aMaxV);
+        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ - 0.96, aMaxU, aMinV);
+        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ - 0.96, aMinU, aMinV);
+        tes.addVertexWithUV(aX + 2, aY          , aZ - 0.96, aMinU, aMaxV);
+
+        tes.addVertexWithUV(aX + 2, aY          , aZ - 0.96, aMaxU, aMaxV);
+        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ - 0.96, aMaxU, aMinV);
+        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ + 3.96, aMinU, aMinV);
+        tes.addVertexWithUV(aX + 2, aY          , aZ + 3.96, aMinU, aMaxV);
+
+        tes.addVertexWithUV(aX + 2, aY          , aZ + 4, aMaxU, aMaxV);
+        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ + 4, aMaxU, aMinV);
+        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ + 4, aMinU, aMinV);
+        tes.addVertexWithUV(aX - 2.96, aY          , aZ + 4, aMinU, aMaxV);
+
+        tes.addVertexWithUV(aX - 2.96, aY          , aZ + 3.96, aMaxU, aMaxV);
+        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ + 3.96, aMaxU, aMinV);
+        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ - 0.96, aMinU, aMinV);
+        tes.addVertexWithUV(aX - 2.96, aY          , aZ - 0.96, aMinU, aMaxV);
+        // spotless:on
     }
 
     public static void setColor(int color) {
