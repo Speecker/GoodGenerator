@@ -44,6 +44,7 @@ import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.GregTechTileClientEvents;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
@@ -207,6 +208,9 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             mSoftHammer = true;
             mHardHammer = true;
             mCrowbar = true;
+
+            getBaseMetaTileEntity().sendBlockEvent(GregTechTileClientEvents.CHANGE_CUSTOM_DATA, getUpdateData());
+
             return true;
         }
         return false;
@@ -298,20 +302,36 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     private static Tessellator tes = Tessellator.instance;
 
     @Override
+    public byte getUpdateData() {
+        return (byte) height;
+    }
+
+    @Override
+    public void receiveClientEvent(byte aEventID, byte aValue) {
+        if (aEventID == GregTechTileClientEvents.CHANGE_CUSTOM_DATA) {
+            height = aValue;
+        }
+    }
+
+    @Override
     public boolean renderInWorld(IBlockAccess aWorld, int x, int y, int z, Block aBlock, RenderBlocks aRenderer) {
-        if (!mMachine || getFluid() == null || getFluid().getFluid() == null) return false;
+        if (!mMachine || mFluidName == null || mFluidName.equals("")) return false;
+
+        Fluid fluid = FluidRegistry.getFluid(mFluidName);
+
+        if (fluid == null) return false;
 
         GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_ENABLE_BIT);
         GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         double minU, minV, maxU, maxV;
 
-        setColor(getFluid().getFluid().getColor());
-        IIcon fluidIcon = getFluid().getFluid().getIcon();
+        setColor(fluid.getColor());
+        IIcon fluidIcon = fluid.getIcon();
         minU = fluidIcon.getMinU();
         minV = fluidIcon.getMinV();
         maxU = fluidIcon.getMaxU();
