@@ -48,7 +48,6 @@ import gregtech.api.metatileentity.GregTechTileClientEvents;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_BasicMachine_GT_Recipe.X;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 
@@ -340,15 +339,73 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         tMinV = fluidIcon.getMinV();
         tMaxU = fluidIcon.getMaxU();
         tMaxV = fluidIcon.getMaxV();
+        double tOffsetX = 2 * getExtendedFacing().getRelativeBackInWorld().offsetX;
+        double tOffsetZ = 2 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
+        double tOffsetY = 2 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+        double tXCornerOne = aX + tOffsetX;
+        double tXCornerTwo = aX + tOffsetX;
+        double tYCornerOne = aY + tOffsetY;
+        double tYCornerTwo = aY + tOffsetY;
+        double tZCornerOne = aZ + tOffsetZ;
+        double tZCornerTwo = aZ + tOffsetZ;
+        boolean tUpsideDown = false;
+        switch (getExtendedFacing().getDirection()) {
+            case UP:
+                break;
+            case DOWN:
 
-        double sizeX = 4.98,
-                sizeZ = 4.98,
-                tHeight = height,
-                offsetX = getExtendedFacing().getRelativeBackInWorld().offsetX * 4,
-                offsetZ = getExtendedFacing().getRelativeBackInWorld().offsetZ * 4,
-                offsetY = 1;
+                break;
+            default:
+                switch (getExtendedFacing().getRotation()) {
+                    case CLOCKWISE:
+                        tXCornerOne = aY + tOffsetY + 5;
+                        tXCornerTwo = aY + tOffsetY - 5;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne = aX + tOffsetX + 1;
+                        tYCornerTwo = aX + tOffsetX - 5;
+                        break;
+                    case COUNTER_CLOCKWISE:
+                        tXCornerOne = aY + tOffsetY - 5;
+                        tXCornerTwo = aY + tOffsetY + 5;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne = aX + tOffsetX;
+                        tYCornerTwo = aX + tOffsetX + 5;
+                        break;
+                    case UPSIDE_DOWN:
+                        tXCornerOne -= 1.98;
+                        tXCornerTwo += 2.98;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne -= 4.98;
+                        tYCornerTwo += 0.02;
+                        tUpsideDown = true;
+                        break;
+                    case NORMAL:
+                        tXCornerOne += 2.98;
+                        tXCornerTwo -= 1.98;
+                        tZCornerOne += 2.98;
+                        tZCornerTwo -= 1.98;
+                        tYCornerOne += 0.02;
+                        tYCornerTwo += 5.02;
+                        break;
+                }
+                break;
+        }
 
-        renderFluid(aX + offsetX + 0.98, aY + 1, aZ + offsetZ + 0.98, tHeight, tMinU, tMaxU, tMinV, tMaxV, 0);
+        renderFluid(
+                tXCornerOne,
+                tXCornerTwo, 
+                tYCornerOne, 
+                tYCornerTwo, 
+                tZCornerOne, 
+                tZCornerTwo, 
+                tMinU, 
+                tMaxU, 
+                tMinV, 
+                tMaxV,
+                tUpsideDown);
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
@@ -356,36 +413,49 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return false;
     }
 
-    private void renderFluid(double aX, double aY, double aZ, double aHeight, double aMinU, double aMaxU, double aMinV, double aMaxV, int aRotation) {
-        // spotless:off
-        /*
-         *  A----B
-         *  |    |
-         *  |    |
-         *  C----D
-         *  D -> B -> A -> C
-         * 
-         */
-        tes.addVertexWithUV(aX - 2.96, aY          , aZ - 0.96, aMaxU, aMaxV);
-        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ - 0.96, aMaxU, aMinV);
-        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ - 0.96, aMinU, aMinV);
-        tes.addVertexWithUV(aX + 2, aY          , aZ - 0.96, aMinU, aMaxV);
+    private void renderFluid(
+            double aXCornerOne,
+            double aXCornerTwo,
+            double aYCornerOne,
+            double aYCornerTwo,
+            double aZCornerOne,
+            double aZCornerTwo,
+            double aMinU,
+            double aMaxU,
+            double aMinV,
+            double aMaxV,
+            boolean aUpsideDown) {
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerOne, aMinU, aMaxV);
 
-        tes.addVertexWithUV(aX + 2, aY          , aZ - 0.96, aMaxU, aMaxV);
-        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ - 0.96, aMaxU, aMinV);
-        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ + 3.96, aMinU, aMinV);
-        tes.addVertexWithUV(aX + 2, aY          , aZ + 3.96, aMinU, aMaxV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerOne, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerTwo, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerTwo, aMinU, aMaxV);
 
-        tes.addVertexWithUV(aX + 2, aY          , aZ + 4, aMaxU, aMaxV);
-        tes.addVertexWithUV(aX + 2, aY + aHeight, aZ + 4, aMaxU, aMinV);
-        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ + 4, aMinU, aMinV);
-        tes.addVertexWithUV(aX - 2.96, aY          , aZ + 4, aMinU, aMaxV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerTwo, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerTwo, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerTwo, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerTwo, aMinU, aMaxV);
 
-        tes.addVertexWithUV(aX - 2.96, aY          , aZ + 3.96, aMaxU, aMaxV);
-        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ + 3.96, aMaxU, aMinV);
-        tes.addVertexWithUV(aX - 2.96, aY + aHeight, aZ - 0.96, aMinU, aMinV);
-        tes.addVertexWithUV(aX - 2.96, aY          , aZ - 0.96, aMinU, aMaxV);
-        // spotless:on
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerTwo, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerTwo, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMinU, aMaxV);
+
+        if (aUpsideDown) {
+            tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerTwo, aMaxU, aMaxV);
+            tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerOne, aMaxU, aMinV);
+            tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMinU, aMinV);
+            tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerTwo, aMinU, aMaxV);
+        } else {
+            tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerTwo, aMaxU, aMaxV);
+            tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
+            tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMinU, aMinV);
+            tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerTwo, aMinU, aMaxV);
+        }
     }
 
     public static void setColor(int color) {
