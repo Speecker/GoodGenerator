@@ -339,56 +339,146 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         tMinV = fluidIcon.getMinV();
         tMaxU = fluidIcon.getMaxU();
         tMaxV = fluidIcon.getMaxV();
+        ForgeDirection tDirection = getExtendedFacing().getDirection();
         double tOffsetX = 2 * getExtendedFacing().getRelativeBackInWorld().offsetX;
         double tOffsetZ = 2 * getExtendedFacing().getRelativeBackInWorld().offsetZ;
         double tOffsetY = 2 * getExtendedFacing().getRelativeBackInWorld().offsetY;
+        float tFillPercent = mStorageCurrent.divide(mStorage).floatValue();
+        double tFillLevel = height * tFillPercent;
         double tXCornerOne = aX + tOffsetX;
         double tXCornerTwo = aX + tOffsetX;
         double tYCornerOne = aY + tOffsetY;
         double tYCornerTwo = aY + tOffsetY;
         double tZCornerOne = aZ + tOffsetZ;
         double tZCornerTwo = aZ + tOffsetZ;
-        boolean tUpsideDown = false;
-        switch (getExtendedFacing().getDirection()) {
-            case UP:
-                break;
+        switch (tDirection) {
             case DOWN:
-
+                tFillLevel = 4.98 * tFillPercent;
+                switch (getExtendedFacing().getRotation()) {
+                    case CLOCKWISE:
+                        tXCornerOne += 0;
+                        tXCornerTwo -= height;
+                        tZCornerOne += 2.98;
+                        tZCornerTwo -= 1.98;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case COUNTER_CLOCKWISE:
+                        tXCornerOne += 1;
+                        tXCornerTwo += height + 1;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case UPSIDE_DOWN:
+                        tXCornerOne -= 1.98;
+                        tXCornerTwo += 2.98;
+                        tZCornerOne += 1;
+                        tZCornerTwo += height + 1;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case NORMAL:
+                        tXCornerOne += 2.98;
+                        tXCornerTwo -= 1.98;
+                        tZCornerOne += 0;
+                        tZCornerTwo -= height;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                }
+                break;
+            case UP:
+                tFillLevel = 4.98 * tFillPercent;
+                switch (getExtendedFacing().getRotation()) {
+                    case CLOCKWISE:
+                        tXCornerOne += 1;
+                        tXCornerTwo += height + 1;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case COUNTER_CLOCKWISE:
+                        tXCornerOne += 0;
+                        tXCornerTwo -= height;
+                        tZCornerOne -= 1.98;
+                        tZCornerTwo += 2.98;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case UPSIDE_DOWN:
+                        tXCornerOne -= 1.98;
+                        tXCornerTwo += 2.98;
+                        tZCornerOne += 1;
+                        tZCornerTwo += height + 1;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                    case NORMAL:
+                        tXCornerOne += 2.98;
+                        tXCornerTwo -= 1.98;
+                        tZCornerOne += 0;
+                        tZCornerTwo -= height;
+                        tYCornerOne -= 1.98;
+                        tYCornerTwo += tFillLevel - 1.98;
+                        break;
+                }
                 break;
             default:
                 switch (getExtendedFacing().getRotation()) {
                     case CLOCKWISE:
-                        tXCornerOne = aY + tOffsetY + 5;
-                        tXCornerTwo = aY + tOffsetY - 5;
-                        tZCornerOne -= 1.98;
-                        tZCornerTwo += 2.98;
-                        tYCornerOne = aX + tOffsetX + 1;
-                        tYCornerTwo = aX + tOffsetX - 5;
+                        tFillLevel = 4.98 * tFillPercent;
+                        if (tDirection == ForgeDirection.SOUTH || tDirection == ForgeDirection.NORTH) {
+                            tXCornerOne += 1;
+                            tXCornerTwo += height + 1;
+                            tZCornerOne -= 1.98;
+                            tZCornerTwo += 2.98;
+                            tYCornerOne -= 1.98;
+                            tYCornerTwo += tFillLevel - 1.98;
+                        } else {
+                            tXCornerOne -= 1.98;
+                            tXCornerTwo += 2.98;
+                            tZCornerOne += 1;
+                            tZCornerTwo += height + 1;
+                            tYCornerOne -= 1.98;
+                            tYCornerTwo += tFillLevel - 1.98;
+                        }
                         break;
                     case COUNTER_CLOCKWISE:
-                        tXCornerOne = aY + tOffsetY - 5;
-                        tXCornerTwo = aY + tOffsetY + 5;
-                        tZCornerOne -= 1.98;
-                        tZCornerTwo += 2.98;
-                        tYCornerOne = aX + tOffsetX;
-                        tYCornerTwo = aX + tOffsetX + 5;
+                        tFillLevel = 4.98 * tFillPercent;
+                        if (tDirection == ForgeDirection.SOUTH || tDirection == ForgeDirection.NORTH) {
+                            tXCornerOne += 0;
+                            tXCornerTwo -= height;
+                            tZCornerOne -= 1.98;
+                            tZCornerTwo += 2.98;
+                            tYCornerOne -= 1.98;
+                            tYCornerTwo += tFillLevel - 1.98;
+                        } else {
+                            tXCornerOne -= 1.98;
+                            tXCornerTwo += 2.98;
+                            tZCornerOne += 0;
+                            tZCornerTwo -= height;
+                            tYCornerOne -= 1.98;
+                            tYCornerTwo += tFillLevel - 1.98;
+                        }
                         break;
                     case UPSIDE_DOWN:
                         tXCornerOne -= 1.98;
                         tXCornerTwo += 2.98;
                         tZCornerOne -= 1.98;
                         tZCornerTwo += 2.98;
-                        tYCornerOne -= 4.98;
-                        tYCornerTwo += 0.02;
-                        tUpsideDown = true;
+                        tYCornerOne -= height + 0.01;
+                        tYCornerTwo += tFillLevel - height + 0.01;
                         break;
                     case NORMAL:
                         tXCornerOne += 2.98;
                         tXCornerTwo -= 1.98;
                         tZCornerOne += 2.98;
                         tZCornerTwo -= 1.98;
-                        tYCornerOne += 0.02;
-                        tYCornerTwo += 5.02;
+                        tYCornerOne += 1.01;
+                        tYCornerTwo += tFillLevel + 1.01;
                         break;
                 }
                 break;
@@ -396,16 +486,15 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
 
         renderFluid(
                 tXCornerOne,
-                tXCornerTwo, 
-                tYCornerOne, 
-                tYCornerTwo, 
-                tZCornerOne, 
-                tZCornerTwo, 
-                tMinU, 
-                tMaxU, 
-                tMinV, 
-                tMaxV,
-                tUpsideDown);
+                tXCornerTwo,
+                tYCornerOne,
+                tYCornerTwo,
+                tZCornerOne,
+                tZCornerTwo,
+                tMinU,
+                tMaxU,
+                tMinV,
+                tMaxV);
 
         GL11.glPopAttrib();
         GL11.glPopMatrix();
@@ -423,8 +512,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             double aMinU,
             double aMaxU,
             double aMinV,
-            double aMaxV,
-            boolean aUpsideDown) {
+            double aMaxV) {
         tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMaxU, aMaxV);
         tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
         tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMinU, aMinV);
@@ -445,17 +533,15 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMinU, aMinV);
         tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMinU, aMaxV);
 
-        if (aUpsideDown) {
-            tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerTwo, aMaxU, aMaxV);
-            tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerOne, aMaxU, aMinV);
-            tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMinU, aMinV);
-            tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerTwo, aMinU, aMaxV);
-        } else {
-            tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerTwo, aMaxU, aMaxV);
-            tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
-            tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMinU, aMinV);
-            tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerTwo, aMinU, aMaxV);
-        }
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerTwo, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerTwo, aMinU, aMaxV);
+
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerTwo, aMaxU, aMaxV);
+        tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMaxU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerOne, aMinU, aMinV);
+        tes.addVertexWithUV(aXCornerTwo, aYCornerOne, aZCornerTwo, aMinU, aMaxV);
     }
 
     public static void setColor(int color) {
