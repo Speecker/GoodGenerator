@@ -194,7 +194,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                                 + EnumChatFormatting.RESET
                                 + EnumChatFormatting.GRAY
                                 + "limits the recipes the machine can perform. See the NEI pages for details.")
-                .addInfo("Right-Click with screwdriver to separate input buses.")
+                .addInfo("Right-Click with screwdriver to enable separate input buses.")
                 .addInfo(
                         "Supports " + EnumChatFormatting.BLUE
                                 + "Tec"
