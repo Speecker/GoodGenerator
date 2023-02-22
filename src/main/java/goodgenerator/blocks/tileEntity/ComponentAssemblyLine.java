@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
-import gregtech.api.util.GT_Utility;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,10 +33,12 @@ import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
 import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
 import gregtech.api.render.TextureFactory;
 import gregtech.api.util.GT_Multiblock_Tooltip_Builder;
 import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_StructureUtility;
+import gregtech.api.util.GT_Utility;
 
 public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<ComponentAssemblyLine>
         implements ISurvivalConstructable {
@@ -52,26 +52,10 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
             .addShape(
                     STRUCTURE_PIECE_MAIN,
                     new String[][] {
-                            { "         ",
-                                "   III   ",
-                                " HHI~IHH ",
-                                "HH III HH",
-                                "H       H",
-                                "H       H",
-                                "H  JJJ  H",
-                                "H  JJJ  H",
-                                "H  N N  H",
-                                "HHHHHHHHH" },
-                            { "         ",
-                                " EHHHHHE ",
-                                "E       E",
-                                "H       H",
-                                "A       A",
-                                "A       A",
-                                "A       A",
-                                "A  HHH  A",
-                                "A       A",
-                                "MHHHHHHHM" },
+                            { "         ", "   III   ", " HHI~IHH ", "HH III HH", "H       H", "H       H", "H  JJJ  H",
+                                    "H  JJJ  H", "H  N N  H", "HHHHHHHHH" },
+                            { "         ", " EHHHHHE ", "E       E", "H       H", "A       A", "A       A", "A       A",
+                                    "A  HHH  A", "A       A", "MHHHHHHHM" },
                             { "   HBH   ", " EL   LE ", "E       E", "HC     CH", "AC     CA", "AC     CA", "A D   D A",
                                     "A  HHH  A", "A       A", "MHHHHHHHM" },
                             { "   HBH   ", " EL   LE ", "E       E", "H       H", "A       A", "A       A", "A       A",
@@ -208,7 +192,8 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                                 + EnumChatFormatting.YELLOW
                                 + "Component Assembly Line Casing "
                                 + EnumChatFormatting.RESET
-                                + EnumChatFormatting.GRAY+"limits the recipes the machine can perform. See the NEI pages for details.")
+                                + EnumChatFormatting.GRAY
+                                + "limits the recipes the machine can perform. See the NEI pages for details.")
                 .addInfo("Right-Click with screwdriver to separate input buses.")
                 .addInfo(
                         "Supports " + EnumChatFormatting.BLUE
@@ -290,8 +275,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                 if (processRecipe(tInputs, tFluids)) return true;
                 else tInputList.clear();
             }
-        }
-        else {
+        } else {
             ItemStack[] tItems = getStoredInputs().toArray(new ItemStack[0]);
             return processRecipe(tItems, tFluids);
         }
@@ -301,7 +285,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
     private boolean processRecipe(ItemStack[] tInputs, FluidStack[] tFluidInputs) {
         long totalEU = getRealVoltage();
         this.lastRecipe = getRecipeMap()
-            .findRecipe(getBaseMetaTileEntity(), this.lastRecipe, false, totalEU, tFluidInputs, tInputs);
+                .findRecipe(getBaseMetaTileEntity(), this.lastRecipe, false, totalEU, tFluidInputs, tInputs);
         if (this.lastRecipe == null) return false;
         if (this.lastRecipe.mSpecialValue > casingTier + 1) return false;
         if (!this.lastRecipe.isRecipeInputEqual(true, tFluidInputs, tInputs)) return false;
@@ -332,8 +316,8 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
         separateInputBuses = !separateInputBuses;
         GT_Utility.sendChatToPlayer(
-            aPlayer,
-            StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + separateInputBuses);
+                aPlayer,
+                StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + separateInputBuses);
     }
 
     @Override
