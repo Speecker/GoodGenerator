@@ -1,12 +1,17 @@
 package goodgenerator.blocks.tileEntity;
 
 import static com.gtnewhorizon.structurelib.structure.StructureUtility.*;
+import static goodgenerator.util.DescTextLocalization.BLUE_PRINT_INFO;
 import static gregtech.api.enums.GT_HatchElement.*;
 import static gregtech.api.enums.Textures.BlockIcons.*;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_InputBus;
+import gregtech.api.util.GT_Utility;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
@@ -39,6 +44,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
         implements ISurvivalConstructable {
 
     private int casingTier;
+    private boolean separateInputBuses = false;
     private GT_Recipe lastRecipe;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<ComponentAssemblyLine> STRUCTURE_DEFINITION = StructureDefinition
@@ -200,10 +206,10 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                 .addInfo(
                         "The " + EnumChatFormatting.BOLD
                                 + EnumChatFormatting.YELLOW
-                                + "Special Component Assembly Line Casing"
+                                + "Component Assembly Line Casing "
                                 + EnumChatFormatting.RESET
-                                + EnumChatFormatting.GRAY)
-                .addInfo("limits the recipes the machine can perform. See the NEI pages for details.")
+                                + EnumChatFormatting.GRAY+"limits the recipes the machine can perform. See the NEI pages for details.")
+                .addInfo("Right-Click with screwdriver to separate input buses.")
                 .addInfo(
                         "Supports " + EnumChatFormatting.BLUE
                                 + "Tec"
@@ -213,6 +219,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                                 + " laser and multi-amp hatches!")
                 .addInfo("Supports overclocking beyond MAX!")
                 .addInfo(EnumChatFormatting.ITALIC + "Much more efficient than other competing brands!")
+                .addInfo("The structure is too complex!").addInfo(BLUE_PRINT_INFO).addSeparator()
                 .beginStructureBlock(9, 10, 33, false)
                 .addStructureInfo("This structure is too complex! See schematic for details.")
                 .addOtherStructurePart("Borosilicate Glass", "Can be UV tier or higher")
@@ -270,14 +277,34 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
     public boolean checkRecipe(ItemStack aStack) {
         this.mEfficiencyIncrease = 10000;
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
-        long totalEU = getRealVoltage();
-        ItemStack[] tItems = getStoredInputs().toArray(new ItemStack[0]);
         FluidStack[] tFluids = getStoredFluids().toArray(new FluidStack[0]);
+
+        if (separateInputBuses) {
+            ArrayList<ItemStack> tInputList = new ArrayList<>();
+            for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
+                IGregTechTileEntity tInputBus = tHatch.getBaseMetaTileEntity();
+                for (int i = tInputBus.getSizeInventory() - 1; i >= 0; i--) {
+                    if (tInputBus.getStackInSlot(i) != null) tInputList.add(tInputBus.getStackInSlot(i));
+                }
+                ItemStack[] tInputs = tInputList.toArray(new ItemStack[0]);
+                if (processRecipe(tInputs, tFluids)) return true;
+                else tInputList.clear();
+            }
+        }
+        else {
+            ItemStack[] tItems = getStoredInputs().toArray(new ItemStack[0]);
+            return processRecipe(tItems, tFluids);
+        }
+        return false;
+    }
+
+    private boolean processRecipe(ItemStack[] tInputs, FluidStack[] tFluidInputs) {
+        long totalEU = getRealVoltage();
         this.lastRecipe = getRecipeMap()
-                .findRecipe(getBaseMetaTileEntity(), this.lastRecipe, false, totalEU, tFluids, tItems);
+            .findRecipe(getBaseMetaTileEntity(), this.lastRecipe, false, totalEU, tFluidInputs, tInputs);
         if (this.lastRecipe == null) return false;
         if (this.lastRecipe.mSpecialValue > casingTier + 1) return false;
-        if (!this.lastRecipe.isRecipeInputEqual(true, tFluids, tItems)) return false;
+        if (!this.lastRecipe.isRecipeInputEqual(true, tFluidInputs, tInputs)) return false;
 
         calculateOverclockedNessMulti((long) this.lastRecipe.mEUt, this.lastRecipe.mDuration, 1, totalEU);
         if (this.lEUt > 0) {
@@ -299,6 +326,14 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
     public boolean checkMachine(IGregTechTileEntity aBaseMetaTileEntity, ItemStack aStack) {
         casingTier = -1;
         return checkPiece(STRUCTURE_PIECE_MAIN, 4, 2, 0);
+    }
+
+    @Override
+    public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        separateInputBuses = !separateInputBuses;
+        GT_Utility.sendChatToPlayer(
+            aPlayer,
+            StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + separateInputBuses);
     }
 
     @Override
@@ -324,12 +359,14 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
         aNBT.setInteger("casingTier", casingTier);
+        aNBT.setBoolean("separateInputBuses", separateInputBuses);
         super.saveNBTData(aNBT);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
         casingTier = aNBT.getInteger("casingTier");
+        separateInputBuses = aNBT.getBoolean("separateInputBuses");
         super.loadNBTData(aNBT);
     }
 }
