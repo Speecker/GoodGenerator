@@ -546,7 +546,7 @@ public class MyRecipeAdder {
                 Pos2d windowOffset) {
             builder.widget(
                     new DrawableWidget().setDrawable(GG_UITextures.PICTURE_COMPONENT_ASSLINE)
-                            .setPos(new Pos2d(70, 14).add(windowOffset)).setSize(72, 40));
+                            .setPos(new Pos2d(70, 11).add(windowOffset)).setSize(72, 40));
         }
     }
 
