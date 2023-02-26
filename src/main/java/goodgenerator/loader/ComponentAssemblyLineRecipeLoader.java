@@ -84,8 +84,8 @@ public class ComponentAssemblyLineRecipeLoader {
                             compactItems(fixedInputs, info.getRight()).toArray(new ItemStack[0]),
                             fixedFluids.toArray(new FluidStack[0]),
                             info.getLeft().get(OUTPUT_MULTIPLIER),
-                            recipe.mDuration * INPUT_MULTIPLIER,
-                            energy,
+                            recipe.mDuration * OUTPUT_MULTIPLIER,
+                            energy * OUTPUT_MULTIPLIER,
                             info.getRight());
                 }
             }
