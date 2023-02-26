@@ -44,7 +44,6 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
         implements ISurvivalConstructable {
 
     private int casingTier;
-    private boolean separateInputBuses = false;
     private GT_Recipe lastRecipe;
     protected static final String STRUCTURE_PIECE_MAIN = "main";
     private static final IStructureDefinition<ComponentAssemblyLine> STRUCTURE_DEFINITION = StructureDefinition
@@ -194,7 +193,6 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
                                 + EnumChatFormatting.RESET
                                 + EnumChatFormatting.GRAY
                                 + "limits the recipes the machine can perform. See the NEI pages for details.")
-                .addInfo("Right-Click with screwdriver to enable separate input buses.")
                 .addInfo(
                         "Supports " + EnumChatFormatting.BLUE
                                 + "Tec"
@@ -264,7 +262,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
         this.mEfficiency = (10000 - (this.getIdealStatus() - this.getRepairStatus()) * 1000);
         FluidStack[] tFluids = getStoredFluids().toArray(new FluidStack[0]);
 
-        if (separateInputBuses) {
+        if (inputSeparation) {
             ArrayList<ItemStack> tInputList = new ArrayList<>();
             for (GT_MetaTileEntity_Hatch_InputBus tHatch : mInputBusses) {
                 IGregTechTileEntity tInputBus = tHatch.getBaseMetaTileEntity();
@@ -314,10 +312,15 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
 
     @Override
     public void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
-        separateInputBuses = !separateInputBuses;
+        inputSeparation = !inputSeparation;
         GT_Utility.sendChatToPlayer(
                 aPlayer,
-                StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + separateInputBuses);
+                StatCollector.translateToLocal("GT5U.machines.separatebus") + " " + inputSeparation);
+    }
+
+    @Override
+    protected boolean isInputSeparationButtonEnabled() {
+        return true;
     }
 
     @Override
@@ -342,15 +345,16 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_LongPowerUsageBase<
 
     @Override
     public void saveNBTData(NBTTagCompound aNBT) {
-        aNBT.setInteger("casingTier", casingTier);
-        aNBT.setBoolean("separateInputBuses", separateInputBuses);
         super.saveNBTData(aNBT);
+        aNBT.setInteger("casingTier", casingTier);
     }
 
     @Override
     public void loadNBTData(final NBTTagCompound aNBT) {
-        casingTier = aNBT.getInteger("casingTier");
-        separateInputBuses = aNBT.getBoolean("separateInputBuses");
         super.loadNBTData(aNBT);
+        casingTier = aNBT.getInteger("casingTier");
+        if (!aNBT.hasKey(INPUT_SEPARATION_NBT_KEY)) {
+            inputSeparation = aNBT.getBoolean("mSeparate");
+        }
     }
 }
