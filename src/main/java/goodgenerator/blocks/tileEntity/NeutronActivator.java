@@ -9,7 +9,6 @@ import static gregtech.api.util.GT_StructureUtility.ofFrame;
 
 import java.util.*;
 
-import com.github.bartimaeusnek.bartworks.util.Pair;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,6 +18,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
+import com.github.bartimaeusnek.bartworks.util.Pair;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -123,14 +123,8 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         ItemStack[] inItems = tItems.toArray(new ItemStack[0]);
         int minNKE, maxNKE;
 
-        lastRecipe = getRecipeMap().findRecipe(
-            this.getBaseMetaTileEntity(),
-            lastRecipe,
-            false,
-            Integer.MAX_VALUE,
-            inFluids,
-            inItems
-        );
+        lastRecipe = getRecipeMap()
+                .findRecipe(this.getBaseMetaTileEntity(), lastRecipe, false, Integer.MAX_VALUE, inFluids, inItems);
 
         if (lastRecipe != null) {
             minNKE = (lastRecipe.mSpecialValue % 10000) * 1000000;
@@ -169,7 +163,8 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     }
 
     @Override
-    public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+    public boolean onWireCutterRightClick(byte aSide, byte aWrenchingSide, EntityPlayer aPlayer, float aX, float aY,
+            float aZ) {
         batchMode = !batchMode;
         if (batchMode) {
             GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("misc.BatchModeTextOn"));
