@@ -61,7 +61,6 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected int casingAmount = 0;
     protected int height = 0;
     protected int eV = 0, mCeil = 0, mFloor = 0;
-    protected boolean mBatchMode;
     private GT_Recipe lastRecipe;
     final XSTR R = new XSTR();
 
@@ -190,7 +189,6 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         mCeil = aNBT.getInteger("mCeil");
         mFloor = aNBT.getInteger("mFloor");
         height = aNBT.getInteger("height");
-        mBatchMode = aNBT.getBoolean("mBatchMode");
         super.loadNBTData(aNBT);
     }
 
@@ -200,7 +198,6 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         aNBT.setInteger("mCeil", mCeil);
         aNBT.setInteger("mFloor", mFloor);
         aNBT.setInteger("height", height);
-        aNBT.setBoolean("mBatchMode", mBatchMode);
         super.saveNBTData(aNBT);
     }
 
