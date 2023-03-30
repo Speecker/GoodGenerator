@@ -9,17 +9,25 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
+
+import org.lwjgl.opengl.GL11;
 
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
 import com.github.technus.tectech.TecTech;
@@ -31,10 +39,13 @@ import com.gtnewhorizons.modularui.api.drawable.IDrawable;
 import com.gtnewhorizons.modularui.api.drawable.UITexture;
 import com.gtnewhorizons.modularui.common.widget.*;
 
+import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.YOTTAHatch;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
 import goodgenerator.client.GUI.GG_UITextures;
 import goodgenerator.loader.Loaders;
+import goodgenerator.main.GoodGenerator;
+import goodgenerator.network.YottaFluidTankPacket;
 import goodgenerator.util.CharExchanger;
 import goodgenerator.util.DescTextLocalization;
 import gregtech.api.enums.GT_HatchElement;
@@ -60,6 +71,8 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     private static final IIconContainer textureFontOff = new Textures.BlockIcons.CustomIcon("iconsets/OVERLAY_QCHEST");
     private static final IIconContainer textureFontOff_Glow = new Textures.BlockIcons.CustomIcon(
             "iconsets/OVERLAY_QCHEST_GLOW");
+    private static final int RANGE_OF_UPDATE = 64;
+    private static final int TICKS_BETWEEN_UPDATES = 20;
 
     protected IStructureDefinition<YottaFluidTank> multiDefinition = null;
     protected final ArrayList<YOTTAHatch> mYottaHatch = new ArrayList<>();
@@ -75,6 +88,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected final String YOTTANK_BOTTOM = mName + "buttom";
     protected final String YOTTANK_MID = mName + "mid";
     protected final String YOTTANK_TOP = mName + "top";
+    private int packetUpdateCounter = 0;
 
     protected boolean voidExcessEnabled = false;
 
@@ -502,17 +516,8 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return false;
     }
 
-    private void renderFluid(
-            double aXCornerOne,
-            double aXCornerTwo,
-            double aYCornerOne,
-            double aYCornerTwo,
-            double aZCornerOne,
-            double aZCornerTwo,
-            double aMinU,
-            double aMaxU,
-            double aMinV,
-            double aMaxV) {
+    private void renderFluid(double aXCornerOne, double aXCornerTwo, double aYCornerOne, double aYCornerTwo,
+            double aZCornerOne, double aZCornerTwo, double aMinU, double aMaxU, double aMinV, double aMaxV) {
         tes.addVertexWithUV(aXCornerOne, aYCornerOne, aZCornerOne, aMaxU, aMaxV);
         tes.addVertexWithUV(aXCornerOne, aYCornerTwo, aZCornerOne, aMaxU, aMinV);
         tes.addVertexWithUV(aXCornerTwo, aYCornerTwo, aZCornerOne, aMinU, aMinV);
@@ -675,6 +680,25 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                         }
                     }
                 }
+            }
+
+            if (packetUpdateCounter++ >= TICKS_BETWEEN_UPDATES) {
+                YottaFluidTankPacket messageForClients = new YottaFluidTankPacket(
+                        getBaseMetaTileEntity().getXCoord(),
+                        getBaseMetaTileEntity().getZCoord(),
+                        getBaseMetaTileEntity().getYCoord(),
+                        mStorage.toString(),
+                        mStorageCurrent.toString(),
+                        mFluidName);
+                GoodGenerator.NETWORK_HANDLER.sendToAllAround(
+                        messageForClients,
+                        new TargetPoint(
+                                getBaseMetaTileEntity().getWorld().provider.dimensionId,
+                                getBaseMetaTileEntity().getXCoord(),
+                                getBaseMetaTileEntity().getYCoord(),
+                                getBaseMetaTileEntity().getZCoord(),
+                                RANGE_OF_UPDATE));
+                packetUpdateCounter = 0;
             }
         }
         return true;
@@ -856,5 +880,13 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         }).setPos(174, doesBindPlayerInventory() ? 116 : 140).setSize(16, 16)
                 .addTooltip(StatCollector.translateToLocal("gui.YOTTank.button.locking"))
                 .setTooltipShowUpDelay(TOOLTIP_DELAY);
+    }
+
+    public void setCurrentFluid(String fluidMax, String fluidAmount, String fluidName) {
+        mStorage = new BigInteger(fluidMax);
+        mStorageCurrent = new BigInteger(fluidAmount);
+        mFluidName = fluidName;
+        getBaseMetaTileEntity().issueBlockUpdate();
+        getBaseMetaTileEntity().issueTextureUpdate();
     }
 }

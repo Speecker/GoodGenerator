@@ -18,6 +18,8 @@ import goodgenerator.crossmod.thaumcraft.Research;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.loader.NaquadahReworkRecipeLoader;
+import goodgenerator.network.GG_Network;
+import goodgenerator.network.IGG_NetworkHandler;
 import goodgenerator.tabs.MyTabs;
 
 @SuppressWarnings("ALL")
@@ -42,6 +44,7 @@ public final class GoodGenerator {
     public static CommonProxy proxy;
 
     public static SimpleNetworkWrapper CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
+    public static IGG_NetworkHandler NETWORK_HANDLER = new GG_Network();
 
     static {}
 
