@@ -3,6 +3,11 @@ package goodgenerator.network;
 import java.util.EnumMap;
 import java.util.List;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
+
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
 
@@ -20,10 +25,6 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.MessageToMessageCodec;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 @ChannelHandler.Sharable
 @SuppressWarnings("deprecation")
@@ -33,8 +34,7 @@ public class GG_Network extends MessageToMessageCodec<FMLProxyPacket, GG_Packet>
     private final GG_Packet[] mSubChannels;
 
     public GG_Network() {
-        this(GoodGenerator.MOD_ID,
-            new YottaFluidTankPacket() // 0
+        this(GoodGenerator.MOD_ID, new YottaFluidTankPacket() // 0
         );
     }
 

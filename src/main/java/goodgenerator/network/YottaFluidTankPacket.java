@@ -1,17 +1,17 @@
 package goodgenerator.network;
 
-import com.google.common.io.ByteArrayDataInput;
-
-import cpw.mods.fml.common.network.ByteBufUtils;
-import goodgenerator.blocks.tileEntity.YottaFluidTank;
-import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
-import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
-import gregtech.api.net.GT_Packet_New;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 
+import com.google.common.io.ByteArrayDataInput;
+
+import goodgenerator.blocks.tileEntity.YottaFluidTank;
+import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
+import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
+import io.netty.buffer.ByteBuf;
+
 public class YottaFluidTankPacket extends GG_Packet {
+
     private String fluidAmount;
     private String fluidName;
     private String fluidMax;
