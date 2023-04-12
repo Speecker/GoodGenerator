@@ -16,6 +16,7 @@ import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.*;
 import gregtech.api.util.*;
 import gregtech.api.util.GT_ModHandler;
+import gtPlusPlus.core.item.chemistry.GenericChem;
 import gtPlusPlus.core.material.ALLOY;
 import gtPlusPlus.core.material.ELEMENT;
 import gtPlusPlus.core.recipe.common.CI;
@@ -1258,22 +1259,27 @@ public class RecipeLoader_02 {
             GT_Values.RA.addAssemblerRecipe(
                     new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T3.get(1), },
                     null,
-                    GT_ModHandler.getModItem("miscutils", "gtplusplus.blockcasings.3", 3, 13),
+                    GregtechItemList.Casing_Fusion_Internal.get(3),
                     600,
-                    7680000);
+                    (int) TierEU.RECIPE_UEV);
 
             GT_Values.RA.addAssemblylineRecipe(
                     ItemRefer.Compact_Fusion_MK3.get(1),
                     24000,
-                    new Object[] { GT_ModHandler.getModItem("gregtech", "gt.blockmachines", 48, 965),
-                            GT_OreDictUnificator.get(OrePrefixes.wireGt08, Materials.SuperconductorLuV, 32),
+                    new Object[] { GregtechItemList.FusionComputer_UV2.get(48),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Infinite, 1),
                             ItemList.Circuit_Wafer_PPIC.get(64), ItemList.UHV_Coil.get(16),
-                            ItemRefer.Compact_Fusion_Coil_T2.get(8), ItemRefer.HiC_T4.get(8) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("molten.teflon", 1152),
-                            MyMaterial.dalisenite.getMolten(576), FluidRegistry.getFluidStack("molten.botmium", 288) },
+                            ALLOY.TITANSTEEL.getPlateDense(8), ItemRefer.HiC_T4.get(8),
+                            ItemList.Field_Generator_UHV.get(8),
+                            MyMaterial.enrichedNaquadahAlloy.get(OrePrefixes.gearGtSmall, 64) },
+                    new FluidStack[] { GenericChem.TEFLON.getFluidStack(2304), MyMaterial.dalisenite.getMolten(1152),
+                            ALLOY.BOTMIUM.getFluidStack(288) },
                     ItemRefer.Compact_Fusion_MK4.get(1),
                     6000,
-                    520000);
+                    (int) TierEU.RECIPE_UV);
 
             // Compact MK5 Fusion Coil
             MyRecipeAdder.instance.addPreciseAssemblerRecipe(
@@ -1305,6 +1311,14 @@ public class RecipeLoader_02 {
                     ItemRefer.Compact_Fusion_MK5.get(1),
                     6000,
                     (int) TierEU.RECIPE_UHV);
+
+            // Compact MK5 Fusion Disassembly Recipe
+            GT_Values.RA.addAssemblerRecipe(
+                    new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T4.get(1), },
+                    null,
+                    GregtechItemList.Casing_Fusion_Internal2.get(3),
+                    600,
+                    (int) TierEU.RECIPE_UIV);
         }
 
         GT_Values.RA.addMultiblockChemicalRecipe(
