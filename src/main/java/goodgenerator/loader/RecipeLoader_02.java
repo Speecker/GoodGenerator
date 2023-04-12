@@ -13,12 +13,13 @@ import goodgenerator.items.MyMaterial;
 import goodgenerator.util.CrackRecipeAdder;
 import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
-import gregtech.api.enums.GT_Values;
-import gregtech.api.enums.ItemList;
-import gregtech.api.enums.Materials;
-import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.*;
 import gregtech.api.util.*;
 import gregtech.api.util.GT_ModHandler;
+import gtPlusPlus.core.material.ALLOY;
+import gtPlusPlus.core.material.ELEMENT;
+import gtPlusPlus.core.recipe.common.CI;
+import gtPlusPlus.xmod.gregtech.api.enums.GregtechItemList;
 import ic2.core.Ic2Items;
 
 @SuppressWarnings("deprecation")
@@ -1274,44 +1275,36 @@ public class RecipeLoader_02 {
                     6000,
                     520000);
 
-            // MyRecipeAdder.instance.addPreciseAssemblerRecipe(
-            // new ItemStack[] {
-            // ItemRefer.Compact_Fusion_Coil_T3.get(1),
-            // GT_ModHandler.getModItem("miscutils", "gtplusplus.blockcasings.3", 1, 13),
-            // ItemRefer.HiC_T5.get(4),
-            // GT_ModHandler.getModItem("miscutils", "item.itemBufferCore6", 1),
-            // },
-            // new FluidStack[] {
-            // FluidRegistry.getFluidStack("molten.laurenium", 1152),
-            // MyMaterial.hikarium.getMolten(576)
-            // },
-            // ItemRefer.Compact_Fusion_Coil_T4.get(1),
-            // 1100000,
-            // 1919,
-            // 3
-            // );
+            // Compact MK5 Fusion Coil
+            MyRecipeAdder.instance.addPreciseAssemblerRecipe(
+                    new ItemStack[] { GregtechItemList.Casing_Fusion_Internal2.get(3),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1), ItemRefer.HiC_T5.get(4),
+                            CI.getEnergyCore(5, 1), },
+                    new FluidStack[] { ALLOY.BLACK_TITANIUM.getFluidStack(1152),
+                            MyMaterial.metastableOganesson.getMolten(576) },
+                    ItemRefer.Compact_Fusion_Coil_T4.get(1),
+                    (int) TierEU.RECIPE_UHV,
+                    2000,
+                    3);
 
             // Compact MK5 Computer
-            // GT_Values.RA.addAssemblylineRecipe(
-            // ItemRefer.Compact_Fusion_MK4.get(1),
-            // 24000,
-            // new Object[] {
-            // GT_ModHandler.getModItem("gregtech", "gt.blockmachines", 48, 965),
-            // GT_OreDictUnificator.get(OrePrefixes.wireGt08, Materials.SuperconductorUV, 32),
-            // ItemList.Circuit_Wafer_QPIC.get(64),
-            // ItemList.UHV_Coil.get(64),
-            // ItemRefer.Compact_Fusion_Coil_T3.get(8),
-            // ItemRefer.HiC_T5.get(8)
-            // },
-            // new FluidStack[] {
-            // MyMaterial.tairitsu.getMolten( 1152),
-            // MyMaterial.artheriumSn.getMolten(576),
-            // FluidRegistry.getFluidStack("molten.rhugnor", 288)
-            // },
-            // ItemRefer.Compact_Fusion_MK5.get(1),
-            // 6000,
-            // 1100000
-            // );
+            GT_Values.RA.addAssemblylineRecipe(
+                    ItemRefer.Compact_Fusion_MK4.get(1),
+                    24000,
+                    new Object[] { GregtechItemList.FusionComputer_UV3.get(48),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
+                            GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Bio, 1),
+                            ItemList.Circuit_Wafer_QPIC.get(64), ItemList.UHV_Coil.get(64),
+                            ELEMENT.STANDALONE.HYPOGEN.getPlateDense(8), ItemRefer.HiC_T5.get(8),
+                            ItemList.Field_Generator_UEV.get(8),
+                            MyMaterial.metastableOganesson.get(OrePrefixes.gearGtSmall, 64) },
+                    new FluidStack[] { MyMaterial.tairitsu.getMolten(2304), ALLOY.OCTIRON.getFluidStack(1152),
+                            ELEMENT.STANDALONE.RHUGNOR.getFluidStack(288) },
+                    ItemRefer.Compact_Fusion_MK5.get(1),
+                    6000,
+                    (int) TierEU.RECIPE_UHV);
         }
 
         GT_Values.RA.addMultiblockChemicalRecipe(
