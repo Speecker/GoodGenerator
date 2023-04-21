@@ -25,7 +25,7 @@ dependencies {
     compileOnly('com.github.GTNewHorizons:ThaumicEnergistics:1.4.1-GTNH:dev') {transitive =  false}
     compileOnly("com.github.GTNewHorizons:ProjectRed:4.7.9-GTNH:dev") {transitive = false}
 
-    runtimeOnly('com.github.GTNewHorizons:NewHorizonsCoreMod:2.0.26-pre:dev')
+    runtimeOnly('com.github.GTNewHorizons:NewHorizonsCoreMod:2.0.27-pre:dev')
     runtimeOnly('com.github.GTNewHorizons:ForestryMC:4.6.5:dev')
     runtimeOnly('com.github.GTNewHorizons:GTplusplus:1.8.38-pre:dev')
 
