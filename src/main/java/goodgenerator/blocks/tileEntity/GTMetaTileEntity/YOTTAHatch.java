@@ -12,6 +12,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import com.glodblock.github.util.Util;
+
 import appeng.api.config.AccessRestriction;
 import appeng.api.config.Actionable;
 import appeng.api.networking.GridFlags;
@@ -33,7 +35,6 @@ import appeng.api.util.DimensionalCoord;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import cpw.mods.fml.common.Optional;
-import extracells.util.FluidUtil;
 import goodgenerator.blocks.tileEntity.YottaFluidTank;
 import goodgenerator.loader.Loaders;
 import gregtech.api.enums.Textures;
@@ -189,7 +190,7 @@ public class YOTTAHatch extends GT_MetaTileEntity_Hatch implements IGridProxyabl
         if (host.mStorageCurrent.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             ready = Long.MAX_VALUE;
         } else ready = host.mStorageCurrent.longValue();
-        out.add(FluidUtil.createAEFluidStack(FluidRegistry.getFluid(host.mFluidName), ready));
+        out.add(Util.FluidUtil.createAEFluidStack(FluidRegistry.getFluid(host.mFluidName), ready));
         return out;
     }
 
