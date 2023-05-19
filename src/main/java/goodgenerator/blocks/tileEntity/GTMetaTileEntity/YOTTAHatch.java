@@ -33,9 +33,9 @@ import appeng.api.util.DimensionalCoord;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import cpw.mods.fml.common.Optional;
-import extracells.util.FluidUtil;
 import goodgenerator.blocks.tileEntity.YottaFluidTank;
 import goodgenerator.loader.Loaders;
+import goodgenerator.util.StackUtils;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.IIconContainer;
 import gregtech.api.interfaces.ITexture;
@@ -189,7 +189,7 @@ public class YOTTAHatch extends GT_MetaTileEntity_Hatch implements IGridProxyabl
         if (host.mStorageCurrent.compareTo(BigInteger.valueOf(Long.MAX_VALUE)) > 0) {
             ready = Long.MAX_VALUE;
         } else ready = host.mStorageCurrent.longValue();
-        out.add(FluidUtil.createAEFluidStack(FluidRegistry.getFluid(host.mFluidName), ready));
+        out.add(StackUtils.createAEFluidStack(FluidRegistry.getFluid(host.mFluidName), ready));
         return out;
     }
 
