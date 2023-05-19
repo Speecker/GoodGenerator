@@ -6,7 +6,6 @@ dependencies {
     implementation('thaumcraft:Thaumcraft:1.7.10-4.2.3.5:dev')
     implementation('com.github.GTNewHorizons:GTplusplus:1.9.13:dev')
 
-    compileOnly('com.github.GTNewHorizons:AE2FluidCraft-Rework:1.1.20-gtnh:dev') {transitive = false}
     compileOnly('com.github.GTNewHorizons:ThaumicEnergistics:1.4.2-GTNH:dev') {transitive =  false}
 
     runtimeOnly('com.github.GTNewHorizons:NewHorizonsCoreMod:2.1.25:dev')
