@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
+import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoTunnel;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -79,7 +80,17 @@ public class LargeEssentiaGenerator extends GT_MetaTileEntity_TooltipMultiBlockB
         mEssentiaHatch.clear();
         return structureCheck_EM(mName, 4, 0, 4) && (mDynamoHatches.size() + eDynamoMulti.size()) == 1
                 && checkHatchTier()
+                && checkNoLaser()
                 && updateEssentiaHatchState();
+    }
+
+    private boolean checkNoLaser() {
+        for (GT_MetaTileEntity_Hatch_DynamoMulti tHatch : eDynamoMulti) {
+            if (tHatch instanceof GT_MetaTileEntity_Hatch_DynamoTunnel) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean checkHatchTier() {
