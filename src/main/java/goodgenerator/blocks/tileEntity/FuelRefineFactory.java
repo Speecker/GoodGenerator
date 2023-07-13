@@ -6,7 +6,6 @@ import static gregtech.api.enums.GT_Values.V;
 import static gregtech.api.util.GT_StructureUtility.buildHatchAdder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -17,9 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidStack;
 
-import com.github.bartimaeusnek.crossmod.tectech.TecTechEnabledMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
 import com.gtnewhorizon.structurelib.StructureLibAPI;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
@@ -45,7 +42,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class FuelRefineFactory extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
-        implements TecTechEnabledMulti, IConstructable, ISurvivalConstructable {
+        implements IConstructable, ISurvivalConstructable {
 
     private IStructureDefinition<FuelRefineFactory> multiDefinition = null;
     private int Tier = -1;
@@ -58,21 +55,6 @@ public class FuelRefineFactory extends GT_MetaTileEntity_TooltipMultiBlockBase_E
 
     public FuelRefineFactory(int id, String name, String nameRegional) {
         super(id, name, nameRegional);
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_Energy> getVanillaEnergyHatches() {
-        return this.mEnergyHatches;
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_EnergyTunnel> getTecTechEnergyTunnels() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_EnergyMulti> getTecTechEnergyMultis() {
-        return new ArrayList<>();
     }
 
     @Override

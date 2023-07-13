@@ -18,10 +18,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.github.bartimaeusnek.bartworks.util.Pair;
-import com.github.bartimaeusnek.crossmod.tectech.TecTechEnabledMulti;
 import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_DynamoMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyMulti;
-import com.github.technus.tectech.thing.metaTileEntity.hatch.GT_MetaTileEntity_Hatch_EnergyTunnel;
 import com.gtnewhorizon.structurelib.alignment.constructable.IConstructable;
 import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructable;
 import com.gtnewhorizon.structurelib.structure.IItemSource;
@@ -49,7 +46,7 @@ import gregtech.api.util.GT_Recipe;
 import gregtech.api.util.GT_Utility;
 
 public class MultiNqGenerator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
-        implements TecTechEnabledMulti, IConstructable, ISurvivalConstructable {
+        implements IConstructable, ISurvivalConstructable {
 
     protected IStructureDefinition<MultiNqGenerator> multiDefinition = null;
     protected long leftEnergy = 0;
@@ -414,21 +411,6 @@ public class MultiNqGenerator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                     new GT_RenderedTexture(Textures.BlockIcons.NAQUADAH_REACTOR_SOLID_FRONT) };
         }
         return new ITexture[] { Textures.BlockIcons.getCasingTextureForId(44) };
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_Energy> getVanillaEnergyHatches() {
-        return this.mEnergyHatches;
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_EnergyTunnel> getTecTechEnergyTunnels() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<GT_MetaTileEntity_Hatch_EnergyMulti> getTecTechEnergyMultis() {
-        return new ArrayList<>();
     }
 
     @Override
