@@ -546,7 +546,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     }
 
     @Override
-    protected boolean shouldDisplayRecipeIssue() {
+    protected boolean shouldDisplayCheckRecipeResult() {
         return false;
     }
 
