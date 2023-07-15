@@ -92,8 +92,8 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             @Override
             protected GT_OverclockCalculator createOverclockCalculator(@NotNull GT_Recipe recipe,
                     @NotNull GT_ParallelHelper helper) {
-                return super.createOverclockCalculator(recipe, helper)
-                        .setSpeedBoost((float) Math.pow(0.9f, height - 4));
+                return GT_OverclockCalculator.ofNoOverclock(recipe)
+                        .setDuration((int) (recipe.mDuration * Math.pow(0.9f, height - 4)));
             }
 
             @NotNull
@@ -108,9 +108,19 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                 if (eV > mCeil && eV < mFloor) {
                     setOutputItems(ItemRefer.Radioactive_Waste.get(4));
                 }
+                // NA does not consume power, its hatches do. Set it to 0 to be sure
+                calculatedEut = 0;
                 return result;
             }
         };
+    }
+
+    @Override
+    protected void setProcessingLogicPower(ProcessingLogic logic) {
+        // NA does not use power, to prevent GT_ParallelHelper from failing we trick it into thinking
+        // we have infinite power
+        logic.setAvailableVoltage(Long.MAX_VALUE);
+        logic.setAvailableAmperage(1);
     }
 
     @Override
