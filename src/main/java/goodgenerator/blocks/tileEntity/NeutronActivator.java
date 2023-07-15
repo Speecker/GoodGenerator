@@ -265,6 +265,26 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     }
 
     @Override
+    public boolean supportsBatchMode() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsVoidProtection() {
+        return true;
+    }
+
+    @Override
+    public boolean protectsExcessItem() {
+        return !eSafeVoid;
+    }
+
+    @Override
+    public boolean protectsExcessFluid() {
+        return !eSafeVoid;
+    }
+
+    @Override
     public IMetaTileEntity newMetaEntity(IGregTechTileEntity aTileEntity) {
         return new NeutronActivator(this.mName);
     }
