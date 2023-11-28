@@ -23,10 +23,10 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.IStructureElement;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.DescTextLocalization;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.GT_HatchElement;
 import gregtech.api.enums.Textures;
 import gregtech.api.interfaces.ITexture;
@@ -209,7 +209,7 @@ public class FuelRefineFactory extends GT_MetaTileEntity_TooltipMultiBlockBase_E
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MyRecipeAdder.instance.FRF;
+        return GoodGeneratorRecipeMaps.naquadahFuelRefineFactoryRecipes;
     }
 
     @Override

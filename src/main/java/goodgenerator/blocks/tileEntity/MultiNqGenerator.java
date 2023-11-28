@@ -27,12 +27,12 @@ import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.CrackRecipeAdder;
 import goodgenerator.util.DescTextLocalization;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_HatchElement;
 import gregtech.api.enums.Materials;
@@ -194,7 +194,7 @@ public class MultiNqGenerator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MyRecipeAdder.instance.NqGFuels;
+        return GoodGeneratorRecipeMaps.naquadahReactorFuels;
     }
 
     @Override
@@ -215,7 +215,7 @@ public class MultiNqGenerator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             }
         }
 
-        GT_Recipe tRecipe = MyRecipeAdder.instance.NqGFuels
+        GT_Recipe tRecipe = GoodGeneratorRecipeMaps.naquadahReactorFuels
                 .findRecipe(this.getBaseMetaTileEntity(), true, 1 << 30, tFluids.toArray(new FluidStack[0]));
         if (tRecipe != null) {
             Pair<FluidStack, Integer> excitedInfo = getExcited(tFluids.toArray(new FluidStack[0]), false);

@@ -34,10 +34,10 @@ import com.gtnewhorizons.modularui.api.screen.ModularWindow;
 import com.gtnewhorizons.modularui.api.screen.UIBuildContext;
 import com.gtnewhorizons.modularui.common.widget.CycleButtonWidget;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.client.GUI.GG_UITextures;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.DescTextLocalization;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
@@ -264,14 +264,14 @@ public class PreciseAssembler extends GT_MetaTileEntity_ExtendedPowerMultiBlockB
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        if (this.mode == 0) return MyRecipeAdder.instance.PA;
+        if (this.mode == 0) return GoodGeneratorRecipeMaps.preciseAssemblerRecipes;
         else return RecipeMaps.assemblerRecipes;
     }
 
     @Nonnull
     @Override
     public Collection<RecipeMap<?>> getAvailableRecipeMaps() {
-        return Arrays.asList(MyRecipeAdder.instance.PA, RecipeMaps.assemblerRecipes);
+        return Arrays.asList(GoodGeneratorRecipeMaps.preciseAssemblerRecipes, RecipeMaps.assemblerRecipes);
     }
 
     @Override

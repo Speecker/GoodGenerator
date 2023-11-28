@@ -19,6 +19,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 import org.jetbrains.annotations.NotNull;
@@ -29,10 +30,11 @@ import com.gtnewhorizon.structurelib.structure.IItemSource;
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import goodgenerator.api.recipe.ExtremeHeatExchangerRecipe;
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
 import goodgenerator.loader.Loaders;
 import goodgenerator.util.DescTextLocalization;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_HatchElement;
 import gregtech.api.interfaces.IHatchElement;
@@ -64,7 +66,7 @@ public class ExtremeHeatExchanger extends GT_MetaTileEntity_TooltipMultiBlockBas
     protected GT_MetaTileEntity_Hatch_Output mCooledFluidHatch;
     private boolean transformed = false;
     private String hotName;
-    private MyRecipeAdder.ExtremeHeatExchangerRecipe tRunningRecipe;
+    private ExtremeHeatExchangerRecipe tRunningRecipe;
 
     public ExtremeHeatExchanger(String name) {
         super(name);
@@ -157,8 +159,13 @@ public class ExtremeHeatExchanger extends GT_MetaTileEntity_TooltipMultiBlockBas
     public void loadNBTData(NBTTagCompound aNBT) {
         transformed = aNBT.getBoolean("transformed");
         if (aNBT.hasKey("hotName", Constants.NBT.TAG_STRING)) {
-            hotName = aNBT.getString("hotName");
-            tRunningRecipe = MyRecipeAdder.mXHeatExchangerFuelMap.get(new Fluid(hotName));
+            String loadedHotName = aNBT.getString("hotName");
+            Fluid hotFluid = FluidRegistry.getFluid(loadedHotName);
+            if (hotFluid != null) {
+                hotName = loadedHotName;
+                tRunningRecipe = (ExtremeHeatExchangerRecipe) GoodGeneratorRecipeMaps.extremeHeatExchangerFuels
+                        .getBackend().findFuel(hotFluid);
+            }
         } else {
             hotName = null;
             tRunningRecipe = null;
@@ -175,7 +182,7 @@ public class ExtremeHeatExchanger extends GT_MetaTileEntity_TooltipMultiBlockBas
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MyRecipeAdder.instance.XHE;
+        return GoodGeneratorRecipeMaps.extremeHeatExchangerFuels;
     }
 
     @Override
@@ -207,8 +214,8 @@ public class ExtremeHeatExchanger extends GT_MetaTileEntity_TooltipMultiBlockBas
     public @NotNull CheckRecipeResult checkProcessing_EM() {
         tRunningRecipe = null;
         if (mHotFluidHatch.getFluid() == null) return CheckRecipeResultRegistry.SUCCESSFUL;
-        MyRecipeAdder.ExtremeHeatExchangerRecipe tRecipe = MyRecipeAdder.mXHeatExchangerFuelMap
-                .get(mHotFluidHatch.getFluid().getFluid());
+        ExtremeHeatExchangerRecipe tRecipe = (ExtremeHeatExchangerRecipe) GoodGeneratorRecipeMaps.extremeHeatExchangerFuels
+                .getBackend().findFuel(mHotFluidHatch.getFluid());
         if (tRecipe == null) return CheckRecipeResultRegistry.NO_RECIPE;
         tRunningRecipe = tRecipe;
         this.hotName = mHotFluidHatch.getFluid().getFluid().getName();

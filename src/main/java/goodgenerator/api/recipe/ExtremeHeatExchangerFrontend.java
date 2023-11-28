@@ -2,7 +2,6 @@ package goodgenerator.api.recipe;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Supplier;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -10,10 +9,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.FluidStack;
 
 import com.gtnewhorizons.modularui.api.math.Pos2d;
-import com.gtnewhorizons.modularui.api.screen.ModularWindow;
-import com.gtnewhorizons.modularui.common.widget.DrawableWidget;
 
-import goodgenerator.client.GUI.GG_UITextures;
 import gregtech.api.recipe.BasicUIPropertiesBuilder;
 import gregtech.api.recipe.NEIRecipePropertiesBuilder;
 import gregtech.api.recipe.RecipeMapFrontend;
@@ -39,13 +35,6 @@ public class ExtremeHeatExchangerFrontend extends RecipeMapFrontend {
     @Override
     public List<Pos2d> getFluidOutputPositions(int fluidOutputCount) {
         return Arrays.asList(new Pos2d(128, 13), new Pos2d(128, 31), new Pos2d(128, 54));
-    }
-
-    @Override
-    public void addProgressBar(ModularWindow.Builder builder, Supplier<Float> progressSupplier, Pos2d windowOffset) {
-        builder.widget(
-                new DrawableWidget().setDrawable(GG_UITextures.PICTURE_EXTREME_HEAT_EXCHANGER)
-                        .setPos(new Pos2d(47, 13).add(windowOffset)).setSize(78, 59));
     }
 
     private static class EHESpecialValueFormatter implements INEISpecialInfoFormatter {

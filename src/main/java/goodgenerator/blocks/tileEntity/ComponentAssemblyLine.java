@@ -23,8 +23,8 @@ import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.loader.Loaders;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.Materials;
@@ -325,7 +325,7 @@ public class ComponentAssemblyLine extends GT_MetaTileEntity_ExtendedPowerMultiB
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MyRecipeAdder.instance.COMPASSLINE_RECIPES;
+        return GoodGeneratorRecipeMaps.componentAssemblyLineRecipes;
     }
 
     @Override

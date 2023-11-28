@@ -30,6 +30,7 @@ import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
 import com.gtnewhorizons.modularui.common.widget.TextWidget;
 
+import goodgenerator.api.recipe.GoodGeneratorRecipeMaps;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronAccelerator;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronSensor;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
@@ -37,7 +38,6 @@ import goodgenerator.loader.Loaders;
 import goodgenerator.util.CharExchanger;
 import goodgenerator.util.DescTextLocalization;
 import goodgenerator.util.ItemRefer;
-import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.GregTech_API;
 import gregtech.api.enums.GT_HatchElement;
 import gregtech.api.enums.Materials;
@@ -173,7 +173,7 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
 
     @Override
     public RecipeMap<?> getRecipeMap() {
-        return MyRecipeAdder.instance.NA;
+        return GoodGeneratorRecipeMaps.neutronActivatorRecipes;
     }
 
     protected GT_Multiblock_Tooltip_Builder createTooltip() {
