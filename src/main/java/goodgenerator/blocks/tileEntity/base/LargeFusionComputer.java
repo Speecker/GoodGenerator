@@ -424,6 +424,11 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
     }
 
     @Override
+    public int getRecipeCatalystPriority() {
+        return -2;
+    }
+
+    @Override
     protected ProcessingLogic createProcessingLogic() {
         return new ProcessingLogic() {
 

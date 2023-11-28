@@ -47,6 +47,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Maintenance;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.objects.GT_RenderedTexture;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -189,6 +190,11 @@ public class MultiNqGenerator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             aNBT.setInteger("mLockedFluidAmount", this.lockedFluid.amount);
         }
         super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return MyRecipeAdder.instance.NqGFuels;
     }
 
     @Override

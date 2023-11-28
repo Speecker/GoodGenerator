@@ -43,6 +43,7 @@ import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
 import gregtech.api.multitileentity.multiblock.casing.Glasses;
+import gregtech.api.recipe.RecipeMap;
 import gregtech.api.recipe.check.CheckRecipeResult;
 import gregtech.api.recipe.check.CheckRecipeResultRegistry;
 import gregtech.api.render.TextureFactory;
@@ -170,6 +171,11 @@ public class ExtremeHeatExchanger extends GT_MetaTileEntity_TooltipMultiBlockBas
         aNBT.setBoolean("transformed", transformed);
         if (hotName != null) aNBT.setString("hotName", hotName);
         super.saveNBTData(aNBT);
+    }
+
+    @Override
+    public RecipeMap<?> getRecipeMap() {
+        return MyRecipeAdder.instance.XHE;
     }
 
     @Override
