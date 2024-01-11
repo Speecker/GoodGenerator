@@ -3,6 +3,7 @@ package goodgenerator.loader;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
 import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
+import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -770,12 +771,10 @@ public class RecipeLoader {
                 .itemOutputs(ItemRefer.Special_Ceramics_Dust.get(9)).duration(5 * SECONDS).eut(TierEU.RECIPE_EV)
                 .addTo(mixerRecipes);
 
-        GT_Values.RA.addExtruderRecipe(
-                ItemRefer.Special_Ceramics_Dust.get(2),
-                ItemList.Shape_Extruder_Plate.get(0L),
-                ItemRefer.Special_Ceramics_Plate.get(1),
-                400,
-                480);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(ItemRefer.Special_Ceramics_Dust.get(2), ItemList.Shape_Extruder_Plate.get(0L))
+                .itemOutputs(ItemRefer.Special_Ceramics_Plate.get(1)).duration(20 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(extruderRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.Raw_Cylinder.get(1),

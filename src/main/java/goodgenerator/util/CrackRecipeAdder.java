@@ -1,5 +1,8 @@
 package goodgenerator.util;
 
+import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.TICKS;
+
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -11,6 +14,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -182,36 +186,26 @@ public class CrackRecipeAdder {
                         flow * 4,
                         temp,
                         gas).getStackForm(1L));
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 1),
-                ItemList.Shape_Extruder_Pipe_Tiny.get(0),
-                material.get(OrePrefixes.pipeTiny, 2),
-                (int) material.getStats().getMass(),
-                120);
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 1),
-                ItemList.Shape_Extruder_Pipe_Small.get(0),
-                material.get(OrePrefixes.pipeSmall, 1),
-                (int) material.getStats().getMass() * 2,
-                120);
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 3),
-                ItemList.Shape_Extruder_Pipe_Medium.get(0),
-                material.get(OrePrefixes.pipeMedium, 1),
-                (int) material.getStats().getMass() * 6,
-                120);
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 6),
-                ItemList.Shape_Extruder_Pipe_Large.get(0),
-                material.get(OrePrefixes.pipeLarge, 1),
-                (int) material.getStats().getMass() * 12,
-                120);
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 12),
-                ItemList.Shape_Extruder_Pipe_Huge.get(0),
-                material.get(OrePrefixes.pipeHuge, 1),
-                (int) material.getStats().getMass() * 24,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(material.get(OrePrefixes.ingot, 1), ItemList.Shape_Extruder_Pipe_Tiny.get(0))
+                .itemOutputs(material.get(OrePrefixes.pipeTiny, 2)).duration(material.getStats().getMass() * TICKS)
+                .eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(material.get(OrePrefixes.ingot, 1), ItemList.Shape_Extruder_Pipe_Small.get(0))
+                .itemOutputs(material.get(OrePrefixes.pipeSmall, 1)).duration(material.getStats().getMass() * 2 * TICKS)
+                .eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(material.get(OrePrefixes.ingot, 3), ItemList.Shape_Extruder_Pipe_Medium.get(0))
+                .itemOutputs(material.get(OrePrefixes.pipeMedium, 1))
+                .duration(material.getStats().getMass() * 6 * TICKS).eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(material.get(OrePrefixes.ingot, 6), ItemList.Shape_Extruder_Pipe_Large.get(0))
+                .itemOutputs(material.get(OrePrefixes.pipeLarge, 1))
+                .duration(material.getStats().getMass() * 12 * TICKS).eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(material.get(OrePrefixes.ingot, 12), ItemList.Shape_Extruder_Pipe_Huge.get(0))
+                .itemOutputs(material.get(OrePrefixes.pipeHuge, 1)).duration(material.getStats().getMass() * 24 * TICKS)
+                .eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
         GT_Values.RA.addFluidSolidifierRecipe(
                 ItemList.Shape_Mold_Pipe_Tiny.get(0),
                 material.getMolten(72),
@@ -512,11 +506,8 @@ public class CrackRecipeAdder {
                 material.get(OrePrefixes.wireFine, 4),
                 200,
                 8);
-        GT_Values.RA.addExtruderRecipe(
-                material.get(OrePrefixes.ingot, 1),
-                ItemList.Shape_Extruder_Wire.get(0),
-                material.get(OrePrefixes.wireGt01, 2),
-                (int) material.getStats().getMass() * 8,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(material.get(OrePrefixes.ingot, 1), ItemList.Shape_Extruder_Wire.get(0))
+                .itemOutputs(material.get(OrePrefixes.wireGt01, 2)).duration(material.getStats().getMass() * 8 * TICKS)
+                .eut(TierEU.RECIPE_HV).addTo(extruderRecipes);
     }
 }
