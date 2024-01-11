@@ -4,6 +4,7 @@ import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -588,71 +589,65 @@ public class RecipeLoader_02 {
                 .itemOutputs(ItemRefer.Fluid_Storage_Core_T10.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
                 .addTo(assemblerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T1.get(1),
-                ItemRefer.Fluid_Storage_Core_T1.get(10),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T1.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T1.get(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T2.get(1),
-                ItemRefer.Fluid_Storage_Core_T2.get(10),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T2.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T2.get(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T3.get(1),
-                ItemRefer.Fluid_Storage_Core_T3.get(10),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Naquadah, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T3.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T3.get(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Naquadah, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T4.get(1),
-                ItemRefer.Fluid_Storage_Core_T4.get(10),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T4.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T4.get(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Neutronium, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T5.get(1),
-                ItemRefer.Fluid_Storage_Core_T5.get(10),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T5.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T5.get(10),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.CosmicNeutronium, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T6.get(1),
-                ItemRefer.Fluid_Storage_Core_T6.get(2),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1),
-                100,
-                480);
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T7.get(1),
-                ItemRefer.Fluid_Storage_Core_T7.get(2),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1),
-                100,
-                480);
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T8.get(1),
-                ItemRefer.Fluid_Storage_Core_T8.get(2),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1),
-                100,
-                480);
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T9.get(1),
-                ItemRefer.Fluid_Storage_Core_T9.get(2),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1),
-                100,
-                480);
-        GT_Values.RA.addUnboxingRecipe(
-                ItemRefer.YOTTank_Cell_T10.get(1),
-                ItemRefer.Fluid_Storage_Core_T10.get(2),
-                GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1),
-                100,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T6.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T6.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T7.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T7.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T8.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T8.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T9.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T9.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.YOTTank_Cell_T10.get(1))
+                .itemOutputs(
+                        ItemRefer.Fluid_Storage_Core_T10.get(2),
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_HV).addTo(unpackagerRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(WerkstoffLoader.Tiberium.get(OrePrefixes.dust, 1))
                 .itemOutputs(
