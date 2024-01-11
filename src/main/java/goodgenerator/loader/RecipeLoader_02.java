@@ -3,6 +3,7 @@ package goodgenerator.loader;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
+import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
@@ -656,25 +657,15 @@ public class RecipeLoader_02 {
                 .outputChances(10000, 2000).fluidInputs(MyMaterial.naquadahGas.getFluidOrGas(250)).duration(400)
                 .eut(TierEU.RECIPE_HV).addTo(autoclaveRecipes);
 
-        GT_Values.RA.addChemicalBathRecipe(
-                Materials.Firestone.getGems(1),
-                MyMaterial.lightNaquadahFuel.getFluidOrGas(144),
-                WerkstoffLoader.Tiberium.get(OrePrefixes.gem, 1),
-                null,
-                null,
-                new int[] { 10000 },
-                400,
-                1980);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Firestone.getGems(1))
+                .fluidInputs(MyMaterial.lightNaquadahFuel.getFluidOrGas(144))
+                .itemOutputs(WerkstoffLoader.Tiberium.get(OrePrefixes.gem, 1)).duration(20 * SECONDS)
+                .eut(TierEU.RECIPE_EV).addTo(chemicalBathRecipes);
 
-        GT_Values.RA.addChemicalBathRecipe(
-                Materials.Diamond.getGems(1),
-                MyMaterial.heavyNaquadahFuel.getFluidOrGas(144),
-                WerkstoffLoader.Tiberium.get(OrePrefixes.gem, 1),
-                null,
-                null,
-                new int[] { 10000 },
-                400,
-                1980);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Diamond.getGems(1))
+                .fluidInputs(MyMaterial.heavyNaquadahFuel.getFluidOrGas(144))
+                .itemOutputs(WerkstoffLoader.Tiberium.get(OrePrefixes.gem, 1)).duration(20 * SECONDS)
+                .eut(TierEU.RECIPE_EV).addTo(chemicalBathRecipes);
 
         GT_Values.RA.addDistillationTowerRecipe(
                 Materials.HeavyFuel.getFluid(1000),
