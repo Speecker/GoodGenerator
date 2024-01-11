@@ -1,5 +1,6 @@
 package goodgenerator.util;
 
+import static gregtech.api.recipe.RecipeMaps.benderRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
@@ -10,6 +11,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
 import gregtech.api.util.GT_Utility;
@@ -114,18 +116,16 @@ public class MaterialFix {
         for (Werkstoff tMaterial : Werkstoff.werkstoffHashSet) {
             if (tMaterial == null) continue;
             if (tMaterial.hasItemType(OrePrefixes.plateDouble) && tMaterial.hasItemType(OrePrefixes.ingotDouble)) {
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.plate, 2),
-                        GT_Utility.getIntegratedCircuit(2),
-                        tMaterial.get(OrePrefixes.plateDouble, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 2, 1L),
-                        60);
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.ingotDouble, 1),
-                        GT_Utility.getIntegratedCircuit(1),
-                        tMaterial.get(OrePrefixes.plateDouble, 1),
-                        (int) Math.max(tMaterial.getStats().getMass(), 1L),
-                        60);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.plate, 2), GT_Utility.getIntegratedCircuit(2))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateDouble, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 2, 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.ingotDouble, 1), GT_Utility.getIntegratedCircuit(1))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateDouble, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass(), 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
                 GT_ModHandler.addCraftingRecipe(
                         tMaterial.get(OrePrefixes.plateDouble, 1),
                         new Object[] { "P", "P", "h", 'P', tMaterial.get(OrePrefixes.plate, 1) });
@@ -134,24 +134,21 @@ public class MaterialFix {
                         new Object[] { "P", "P", "h", 'P', tMaterial.get(OrePrefixes.ingot, 1) });
             }
             if (tMaterial.hasItemType(OrePrefixes.plateTriple) && tMaterial.hasItemType(OrePrefixes.ingotTriple)) {
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.plate, 3),
-                        GT_Utility.getIntegratedCircuit(3),
-                        tMaterial.get(OrePrefixes.plateTriple, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 3, 1L),
-                        60);
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.ingot, 3),
-                        GT_Utility.getIntegratedCircuit(3),
-                        tMaterial.get(OrePrefixes.plateTriple, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 3, 1L),
-                        60);
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.ingotTriple, 1),
-                        GT_Utility.getIntegratedCircuit(1),
-                        tMaterial.get(OrePrefixes.plateTriple, 1),
-                        (int) Math.max(tMaterial.getStats().getMass(), 1L),
-                        60);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.plate, 3), GT_Utility.getIntegratedCircuit(3))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateTriple, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 3, 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.ingot, 3), GT_Utility.getIntegratedCircuit(3))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateTriple, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 3, 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.ingotTriple, 1), GT_Utility.getIntegratedCircuit(1))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateTriple, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass(), 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
                 GT_ModHandler.addCraftingRecipe(
                         tMaterial.get(OrePrefixes.plateTriple, 1),
                         new Object[] { "B", "P", "h", 'P', tMaterial.get(OrePrefixes.plate, 1), 'B',
@@ -162,31 +159,28 @@ public class MaterialFix {
                                 tMaterial.get(OrePrefixes.ingotDouble, 1) });
             }
             if (tMaterial.hasItemType(OrePrefixes.plateDense)) {
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.plate, 9),
-                        GT_Utility.getIntegratedCircuit(9),
-                        tMaterial.get(OrePrefixes.plateDense, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 9, 1L),
-                        60);
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.ingot, 9),
-                        GT_Utility.getIntegratedCircuit(9),
-                        tMaterial.get(OrePrefixes.plateDense, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 9, 1L),
-                        60);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.plate, 9), GT_Utility.getIntegratedCircuit(9))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateDense, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 9, 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.ingot, 9), GT_Utility.getIntegratedCircuit(9))
+                        .itemOutputs(tMaterial.get(OrePrefixes.plateDense, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 9, 1L) * TICKS).eut(TierEU.RECIPE_MV / 2)
+                        .addTo(benderRecipes);
+
                 if (tMaterial.hasItemType(OrePrefixes.plateTriple) && tMaterial.hasItemType(OrePrefixes.ingotTriple)) {
-                    GT_Values.RA.addBenderRecipe(
-                            tMaterial.get(OrePrefixes.plateTriple, 3),
-                            GT_Utility.getIntegratedCircuit(3),
-                            tMaterial.get(OrePrefixes.plateDense, 1),
-                            (int) Math.max(tMaterial.getStats().getMass() * 3, 1L),
-                            60);
-                    GT_Values.RA.addBenderRecipe(
-                            tMaterial.get(OrePrefixes.ingotTriple, 3),
-                            GT_Utility.getIntegratedCircuit(3),
-                            tMaterial.get(OrePrefixes.plateDense, 1),
-                            (int) Math.max(tMaterial.getStats().getMass() * 3, 1L),
-                            60);
+                    GT_Values.RA.stdBuilder()
+                            .itemInputs(tMaterial.get(OrePrefixes.plateTriple, 3), GT_Utility.getIntegratedCircuit(3))
+                            .itemOutputs(tMaterial.get(OrePrefixes.plateDense, 1))
+                            .duration(Math.max(tMaterial.getStats().getMass() * 3, 1L) * TICKS)
+                            .eut(TierEU.RECIPE_MV / 2).addTo(benderRecipes);
+                    GT_Values.RA.stdBuilder()
+                            .itemInputs(tMaterial.get(OrePrefixes.ingotTriple, 3), GT_Utility.getIntegratedCircuit(3))
+                            .itemOutputs(tMaterial.get(OrePrefixes.plateDense, 1))
+                            .duration(Math.max(tMaterial.getStats().getMass() * 3, 1L) * TICKS)
+                            .eut(TierEU.RECIPE_MV / 2).addTo(benderRecipes);
                 }
             }
             if (tMaterial.hasItemType(OrePrefixes.stick)) {
@@ -223,23 +217,21 @@ public class MaterialFix {
                 GT_ModHandler.addCraftingRecipe(
                         tMaterial.get(OrePrefixes.spring, 1),
                         new Object[] { " s ", "fPx", " P ", 'P', tMaterial.get(OrePrefixes.stickLong, 1) });
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.stickLong, 1),
-                        GT_Utility.getIntegratedCircuit(1),
-                        tMaterial.get(OrePrefixes.spring, 1),
-                        (int) Math.max(tMaterial.getStats().getMass() * 2, 1L),
-                        16);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.stickLong, 1), GT_Utility.getIntegratedCircuit(1))
+                        .itemOutputs(tMaterial.get(OrePrefixes.spring, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass() * 2, 1L) * TICKS).eut(TierEU.RECIPE_LV / 2)
+                        .addTo(benderRecipes);
             }
             if (tMaterial.hasItemType(OrePrefixes.springSmall)) {
                 GT_ModHandler.addCraftingRecipe(
                         tMaterial.get(OrePrefixes.springSmall, 1),
                         new Object[] { " s ", "fPx", 'P', tMaterial.get(OrePrefixes.stick, 1) });
-                GT_Values.RA.addBenderRecipe(
-                        tMaterial.get(OrePrefixes.stick, 1),
-                        GT_Utility.getIntegratedCircuit(1),
-                        tMaterial.get(OrePrefixes.springSmall, 2),
-                        (int) Math.max(tMaterial.getStats().getMass(), 1L),
-                        16);
+                GT_Values.RA.stdBuilder()
+                        .itemInputs(tMaterial.get(OrePrefixes.stick, 1), GT_Utility.getIntegratedCircuit(1))
+                        .itemOutputs(tMaterial.get(OrePrefixes.springSmall, 1))
+                        .duration(Math.max(tMaterial.getStats().getMass(), 1L) * TICKS).eut(TierEU.RECIPE_LV / 2)
+                        .addTo(benderRecipes);
             }
         }
         Materials tUHV = Materials.Longasssuperconductornameforuhvwire;
