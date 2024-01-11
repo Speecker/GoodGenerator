@@ -1,5 +1,7 @@
 package goodgenerator.loader;
 
+import static gregtech.api.enums.Mods.GTPlusPlus;
+import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
@@ -20,7 +22,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 import com.github.technus.tectech.recipe.TT_recipeAdder;
 
-import goodgenerator.crossmod.LoadedList;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.CrackRecipeAdder;
 import goodgenerator.util.ItemRefer;
@@ -687,7 +688,7 @@ public class RecipeLoader_02 {
                     .eut(TierEU.RECIPE_MV).addTo(fluidExtractionRecipes);
         }
 
-        if (LoadedList.GTPP) {
+        if (GTPlusPlus.isModLoaded()) {
             GT_Values.RA.addDistilleryRecipe(
                     24,
                     FluidRegistry.getFluidStack("fluid.coaltaroil", 100),
@@ -774,7 +775,7 @@ public class RecipeLoader_02 {
                 600,
                 120);
 
-        if (LoadedList.GTPP) {
+        if (GTPlusPlus.isModLoaded()) {
             GT_Values.RA.addMultiblockChemicalRecipe(
                     new ItemStack[] { MyMaterial.ferrocene.get(OrePrefixes.dust, 4),
                             Materials.SodiumHydroxide.getDust(8) },
@@ -972,7 +973,7 @@ public class RecipeLoader_02 {
                 100,
                 30);
 
-        if (LoadedList.GTNH_CORE) {
+        if (NewHorizonsCoreMod.isModLoaded()) {
             GT_Values.RA.stdBuilder()
                     .itemInputs(
                             ItemList.Robot_Arm_IV.get(4),
@@ -1187,7 +1188,7 @@ public class RecipeLoader_02 {
                 90000);
 
         // Compact MK4 Fusion Coil
-        if (LoadedList.GTPP) {
+        if (GTPlusPlus.isModLoaded()) {
             MyRecipeAdder.instance.addPreciseAssemblerRecipe(
                     new ItemStack[] { GT_ModHandler.getModItem("miscutils", "gtplusplus.blockcasings.3", 3, 13),
                             ItemRefer.HiC_T5.get(1),

@@ -1,5 +1,6 @@
 package goodgenerator.loader;
 
+import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
@@ -19,7 +20,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import goodgenerator.crossmod.LoadedList;
 import goodgenerator.items.MyMaterial;
 import goodgenerator.util.CrackRecipeAdder;
 import goodgenerator.util.ItemRefer;
@@ -586,7 +586,7 @@ public class RecipeLoader {
                 500,
                 65536);
 
-        if (LoadedList.GTNH_CORE) {
+        if (NewHorizonsCoreMod.isModLoaded()) {
             GT_Values.RA.addAssemblylineRecipe(
                     MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingot),
                     300000,
@@ -950,7 +950,7 @@ public class RecipeLoader {
                             GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Aluminium, 8))
                     .fluidInputs(tMat.getMolten(144 * tMultiplier)).itemOutputs(ItemRefer.Inverter.get(1))
                     .duration(12 * SECONDS).eut(TierEU.RECIPE_MV).addTo(assemblerRecipes);
-            if (LoadedList.GTNH_CORE) {
+            if (NewHorizonsCoreMod.isModLoaded()) {
                 GT_Values.RA.stdBuilder()
                         .itemInputs(
                                 ItemList.Circuit_Board_Multifiberglass_Elite.get(1),

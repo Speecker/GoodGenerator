@@ -34,6 +34,7 @@ import static goodgenerator.items.MyMaterial.towEthyl1Hexanol;
 import static goodgenerator.items.MyMaterial.triniumSulphate;
 import static goodgenerator.items.MyMaterial.wasteLiquid;
 import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
+import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
@@ -64,7 +65,6 @@ import org.apache.commons.lang3.reflect.FieldUtils;
 import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.PlatinumSludgeOverHaul;
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
-import goodgenerator.crossmod.LoadedList;
 import goodgenerator.main.GoodGenerator;
 import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
@@ -90,7 +90,7 @@ public class NaquadahReworkRecipeLoader {
 
         if (!EnableNaquadahRework) return;
 
-        if (LoadedList.GTPP) {
+        if (GTPlusPlus.isModLoaded()) {
             try {
                 // Naquadah (UEV)
                 CORE.RA.addQuantumTransformerRecipe(
@@ -1101,7 +1101,7 @@ public class NaquadahReworkRecipeLoader {
 
         GT_Log.out.print("Multi Chemical Reactor done!\n");
 
-        if (LoadedList.GTPP) {
+        if (GTPlusPlus.isModLoaded()) {
             // For Gt++ Multi Centrifuge
             // Apparently NEI will break down if one modifies the hash list directly.
             // GTPP_Recipe.GTPP_Recipe_Map.sMultiblockCentrifugeRecipes_GT.mRecipeList.clear();
