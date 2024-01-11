@@ -36,10 +36,13 @@ import static goodgenerator.items.MyMaterial.wasteLiquid;
 import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
+import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
 import java.lang.reflect.Constructor;
@@ -174,28 +177,18 @@ public class NaquadahReworkRecipeLoader {
                 4);
 
         // Naquadah Rework Line
-        GT_Values.RA.addBlastRecipe(
-                naquadahEarth.get(OrePrefixes.dust, 2),
-                GT_Utility.getIntegratedCircuit(1),
-                fluoroantimonicAcid.getFluidOrGas(3000),
-                lowQualityNaquadahEmulsion.getFluidOrGas(2000),
-                titaniumTrifluoride.get(OrePrefixes.dust, 4),
-                null,
-                100,
-                480,
-                3000);
+        GT_Values.RA.stdBuilder().itemInputs(naquadahEarth.get(OrePrefixes.dust, 2), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(fluoroantimonicAcid.getFluidOrGas(3000))
+                .fluidOutputs(lowQualityNaquadahEmulsion.getFluidOrGas(2000))
+                .itemOutputs(titaniumTrifluoride.get(OrePrefixes.dust, 4)).duration(5 * SECONDS).eut(TierEU.RECIPE_HV)
+                .metadata(COIL_HEAT, 3000).addTo(blastFurnaceRecipes);
 
         // TiF3 + 3H = Ti + 3HF
-        GT_Values.RA.addBlastRecipe(
-                titaniumTrifluoride.get(OrePrefixes.dust, 4),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.Hydrogen.getGas(3000),
-                Materials.HydrofluoricAcid.getFluid(3000),
-                GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Titanium, 1),
-                null,
-                120,
-                1920,
-                2000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(titaniumTrifluoride.get(OrePrefixes.dust, 4), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Hydrogen.getGas(3000)).fluidOutputs(Materials.HydrofluoricAcid.getFluid(3000))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Titanium, 1))
+                .duration(6 * SECONDS).eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 2000).addTo(blastFurnaceRecipes);
 
         GT_Values.RA.addChemicalRecipe(
                 GT_Utility.copyAmount(0, GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Copper, 1)),
@@ -268,16 +261,13 @@ public class NaquadahReworkRecipeLoader {
                 .duration(50 * SECONDS).eut(TierEU.RECIPE_MV).addTo(autoclaveRecipes);
 
         // NqO2 + C = CO2 + Nq
-        GT_Values.RA.addBlastRecipe(
-                naquadahine.get(OrePrefixes.dust, 3),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1),
-                null,
-                Materials.CarbonDioxide.getGas(1000),
-                GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadah, 1),
-                null,
-                40,
-                7680,
-                5000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        naquadahine.get(OrePrefixes.dust, 3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Carbon, 1))
+                .fluidOutputs(Materials.CarbonDioxide.getGas(1000))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadah, 1))
+                .duration(2 * SECONDS).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 5000).addTo(blastFurnaceRecipes);
 
         GT_Values.RA.addCentrifugeRecipe(
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 27),
@@ -334,16 +324,14 @@ public class NaquadahReworkRecipeLoader {
                 460);
 
         // Nq+(SO4)2 + 2Zn = Nq+ + 2ZnSO4
-        GT_Values.RA.addBlastRecipe(
-                enrichedNaquadahSulphate.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 2),
-                null,
-                null,
-                GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.NaquadahEnriched, 1),
-                WerkstoffLoader.ZincSulfate.get(OrePrefixes.dust, 12),
-                100,
-                7680,
-                7500);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        enrichedNaquadahSulphate.get(OrePrefixes.dust, 11),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 2))
+                .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.NaquadahEnriched, 1),
+                        WerkstoffLoader.ZincSulfate.get(OrePrefixes.dust, 12))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 7500).addTo(blastFurnaceRecipes);
 
         // KeSO4 + 2H = Ke + H2SO4
         GT_Values.RA.addMultiblockChemicalRecipe(
@@ -429,16 +417,14 @@ public class NaquadahReworkRecipeLoader {
                 7680);
 
         // Nq*(SO4)2 + 2Mg = Nq* + 2MgSO4
-        GT_Values.RA.addBlastRecipe(
-                naquadriaSulphate.get(OrePrefixes.dust, 11),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesium, 2),
-                null,
-                null,
-                GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadria, 1),
-                magnesiumSulphate.get(OrePrefixes.dust, 12),
-                100,
-                122880,
-                9100);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        naquadriaSulphate.get(OrePrefixes.dust, 11),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Magnesium, 2))
+                .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadria, 1),
+                        magnesiumSulphate.get(OrePrefixes.dust, 12))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_ZPM).metadata(COIL_HEAT, 9100).addTo(blastFurnaceRecipes);
 
         // InPO4 + Ga(OH)3 = InGaP
         GT_Values.RA.stdBuilder()
@@ -493,20 +479,13 @@ public class NaquadahReworkRecipeLoader {
                 100,
                 2);
 
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.block, Materials.SiliconSG, 16),
-                naquadahine.get(OrePrefixes.dust, 3),
-                ItemList.GalliumArsenideCrystal.get(1L),
-                null,
-                Materials.Argon.getGas(8000),
-                null,
-                ItemList.Circuit_Silicon_Ingot3.get(1),
-                null,
-                null,
-                null,
-                1000,
-                7680,
-                4484);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.block, Materials.SiliconSG, 16),
+                        naquadahine.get(OrePrefixes.dust, 3),
+                        ItemList.GalliumArsenideCrystal.get(1L))
+                .fluidInputs(Materials.Argon.getGas(8000)).itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(1))
+                .duration(50 * SECONDS).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 4484).addTo(blastFurnaceRecipes);
 
         // NqO2 + 4Na = 2Na2O + Nq
         GT_Values.RA.addChemicalRecipe(
@@ -519,16 +498,9 @@ public class NaquadahReworkRecipeLoader {
                 100,
                 1920);
 
-        GT_Values.RA.addBlastRecipe(
-                naquadahEarth.get(OrePrefixes.dust, 2),
-                GT_Utility.getIntegratedCircuit(2),
-                Materials.Nitrogen.getGas(1000),
-                null,
-                Materials.Naquadah.getNuggets(1),
-                null,
-                2400,
-                7680,
-                5000);
+        GT_Values.RA.stdBuilder().itemInputs(naquadahEarth.get(OrePrefixes.dust, 2), GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Nitrogen.getGas(1000)).itemOutputs(ItemList.Circuit_Silicon_Ingot3.get(1))
+                .duration(2 * MINUTES).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 5000).addTo(blastFurnaceRecipes);
 
         // C2H4 + H2O(g) = C2H6O
         GT_Values.RA.addMultiblockChemicalRecipe(

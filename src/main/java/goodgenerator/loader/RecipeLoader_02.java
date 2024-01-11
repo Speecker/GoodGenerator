@@ -4,6 +4,7 @@ import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
@@ -12,6 +13,7 @@ import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
+import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -902,16 +904,11 @@ public class RecipeLoader_02 {
                         Materials.Cryolite.getDust(4))
                 .outputChances(8000, 8000, 8000).duration(7 * SECONDS).eut(TierEU.RECIPE_MV).addTo(chemicalBathRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                MyMaterial.marM200.get(OrePrefixes.ingot, 18),
-                Materials.Cerium.getIngots(1),
-                MyMaterial.lithiumChloride.getMolten(144),
-                null,
-                MyMaterial.marCeM200.get(OrePrefixes.ingotHot, 19),
-                null,
-                5700,
-                122880,
-                4500);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.marM200.get(OrePrefixes.ingot, 18), Materials.Cerium.getIngots(1))
+                .fluidInputs(MyMaterial.lithiumChloride.getMolten(144))
+                .itemOutputs(MyMaterial.marCeM200.get(OrePrefixes.ingotHot, 19)).duration(4 * MINUTES + 45 * SECONDS)
+                .eut(TierEU.RECIPE_ZPM).metadata(COIL_HEAT, 4500).addTo(blastFurnaceRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.SC_Turbine_Casing.get(1),

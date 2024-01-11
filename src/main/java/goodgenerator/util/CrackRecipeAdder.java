@@ -1,7 +1,9 @@
 package goodgenerator.util;
 
+import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
+import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -99,27 +101,12 @@ public class CrackRecipeAdder {
         ItemStack input = material.get(OrePrefixes.dust, 1);
         ItemStack output = level > 1750 ? material.get(OrePrefixes.ingotHot, 1) : material.get(OrePrefixes.ingot, 1);
         if (gas) {
-            GT_Values.RA.addBlastRecipe(
-                    input,
-                    GT_Utility.getIntegratedCircuit(11),
-                    Materials.Helium.getGas(1000),
-                    null,
-                    output,
-                    null,
-                    duration,
-                    EUt,
-                    level);
+            GT_Values.RA.stdBuilder().itemInputs(input, GT_Utility.getIntegratedCircuit(11))
+                    .fluidInputs(Materials.Helium.getGas(1000)).itemOutputs(output).duration(duration * TICKS).eut(EUt)
+                    .metadata(COIL_HEAT, level).addTo(blastFurnaceRecipes);
         } else {
-            GT_Values.RA.addBlastRecipe(
-                    input,
-                    GT_Utility.getIntegratedCircuit(1),
-                    null,
-                    null,
-                    output,
-                    null,
-                    duration,
-                    EUt,
-                    level);
+            GT_Values.RA.stdBuilder().itemInputs(input, GT_Utility.getIntegratedCircuit(1)).itemOutputs(output)
+                    .duration(duration * TICKS).eut(EUt).metadata(COIL_HEAT, level).addTo(blastFurnaceRecipes);
         }
     }
 

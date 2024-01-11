@@ -3,6 +3,7 @@ package goodgenerator.loader;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
 import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
@@ -12,7 +13,9 @@ import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
+import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 import static gregtech.api.util.GT_RecipeConstants.ADDITIVE_AMOUNT;
+import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 import static gregtech.loaders.postload.GT_MachineRecipeLoader.solderingMats;
 
 import net.minecraft.item.ItemStack;
@@ -222,16 +225,10 @@ public class RecipeLoader {
                 120);
 
         // Th + 2O = ThO2
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Thorium, 1),
-                null,
-                Materials.Oxygen.getGas(2000),
-                null,
-                WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 3),
-                null,
-                100,
-                480,
-                1200);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Thorium, 1))
+                .fluidInputs(Materials.Oxygen.getGas(2000))
+                .itemOutputs(WerkstoffLoader.Thorianit.get(OrePrefixes.dust, 3)).duration(5 * SECONDS)
+                .eut(TierEU.RECIPE_HV).metadata(COIL_HEAT, 1200).addTo(blastFurnaceRecipes);
 
         // Th + 8HNO3 =HF= Th(NO3)4 + 4NO2 + 4H2O
         GT_Values.RA.addMultiblockChemicalRecipe(
@@ -288,39 +285,29 @@ public class RecipeLoader {
                 30);
 
         // ZnCl2 + 3Ca + ThF4 = ZnTh + CaCl2 + 2CaF2
-        GT_Values.RA.addBlastRecipe(
-                MyMaterial.zincChloride.get(OrePrefixes.dust, 3),
-                Materials.Calcium.getDust(3),
-                MyMaterial.thorium232Tetrafluoride.getFluidOrGas(1000),
-                WerkstoffLoader.CalciumChloride.getFluidOrGas(3000),
-                MyMaterial.zincThoriumAlloy.get(OrePrefixes.ingot, 1),
-                WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 6),
-                300,
-                120,
-                3000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.zincChloride.get(OrePrefixes.dust, 3), Materials.Calcium.getDust(3))
+                .fluidInputs(MyMaterial.thorium232Tetrafluoride.getFluidOrGas(1000))
+                .fluidOutputs(WerkstoffLoader.CalciumChloride.getFluidOrGas(3000))
+                .itemOutputs(
+                        MyMaterial.zincThoriumAlloy.get(OrePrefixes.ingot, 1),
+                        WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 6))
+                .duration(15 * SECONDS).eut(TierEU.RECIPE_MV).metadata(COIL_HEAT, 3000).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                MyMaterial.zincThoriumAlloy.get(OrePrefixes.ingot, 1),
-                GT_Utility.getIntegratedCircuit(11),
-                Materials.Argon.getGas(250),
-                Materials.Zinc.getMolten(144),
-                WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 1),
-                null,
-                150,
-                480,
-                1900);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.zincThoriumAlloy.get(OrePrefixes.ingot, 1), GT_Utility.getIntegratedCircuit(11))
+                .fluidInputs(Materials.Argon.getGas(250)).fluidOutputs(Materials.Zinc.getMolten(144))
+                .itemOutputs(WerkstoffLoader.Thorium232.get(OrePrefixes.dust, 1)).duration(7 * SECONDS + 10 * TICKS)
+                .eut(TierEU.RECIPE_HV).metadata(COIL_HEAT, 1900).addTo(blastFurnaceRecipes);
 
         // 2V + 5O = V2O5
-        GT_Values.RA.addBlastRecipe(
-                GT_Utility.getIntegratedCircuit(24),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Vanadium, 2),
-                Materials.Oxygen.getGas(5000),
-                null,
-                MyMaterial.vanadiumPentoxide.get(OrePrefixes.dust, 7),
-                null,
-                200,
-                120,
-                2500);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Vanadium, 2),
+                        GT_Utility.getIntegratedCircuit(24))
+                .fluidInputs(Materials.Oxygen.getGas(5000))
+                .itemOutputs(MyMaterial.vanadiumPentoxide.get(OrePrefixes.dust, 7)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_MV).metadata(COIL_HEAT, 2500).addTo(blastFurnaceRecipes);
 
         // Atomic Separation Catalyst
         ItemStack[] mat1 = new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Blaze, 32),
@@ -348,16 +335,13 @@ public class RecipeLoader {
                 .itemOutputs(MyMaterial.orundum.get(OrePrefixes.plate, 1)).duration(20 * SECONDS)
                 .eut(TierEU.RECIPE_IV / 2).addTo(formingPressRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                MyMaterial.orundum.get(OrePrefixes.plate, 2),
-                ItemRefer.Raw_Atomic_Separation_Catalyst.get(4),
-                Materials.Plutonium.getMolten(144),
-                null,
-                MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1),
-                null,
-                3600,
-                480,
-                5000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.orundum.get(OrePrefixes.plate, 2),
+                        ItemRefer.Raw_Atomic_Separation_Catalyst.get(4))
+                .fluidInputs(Materials.Plutonium.getMolten(144))
+                .itemOutputs(MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1)).duration(3 * MINUTES)
+                .eut(TierEU.RECIPE_HV).metadata(COIL_HEAT, 5000).addTo(blastFurnaceRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1))
                 .itemOutputs(MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1)).duration(10 * SECONDS)
@@ -479,16 +463,14 @@ public class RecipeLoader {
                 840,
                 2040);
 
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.NaquadahEnriched, 16),
-                GT_Utility.getIntegratedCircuit(16),
-                Materials.HydrofluoricAcid.getFluid(3000),
-                MyMaterial.acidNaquadahEmulsion.getFluidOrGas(2000),
-                MyMaterial.radioactiveSludge.get(OrePrefixes.dust, 3),
-                null,
-                3600,
-                2040,
-                3400);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.NaquadahEnriched, 16),
+                        GT_Utility.getIntegratedCircuit(16))
+                .fluidInputs(Materials.HydrofluoricAcid.getFluid(3000))
+                .fluidOutputs(MyMaterial.acidNaquadahEmulsion.getFluidOrGas(2000))
+                .itemOutputs(MyMaterial.radioactiveSludge.get(OrePrefixes.dust, 3)).duration(3 * MINUTES)
+                .eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 3400).addTo(blastFurnaceRecipes);
 
         GT_Values.RA.addMultiblockChemicalRecipe(
                 new ItemStack[] { GT_Utility.getIntegratedCircuit(3),
@@ -530,16 +512,14 @@ public class RecipeLoader {
                 500,
                 525000);
 
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadria, 32),
-                GT_Utility.getIntegratedCircuit(16),
-                MyMaterial.fluoroantimonicAcid.getFluidOrGas(4000),
-                MyMaterial.acidNaquadahEmulsion.getFluidOrGas(8000),
-                MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 17),
-                null,
-                3600,
-                4080,
-                3400);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadria, 32),
+                        GT_Utility.getIntegratedCircuit(16))
+                .fluidInputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(4000))
+                .fluidOutputs(MyMaterial.acidNaquadahEmulsion.getFluidOrGas(8000))
+                .itemOutputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 17)).duration(3 * MINUTES)
+                .eut(TierEU.RECIPE_IV / 2).metadata(COIL_HEAT, 3400).addTo(blastFurnaceRecipes);
 
         GT_Values.RA.addAssemblylineRecipe(
                 ItemList.Generator_Naquadah_Mark_V.get(1).copy(),
@@ -1124,49 +1104,37 @@ public class RecipeLoader {
                 .addTo(assemblerRecipes);
 
         // Al2O3 + 2N + 3C = 2AlN + 3CO
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sapphire, 5),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3),
-                FluidRegistry.getFluidStack("liquidnitrogen", 2000),
-                Materials.CarbonMonoxide.getGas(3000),
-                ItemRefer.Aluminum_Nitride_Dust.get(2),
-                null,
-                200,
-                1920,
-                4600);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sapphire, 5),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3))
+                .fluidInputs(FluidRegistry.getFluidStack("liquidnitrogen", 2000))
+                .fluidOutputs(Materials.CarbonMonoxide.getGas(3000)).itemOutputs(ItemRefer.Aluminum_Nitride_Dust.get(2))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 4600).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.GreenSapphire, 5),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3),
-                FluidRegistry.getFluidStack("liquidnitrogen", 2000),
-                Materials.CarbonMonoxide.getGas(3000),
-                ItemRefer.Aluminum_Nitride_Dust.get(2),
-                null,
-                200,
-                1920,
-                4600);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.GreenSapphire, 5),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3))
+                .fluidInputs(FluidRegistry.getFluidStack("liquidnitrogen", 2000))
+                .fluidOutputs(Materials.CarbonMonoxide.getGas(3000)).itemOutputs(ItemRefer.Aluminum_Nitride_Dust.get(2))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 4600).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminiumoxide, 5),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3),
-                FluidRegistry.getFluidStack("liquidnitrogen", 2000),
-                Materials.CarbonMonoxide.getGas(3000),
-                ItemRefer.Aluminum_Nitride_Dust.get(2),
-                null,
-                200,
-                1920,
-                4600);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminiumoxide, 5),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Coal, 3))
+                .fluidInputs(FluidRegistry.getFluidStack("liquidnitrogen", 2000))
+                .fluidOutputs(Materials.CarbonMonoxide.getGas(3000)).itemOutputs(ItemRefer.Aluminum_Nitride_Dust.get(2))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 4600).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addBlastRecipe(
-                MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1),
-                GT_Utility.getIntegratedCircuit(1),
-                null,
-                null,
-                MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingotHot),
-                null,
-                8000,
-                114514,
-                7000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.dust, 1),
+                        GT_Utility.getIntegratedCircuit(1))
+                .itemOutputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingotHot))
+                .duration(6 * MINUTES + 40 * SECONDS).eut(TierEU.RECIPE_ZPM).metadata(COIL_HEAT, 7000)
+                .addTo(blastFurnaceRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingotHot, 1))
                 .itemOutputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingot, 1)).duration(20 * SECONDS)
