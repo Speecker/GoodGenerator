@@ -2,6 +2,7 @@ package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
+import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -334,12 +335,12 @@ public class RecipeLoader {
             }
         }
 
-        GT_Values.RA.addFormingPressRecipe(
-                WerkstoffLoader.Tiberium.get(OrePrefixes.plate, 1),
-                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Silicon, 8),
-                MyMaterial.orundum.get(OrePrefixes.plate, 1),
-                400,
-                3000);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        WerkstoffLoader.Tiberium.get(OrePrefixes.plate, 1),
+                        GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Silicon, 8))
+                .itemOutputs(MyMaterial.orundum.get(OrePrefixes.plate, 1)).duration(20 * SECONDS)
+                .eut(TierEU.RECIPE_IV / 2).addTo(formingPressRecipes);
 
         GT_Values.RA.addBlastRecipe(
                 MyMaterial.orundum.get(OrePrefixes.plate, 2),
