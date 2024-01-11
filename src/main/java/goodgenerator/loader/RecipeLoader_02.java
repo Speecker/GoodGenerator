@@ -893,15 +893,14 @@ public class RecipeLoader_02 {
                 FluidRegistry.getFluidStack("supercriticalsteam", 32000),
                 8000);
 
-        GT_Values.RA.addChemicalBathRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Lepidolite, 1),
-                Materials.HydrochloricAcid.getFluid(1000),
-                Materials.RockSalt.getDust(1),
-                MyMaterial.lithiumChloride.get(OrePrefixes.dust, 3),
-                Materials.Cryolite.getDust(4),
-                new int[] { 8000, 8000, 8000 },
-                140,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(GT_OreDictUnificator.get(OrePrefixes.crushedPurified, Materials.Lepidolite, 1))
+                .fluidInputs(Materials.HydrochloricAcid.getFluid(1000))
+                .itemOutputs(
+                        Materials.RockSalt.getDust(1),
+                        MyMaterial.lithiumChloride.get(OrePrefixes.dust, 3),
+                        Materials.Cryolite.getDust(4))
+                .outputChances(8000, 8000, 8000).duration(7 * SECONDS).eut(TierEU.RECIPE_MV).addTo(chemicalBathRecipes);
 
         GT_Values.RA.addBlastRecipe(
                 MyMaterial.marM200.get(OrePrefixes.ingot, 18),
@@ -963,15 +962,9 @@ public class RecipeLoader_02 {
                         ItemList.Hull_IV.get(1), 'S', MyMaterial.marM200.get(OrePrefixes.plate, 1), 'E',
                         GT_ModHandler.getIC2Item("reactorHeatSwitchDiamond", 1L, 1) });
 
-        GT_Values.RA.addChemicalBathRecipe(
-                ItemRefer.Salty_Root.get(1),
-                GT_ModHandler.getWater(100),
-                Materials.Salt.getDust(1),
-                Materials.RockSalt.getDust(1),
-                Materials.Saltpeter.getDust(1),
-                new int[] { 9500, 8000, 5000 },
-                100,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Salty_Root.get(1)).fluidInputs(GT_ModHandler.getWater(100))
+                .itemOutputs(Materials.Salt.getDust(1), Materials.RockSalt.getDust(1), Materials.Saltpeter.getDust(1))
+                .outputChances(9500, 8000, 5000).duration(5 * SECONDS).eut(TierEU.RECIPE_LV).addTo(chemicalBathRecipes);
 
         if (NewHorizonsCoreMod.isModLoaded()) {
             GT_Values.RA.stdBuilder()
