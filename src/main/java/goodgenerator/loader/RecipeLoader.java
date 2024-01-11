@@ -2,6 +2,7 @@ package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
+import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
 import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -746,20 +747,10 @@ public class RecipeLoader {
                 30);
 
         // AlN = Al + N
-        GT_Values.RA.addElectrolyzerRecipe(
-                ItemRefer.Aluminum_Nitride_Dust.get(2),
-                null,
-                null,
-                Materials.Nitrogen.getGas(1000L),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminium, 1),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                100,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Aluminum_Nitride_Dust.get(2))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Aluminium, 1))
+                .fluidOutputs(Materials.Nitrogen.getGas(1000L)).duration(5 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(electrolyzerRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
