@@ -2,6 +2,7 @@ package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -104,13 +105,9 @@ public class RecipeLoader_02 {
                 .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_MV)
                 .addTo(assemblerRecipes);
 
-        GT_Values.RA.addCannerRecipe(
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                ItemRefer.High_Density_Uranium.get(1),
-                ItemRefer.Fuel_Rod_U_1.get(1),
-                null,
-                400,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Advanced_Fuel_Rod.get(1), ItemRefer.High_Density_Uranium.get(1))
+                .itemOutputs(ItemRefer.Fuel_Rod_U_1.get(1)).duration(20 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(cannerRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -136,13 +133,10 @@ public class RecipeLoader_02 {
                 .itemOutputs(ItemRefer.Fuel_Rod_U_4.get(1)).duration(11 * SECONDS).eut(TierEU.RECIPE_EV)
                 .addTo(assemblerRecipes);
 
-        GT_Values.RA.addCannerRecipe(
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                ItemRefer.High_Density_Plutonium.get(1),
-                ItemRefer.Fuel_Rod_Pu_1.get(1),
-                null,
-                400,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(ItemRefer.Advanced_Fuel_Rod.get(1), ItemRefer.High_Density_Plutonium.get(1))
+                .itemOutputs(ItemRefer.Fuel_Rod_Pu_1.get(1)).duration(20 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(cannerRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
