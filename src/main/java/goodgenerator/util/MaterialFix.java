@@ -2,6 +2,7 @@ package goodgenerator.util;
 
 import static gregtech.api.recipe.RecipeMaps.benderRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
+import static gregtech.api.recipe.RecipeMaps.hammerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 
@@ -206,11 +207,10 @@ public class MaterialFix {
                     GT_ModHandler.addCraftingRecipe(
                             tMaterial.get(OrePrefixes.stickLong, 1),
                             new Object[] { "PhP", 'P', tMaterial.get(OrePrefixes.stick, 1) });
-                    GT_Values.RA.addForgeHammerRecipe(
-                            tMaterial.get(OrePrefixes.stick, 2),
-                            tMaterial.get(OrePrefixes.stickLong, 1),
-                            (int) Math.max(tMaterial.getStats().getMass(), 1L),
-                            16);
+                    GT_Values.RA.stdBuilder().itemInputs(tMaterial.get(OrePrefixes.stick, 2))
+                            .itemOutputs(tMaterial.get(OrePrefixes.stickLong, 1))
+                            .duration(Math.max(tMaterial.getStats().getMass(), 1L) * TICKS).eut(TierEU.RECIPE_LV / 2)
+                            .addTo(hammerRecipes);
                 }
             }
             if (tMaterial.hasItemType(OrePrefixes.spring)) {
@@ -235,10 +235,8 @@ public class MaterialFix {
             }
         }
         Materials tUHV = Materials.Longasssuperconductornameforuhvwire;
-        GT_Values.RA.addForgeHammerRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.stick, tUHV, 2),
-                GT_OreDictUnificator.get(OrePrefixes.stickLong, tUHV, 1),
-                (int) Math.max(tUHV.getMass(), 1L),
-                16);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.stick, tUHV, 2))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.stickLong, tUHV, 1))
+                .duration(Math.max(tUHV.getMass(), 1L) * TICKS).eut(TierEU.RECIPE_LV / 2).addTo(hammerRecipes);
     }
 }
