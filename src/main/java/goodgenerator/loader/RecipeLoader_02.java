@@ -4,6 +4,7 @@ import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
@@ -675,22 +676,15 @@ public class RecipeLoader_02 {
                 120,
                 480);
 
-        GT_Values.RA.addFluidExtractionRecipe(
-                Materials.Coal.getGems(1),
-                Materials.Ash.getDust(1),
-                FluidRegistry.getFluidStack("fluid.coaltar", 250),
-                10,
-                60,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Coal.getGems(1)).itemOutputs(Materials.Ash.getDust(1))
+                .outputChances(10).fluidOutputs(FluidRegistry.getFluidStack("fluid.coaltar", 250)).duration(3 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(fluidExtractionRecipes);
 
         if (OreDictionary.getOres("fuelCoke").size() > 0) {
-            GT_Values.RA.addFluidExtractionRecipe(
-                    OreDictionary.getOres("fuelCoke").get(0),
-                    Materials.Ash.getDust(1),
-                    FluidRegistry.getFluidStack("fluid.coaltar", 500),
-                    10,
-                    60,
-                    120);
+            GT_Values.RA.stdBuilder().itemInputs(OreDictionary.getOres("fuelCoke").get(0))
+                    .itemOutputs(Materials.Ash.getDust(1)).outputChances(10)
+                    .fluidOutputs(FluidRegistry.getFluidStack("fluid.coaltar", 250)).duration(3 * SECONDS)
+                    .eut(TierEU.RECIPE_MV).addTo(fluidExtractionRecipes);
         }
 
         if (LoadedList.GTPP) {
