@@ -91,46 +91,6 @@ public class CrackRecipeAdder {
                 EUt / 3);
     }
 
-    @Deprecated
-    public static void addUniversalCircuitAssemblerRecipe(ItemStack[] inputs, ItemStack output, int solders,
-            int duration, int EUt, boolean isClean) {
-        GT_Values.RA.addCircuitAssemblerRecipe(
-                inputs,
-                Materials.SolderingAlloy.getMolten(solders),
-                output,
-                duration,
-                EUt,
-                isClean);
-        GT_Values.RA.addCircuitAssemblerRecipe(
-                inputs,
-                Materials.Tin.getMolten(solders * 2),
-                output,
-                duration,
-                EUt,
-                isClean);
-        GT_Values.RA.addCircuitAssemblerRecipe(
-                inputs,
-                Materials.Lead.getMolten(solders * 4),
-                output,
-                duration,
-                EUt,
-                isClean);
-    }
-
-    @Deprecated
-    public static void addUniversalAssemblerRecipe(ItemStack[] inputs, ItemStack output, int solders, int duration,
-            int EUt, boolean isClean) {
-        GT_Values.RA.addAssemblerRecipe(
-                inputs,
-                Materials.SolderingAlloy.getMolten(solders),
-                output,
-                duration,
-                EUt,
-                isClean);
-        GT_Values.RA.addAssemblerRecipe(inputs, Materials.Tin.getMolten(solders * 2), output, duration, EUt, isClean);
-        GT_Values.RA.addAssemblerRecipe(inputs, Materials.Lead.getMolten(solders * 4), output, duration, EUt, isClean);
-    }
-
     public static void reAddBlastRecipe(Werkstoff material, int duration, int EUt, int level, boolean gas) {
         ItemStack input = material.get(OrePrefixes.dust, 1);
         ItemStack output = level > 1750 ? material.get(OrePrefixes.ingotHot, 1) : material.get(OrePrefixes.ingot, 1);
