@@ -1,6 +1,7 @@
 package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
+import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -107,11 +108,9 @@ public class RecipeLoader {
                 ItemRefer.High_Density_Uranium_Nugget.get(1),
                 GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.TungstenCarbide, 8));
 
-        GT_Values.RA.addCompressorRecipe(
-                ItemRefer.High_Density_Uranium_Nugget.get(9),
-                ItemRefer.High_Density_Uranium.get(1),
-                600,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.High_Density_Uranium_Nugget.get(9))
+                .itemOutputs(ItemRefer.High_Density_Uranium.get(1)).duration(30 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(compressorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -146,11 +145,9 @@ public class RecipeLoader {
                 ItemRefer.High_Density_Thorium_Nugget.get(1),
                 GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.TungstenSteel, 8));
 
-        GT_Values.RA.addCompressorRecipe(
-                ItemRefer.High_Density_Thorium_Nugget.get(9),
-                ItemRefer.High_Density_Thorium.get(1),
-                200,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.High_Density_Thorium_Nugget.get(9))
+                .itemOutputs(ItemRefer.High_Density_Thorium.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(compressorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -185,11 +182,9 @@ public class RecipeLoader {
                 ItemRefer.High_Density_Plutonium_Nugget.get(1),
                 GT_OreDictUnificator.get(OrePrefixes.dustTiny, Materials.HSSS, 8));
 
-        GT_Values.RA.addCompressorRecipe(
-                ItemRefer.High_Density_Plutonium_Nugget.get(9),
-                ItemRefer.High_Density_Plutonium.get(1),
-                1200,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.High_Density_Plutonium_Nugget.get(9))
+                .itemOutputs(ItemRefer.High_Density_Plutonium.get(1)).duration(1 * MINUTES).eut(TierEU.RECIPE_MV)
+                .addTo(compressorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
