@@ -91,6 +91,7 @@ public class CrackRecipeAdder {
                 EUt / 3);
     }
 
+    @Deprecated
     public static void addUniversalCircuitAssemblerRecipe(ItemStack[] inputs, ItemStack output, int solders,
             int duration, int EUt, boolean isClean) {
         GT_Values.RA.addCircuitAssemblerRecipe(
@@ -116,6 +117,7 @@ public class CrackRecipeAdder {
                 isClean);
     }
 
+    @Deprecated
     public static void addUniversalAssemblerRecipe(ItemStack[] inputs, ItemStack output, int solders, int duration,
             int EUt, boolean isClean) {
         GT_Values.RA.addAssemblerRecipe(
