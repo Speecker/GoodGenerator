@@ -2,6 +2,8 @@ package goodgenerator.loader;
 
 import static goodgenerator.util.ItemRefer.*;
 import static goodgenerator.util.Log.LOGGER;
+import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 
 import java.util.HashMap;
 
@@ -80,78 +82,83 @@ public class ComponentAssemblyLineMiscRecipes {
     private static void generateCasingRecipes() {
         int t = 1;
         // lv 1
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Steel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Steel, 1),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Steel, 4),
                         ComponentType.Robot_Arm.getComponent(t).get(4),
                         ComponentType.Electric_Piston.getComponent(t).get(8),
                         ComponentType.Electric_Motor.getComponent(t).get(10),
                         GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Steel, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tin, 6), getCircuit(t, 16), },
-                Materials.SolderingAlloy.getMolten(144 * (t + 3)),
-                Compassline_Casing_LV.get(1),
-                16 * 20,
-                getV(t));
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tin, 6),
+                        getCircuit(t, 16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144 * (t + 1)))
+                .itemOutputs(Compassline_Casing_LV.get(1)).duration(16 * SECONDS).eut(GT_Values.VP[t])
+                .addTo(assemblerRecipes);
         // mv 2
         t++;
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Aluminium, 1),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Aluminium, 4),
                         ComponentType.Robot_Arm.getComponent(t).get(4),
                         ComponentType.Electric_Piston.getComponent(t).get(8),
                         ComponentType.Electric_Motor.getComponent(t).get(10),
                         GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Aluminium, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.AnyCopper, 6), getCircuit(t, 8),
-                        getCircuit(t - 1, 16) },
-                Materials.SolderingAlloy.getMolten(144 * (t + 1)),
-                Compassline_Casing_MV.get(1),
-                16 * 20,
-                getV(t));
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.AnyCopper, 6),
+                        getCircuit(t, 8),
+                        getCircuit(t - 1, 16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144 * (t + 1)))
+                .itemOutputs(Compassline_Casing_MV.get(1)).duration(16 * SECONDS).eut(GT_Values.VP[t])
+                .addTo(assemblerRecipes);
         // hv 3
         t++;
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.StainlessSteel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.StainlessSteel, 1),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.StainlessSteel, 4),
                         ComponentType.Robot_Arm.getComponent(t).get(4),
                         ComponentType.Electric_Piston.getComponent(t).get(8),
                         ComponentType.Electric_Motor.getComponent(t).get(10),
                         GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.StainlessSteel, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Gold, 6), getCircuit(t, 8),
-                        getCircuit(t - 1, 16) },
-                Materials.SolderingAlloy.getMolten(144 * (t + 1)),
-                Compassline_Casing_HV.get(1),
-                16 * 20,
-                getV(t));
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Gold, 6),
+                        getCircuit(t, 8),
+                        getCircuit(t - 1, 16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144 * (t + 1)))
+                .itemOutputs(Compassline_Casing_HV.get(1)).duration(16 * SECONDS).eut(GT_Values.VP[t])
+                .addTo(assemblerRecipes);
         // ev 4
         t++;
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Titanium, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Titanium, 1),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Titanium, 4),
                         ComponentType.Robot_Arm.getComponent(t).get(4),
                         ComponentType.Electric_Piston.getComponent(t).get(8),
                         ComponentType.Electric_Motor.getComponent(t).get(10),
                         GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.Titanium, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Aluminium, 6), getCircuit(t, 8),
-                        getCircuit(t - 1, 16) },
-                Materials.SolderingAlloy.getMolten(144 * (t + 1)),
-                Compassline_Casing_EV.get(1),
-                16 * 20,
-                getV(t));
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Aluminium, 6),
+                        getCircuit(t, 8),
+                        getCircuit(t - 1, 16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144 * (t + 1)))
+                .itemOutputs(Compassline_Casing_EV.get(1)).duration(16 * SECONDS).eut(GT_Values.VP[t])
+                .addTo(assemblerRecipes);
         // iv 5
         t++;
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.TungstenSteel, 4),
                         ComponentType.Robot_Arm.getComponent(t).get(4),
                         ComponentType.Electric_Piston.getComponent(t).get(8),
                         ComponentType.Electric_Motor.getComponent(t).get(10),
                         GT_OreDictUnificator.get(OrePrefixes.gearGt, Materials.TungstenSteel, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tungsten, 6), getCircuit(t, 8),
-                        getCircuit(t - 1, 16) },
-                Materials.SolderingAlloy.getMolten(144 * (t + 1)),
-                Compassline_Casing_IV.get(1),
-                16 * 20,
-                getV(t));
+                        GT_OreDictUnificator.get(OrePrefixes.wireGt04, Materials.Tungsten, 6),
+                        getCircuit(t, 8),
+                        getCircuit(t - 1, 16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(144 * (t + 1)))
+                .itemOutputs(Compassline_Casing_IV.get(1)).duration(16 * SECONDS).eut(GT_Values.VP[t])
+                .addTo(assemblerRecipes);
 
         Fluid sold = FluidRegistry.getFluid("molten.indalloy140");
         // Assline Recipes!
@@ -346,27 +353,25 @@ public class ComponentAssemblyLineMiscRecipes {
 
     private static void generateWrapRecipes() {
         for (int i = 0; i <= 11; i++) {
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { getCircuit(i, 16), GT_Utility.getIntegratedCircuit(16) },
-                    Materials.SolderingAlloy.getMolten(72L),
-                    new ItemStack(Loaders.circuitWrap, 1, i),
-                    30 * 20,
-                    30);
+            GT_Values.RA.stdBuilder().itemInputs(getCircuit(i, 16), GT_Utility.getIntegratedCircuit(16))
+                    .fluidInputs(Materials.SolderingAlloy.getMolten(72L))
+                    .itemOutputs(new ItemStack(Loaders.circuitWrap, 1, i)).duration(30 * SECONDS).eut(TierEU.RECIPE_LV)
+                    .addTo(assemblerRecipes);
         }
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GameRegistry.findItemStack("dreamcraft", "item.PikoCircuit", 16),
-                        GT_Utility.getIntegratedCircuit(16) },
-                Materials.SolderingAlloy.getMolten(72L),
-                new ItemStack(Loaders.circuitWrap, 1, 12),
-                30 * 20,
-                30);
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GameRegistry.findItemStack("dreamcraft", "item.QuantumCircuit", 16),
-                        GT_Utility.getIntegratedCircuit(16) },
-                Materials.SolderingAlloy.getMolten(72L),
-                new ItemStack(Loaders.circuitWrap, 1, 13),
-                30 * 20,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GameRegistry.findItemStack("dreamcraft", "item.PikoCircuit", 16),
+                        GT_Utility.getIntegratedCircuit(16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(72L))
+                .itemOutputs(new ItemStack(Loaders.circuitWrap, 1, 12)).duration(30 * SECONDS).eut(TierEU.RECIPE_LV)
+                .addTo(assemblerRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GameRegistry.findItemStack("dreamcraft", "item.QuantumCircuit", 16),
+                        GT_Utility.getIntegratedCircuit(16))
+                .fluidInputs(Materials.SolderingAlloy.getMolten(72L))
+                .itemOutputs(new ItemStack(Loaders.circuitWrap, 1, 13)).duration(30 * SECONDS).eut(TierEU.RECIPE_LV)
+                .addTo(assemblerRecipes);
     }
 
     @SuppressWarnings("unused")
