@@ -1,6 +1,9 @@
 package goodgenerator.loader;
 
+import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
+import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -37,40 +40,30 @@ import ic2.core.Ic2Items;
 public class RecipeLoader_02 {
 
     public static void RecipeLoad() {
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.StainlessSteel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.StainlessSteel, 1),
                         GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlueAlloy, 1),
                         GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.SuperconductorHV, 32),
                         GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Beryllium, 32),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1) },
-                null,
-                ItemRefer.Speeding_Pipe.get(1),
-                300,
-                1920);
+                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Elite, 1))
+                .itemOutputs(ItemRefer.Speeding_Pipe.get(1)).duration(15 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
         // Compact MK1 Fusion Disassembly Recipe
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T0.get(1) },
-                null,
-                ItemList.Casing_Coil_Superconductor.get(3),
-                600,
-                120000);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Compact_Fusion_Coil_T0.get(1))
+                .itemOutputs(ItemList.Casing_Coil_Superconductor.get(3)).duration(30 * SECONDS).eut(TierEU.RECIPE_ZPM)
+                .addTo(assemblerRecipes);
 
         // Compact MK2 Fusion Disassembly Recipe
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T1.get(1), },
-                null,
-                ItemList.Casing_Fusion_Coil.get(3),
-                600,
-                480000);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Compact_Fusion_Coil_T1.get(1))
+                .itemOutputs(ItemList.Casing_Fusion_Coil.get(3)).duration(30 * SECONDS).eut(TierEU.RECIPE_UV)
+                .addTo(assemblerRecipes);
 
         // Compact MK3 Fusion Disassembly Recipe
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T2.get(1), },
-                null,
-                ItemList.Casing_Fusion_Coil.get(3),
-                600,
-                1920000);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Compact_Fusion_Coil_T2.get(1))
+                .itemOutputs(ItemList.Casing_Fusion_Coil.get(3)).duration(30 * SECONDS).eut(TierEU.RECIPE_UHV)
+                .addTo(assemblerRecipes);
 
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.zircaloy2, 500, 480, 2800, true);
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.zircaloy2, 513, 480, 2800, false);
@@ -106,13 +99,13 @@ public class RecipeLoader_02 {
                 2400,
                 1966080);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { MyMaterial.zircaloy4.get(OrePrefixes.plate, 4),
-                        MyMaterial.zircaloy2.get(OrePrefixes.ring, 2), GT_Utility.getIntegratedCircuit(2) },
-                null,
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                200,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.zircaloy4.get(OrePrefixes.plate, 4),
+                        MyMaterial.zircaloy2.get(OrePrefixes.ring, 2),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(assemblerRecipes);
 
         GT_Values.RA.addCannerRecipe(
                 ItemRefer.Advanced_Fuel_Rod.get(1),
@@ -122,29 +115,29 @@ public class RecipeLoader_02 {
                 400,
                 120);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_U_1.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                null,
-                ItemRefer.Fuel_Rod_U_2.get(1),
-                200,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_U_1.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fuel_Rod_U_2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_U_2.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                null,
-                ItemRefer.Fuel_Rod_U_4.get(1),
-                200,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_U_2.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(5))
+                .itemOutputs(ItemRefer.Fuel_Rod_U_4.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_U_1.get(4), MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
-                        GT_Utility.getIntegratedCircuit(4) },
-                null,
-                ItemRefer.Fuel_Rod_U_4.get(1),
-                220,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_U_1.get(4),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
+                        GT_Utility.getIntegratedCircuit(4))
+                .itemOutputs(ItemRefer.Fuel_Rod_U_4.get(1)).duration(11 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
         GT_Values.RA.addCannerRecipe(
                 ItemRefer.Advanced_Fuel_Rod.get(1),
@@ -154,29 +147,29 @@ public class RecipeLoader_02 {
                 400,
                 120);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_Pu_1.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                null,
-                ItemRefer.Fuel_Rod_Pu_2.get(1),
-                200,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_Pu_1.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fuel_Rod_Pu_2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_Pu_2.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                null,
-                ItemRefer.Fuel_Rod_Pu_4.get(1),
-                200,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_Pu_2.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(5))
+                .itemOutputs(ItemRefer.Fuel_Rod_Pu_4.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_Pu_1.get(4), MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
-                        GT_Utility.getIntegratedCircuit(4) },
-                null,
-                ItemRefer.Fuel_Rod_Pu_4.get(1),
-                220,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_Pu_1.get(4),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
+                        GT_Utility.getIntegratedCircuit(4))
+                .itemOutputs(ItemRefer.Fuel_Rod_Pu_4.get(1)).duration(11 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(assemblerRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.YOTTank_Casing.get(1),
@@ -196,79 +189,76 @@ public class RecipeLoader_02 {
                         GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.Enderium, 1), 'C',
                         ItemRefer.YOTTank_Casing.get(1) });
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Hatch_Output_IV.get(1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Hatch_Output_IV.get(1),
                         GT_ModHandler.getModItem("appliedenergistics2", "item.ItemMultiPart", 1, 440),
                         GT_OreDictUnificator.get(OrePrefixes.screw, Materials.CertusQuartz, 8),
-                        GT_Utility.getIntegratedCircuit(1) },
-                Materials.Plastic.getMolten(144),
-                Loaders.YFH,
-                200,
-                1920);
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Plastic.getMolten(144)).itemOutputs(Loaders.YFH).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_EV).addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_Steel.get(12L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_Steel.get(12L),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.Tin, 4),
-                        GT_Utility.getIntegratedCircuit(1) },
-                Materials.Plastic.getMolten(144),
-                ItemRefer.Fluid_Storage_Core_T1.get(1),
-                200,
-                480);
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Plastic.getMolten(144)).itemOutputs(ItemRefer.Fluid_Storage_Core_T1.get(1))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_HV).addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_Aluminium.get(3L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_Aluminium.get(3L),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.Tin, 4),
-                        GT_Utility.getIntegratedCircuit(1) },
-                Materials.Plastic.getMolten(144),
-                ItemRefer.Fluid_Storage_Core_T1.get(1),
-                200,
-                480);
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Plastic.getMolten(144)).itemOutputs(ItemRefer.Fluid_Storage_Core_T1.get(1))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_HV).addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_StainlessSteel.get(2L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_StainlessSteel.get(2L),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.Tin, 4),
-                        GT_Utility.getIntegratedCircuit(1) },
-                Materials.Plastic.getMolten(144),
-                ItemRefer.Fluid_Storage_Core_T1.get(1),
-                200,
-                480);
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Plastic.getMolten(144)).itemOutputs(ItemRefer.Fluid_Storage_Core_T1.get(1))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_HV).addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_Titanium.get(64L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_Titanium.get(64L),
                         GT_OreDictUnificator.get(OrePrefixes.plateDense, Materials.Titanium, 8),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.BlackSteel, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                Materials.Polytetrafluoroethylene.getMolten(2304),
-                ItemRefer.Fluid_Storage_Core_T2.get(1),
-                200,
-                7680);
+                        GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Polytetrafluoroethylene.getMolten(2304))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_TungstenSteel.get(18L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_TungstenSteel.get(18L),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.BlackSteel, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                Materials.Polytetrafluoroethylene.getMolten(2304),
-                ItemRefer.Fluid_Storage_Core_T2.get(1),
-                200,
-                7680);
+                        GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Polytetrafluoroethylene.getMolten(2304))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.Large_Fluid_Cell_Chrome.get(4L),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.Large_Fluid_Cell_Chrome.get(4L),
                         GT_OreDictUnificator.get(OrePrefixes.plateQuadruple, Materials.BlackSteel, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                Materials.Polytetrafluoroethylene.getMolten(2304),
-                ItemRefer.Fluid_Storage_Core_T2.get(1),
-                200,
-                7680);
+                        GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Polytetrafluoroethylene.getMolten(2304))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fluid_Storage_Core_T1.get(32), ItemRefer.Fluid_Storage_Core_T1.get(32),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fluid_Storage_Core_T1.get(32),
+                        ItemRefer.Fluid_Storage_Core_T1.get(32),
                         GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.BlackSteel, 16),
-                        GT_Utility.getIntegratedCircuit(10) },
-                Materials.Polytetrafluoroethylene.getMolten(2304),
-                ItemRefer.Fluid_Storage_Core_T2.get(1),
-                200,
-                7680);
+                        GT_Utility.getIntegratedCircuit(10))
+                .fluidInputs(Materials.Polytetrafluoroethylene.getMolten(2304))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
         Fluid solderIndalloy = FluidRegistry.getFluid("molten.indalloy140") != null
                 ? FluidRegistry.getFluid("molten.indalloy140")
@@ -407,28 +397,28 @@ public class RecipeLoader_02 {
                 400,
                 536800000);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.BlackSteel, 1),
                         ItemRefer.Fluid_Storage_Core_T1.get(10),
                         GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Steel, 4),
                         ItemList.Electric_Pump_HV.get(8),
                         GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.StainlessSteel, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                Materials.Plastic.getMolten(144),
-                ItemRefer.YOTTank_Cell_T1.get(1),
-                400,
-                480);
+                        GT_Utility.getIntegratedCircuit(5))
+                .fluidInputs(Materials.Plastic.getMolten(144)).itemOutputs(ItemRefer.YOTTank_Cell_T1.get(1))
+                .duration(20 * SECONDS).eut(TierEU.RECIPE_HV).addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.TungstenSteel, 1),
                         ItemRefer.Fluid_Storage_Core_T2.get(10),
-                        WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4), ItemList.Electric_Pump_EV.get(8),
+                        WerkstoffLoader.LuVTierMaterial.get(OrePrefixes.plate, 4),
+                        ItemList.Electric_Pump_EV.get(8),
                         GT_OreDictUnificator.get(OrePrefixes.pipeMedium, Materials.Enderium, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                Materials.Polytetrafluoroethylene.getMolten(144),
-                ItemRefer.YOTTank_Cell_T2.get(1),
-                1000,
-                7680);
+                        GT_Utility.getIntegratedCircuit(5))
+                .fluidInputs(Materials.Polytetrafluoroethylene.getMolten(144))
+                .itemOutputs(ItemRefer.YOTTank_Cell_T2.get(1)).duration(50 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
         GT_Values.RA.addAssemblylineRecipe(
                 ItemRefer.YOTTank_Cell_T2.get(1),
@@ -578,34 +568,34 @@ public class RecipeLoader_02 {
                 536800000);
 
         // Craft 2x64X Tier to 1X+1 Tier
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fluid_Storage_Core_T6.get(64), ItemRefer.Fluid_Storage_Core_T6.get(64),
-                        GT_Utility.getIntegratedCircuit(2) },
-                GT_Values.NF,
-                ItemRefer.Fluid_Storage_Core_T7.get(1),
-                200,
-                7680);
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fluid_Storage_Core_T7.get(64), ItemRefer.Fluid_Storage_Core_T7.get(64),
-                        GT_Utility.getIntegratedCircuit(2) },
-                GT_Values.NF,
-                ItemRefer.Fluid_Storage_Core_T8.get(1),
-                200,
-                7680);
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fluid_Storage_Core_T8.get(64), ItemRefer.Fluid_Storage_Core_T8.get(64),
-                        GT_Utility.getIntegratedCircuit(2) },
-                GT_Values.NF,
-                ItemRefer.Fluid_Storage_Core_T9.get(1),
-                200,
-                7680);
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fluid_Storage_Core_T9.get(64), ItemRefer.Fluid_Storage_Core_T9.get(64),
-                        GT_Utility.getIntegratedCircuit(2) },
-                GT_Values.NF,
-                ItemRefer.Fluid_Storage_Core_T10.get(1),
-                200,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fluid_Storage_Core_T6.get(64),
+                        ItemRefer.Fluid_Storage_Core_T6.get(64),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T7.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fluid_Storage_Core_T7.get(64),
+                        ItemRefer.Fluid_Storage_Core_T7.get(64),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T8.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fluid_Storage_Core_T8.get(64),
+                        ItemRefer.Fluid_Storage_Core_T8.get(64),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T9.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fluid_Storage_Core_T9.get(64),
+                        ItemRefer.Fluid_Storage_Core_T9.get(64),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fluid_Storage_Core_T10.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
         GT_Values.RA.addUnboxingRecipe(
                 ItemRefer.YOTTank_Cell_T1.get(1),
@@ -871,53 +861,53 @@ public class RecipeLoader_02 {
                 100,
                 1920);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LPu_1.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                null,
-                ItemRefer.Fuel_Rod_LPu_2.get(1),
-                200,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LPu_1.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fuel_Rod_LPu_2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LPu_2.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                null,
-                ItemRefer.Fuel_Rod_LPu_4.get(1),
-                200,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LPu_2.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(5))
+                .itemOutputs(ItemRefer.Fuel_Rod_LPu_4.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LPu_1.get(4), MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
-                        GT_Utility.getIntegratedCircuit(4) },
-                null,
-                ItemRefer.Fuel_Rod_LPu_4.get(1),
-                220,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LPu_1.get(4),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
+                        GT_Utility.getIntegratedCircuit(4))
+                .itemOutputs(ItemRefer.Fuel_Rod_LPu_4.get(1)).duration(11 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LU_1.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(2) },
-                null,
-                ItemRefer.Fuel_Rod_LU_2.get(1),
-                200,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LU_1.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(ItemRefer.Fuel_Rod_LU_2.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LU_2.get(2), MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
-                        GT_Utility.getIntegratedCircuit(5) },
-                null,
-                ItemRefer.Fuel_Rod_LU_4.get(1),
-                200,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LU_2.get(2),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stick, 4),
+                        GT_Utility.getIntegratedCircuit(5))
+                .itemOutputs(ItemRefer.Fuel_Rod_LU_4.get(1)).duration(10 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemRefer.Fuel_Rod_LU_1.get(4), MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
-                        GT_Utility.getIntegratedCircuit(4) },
-                null,
-                ItemRefer.Fuel_Rod_LU_4.get(1),
-                220,
-                7680);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Fuel_Rod_LU_1.get(4),
+                        MyMaterial.zircaloy2.get(OrePrefixes.stickLong, 6),
+                        GT_Utility.getIntegratedCircuit(4))
+                .itemOutputs(ItemRefer.Fuel_Rod_LU_4.get(1)).duration(11 * SECONDS).eut(TierEU.RECIPE_IV)
+                .addTo(assemblerRecipes);
 
         MyRecipeAdder.instance.addExtremeHeatExchangerRecipe(
                 FluidRegistry.getFluidStack("lava", 20000),
@@ -962,13 +952,13 @@ public class RecipeLoader_02 {
                 new Object[] { "PhP", "GCG", "PwP", 'G', MyMaterial.marM200.get(OrePrefixes.gearGt, 1), 'C',
                         ItemList.Casing_Turbine.get(1), 'P', MyMaterial.marCeM200.get(OrePrefixes.plate, 1), });
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { MyMaterial.marM200.get(OrePrefixes.gearGt, 2),
-                        MyMaterial.marCeM200.get(OrePrefixes.plate, 4), ItemList.Casing_Turbine.get(1) },
-                null,
-                ItemRefer.SC_Turbine_Casing.get(1),
-                300,
-                480);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.marM200.get(OrePrefixes.gearGt, 2),
+                        MyMaterial.marCeM200.get(OrePrefixes.plate, 4),
+                        ItemList.Casing_Turbine.get(1))
+                .itemOutputs(ItemRefer.SC_Turbine_Casing.get(1)).duration(15 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(assemblerRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.SC_Fluid_Turbine.get(1),
@@ -978,25 +968,24 @@ public class RecipeLoader_02 {
                         MyMaterial.marCeM200.get(OrePrefixes.gearGt, 1), 'I',
                         MyMaterial.incoloy903.get(OrePrefixes.pipeLarge, 1) });
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { MyMaterial.marM200.get(OrePrefixes.plate, 2),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.marM200.get(OrePrefixes.plate, 2),
                         MyMaterial.marCeM200.get(OrePrefixes.gearGt, 2),
                         MyMaterial.incoloy903.get(OrePrefixes.pipeLarge, 2),
-                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 2), ItemList.Hull_IV.get(1) },
-                null,
-                ItemRefer.SC_Fluid_Turbine.get(1),
-                300,
-                480);
+                        GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 2),
+                        ItemList.Hull_IV.get(1))
+                .itemOutputs(ItemRefer.SC_Fluid_Turbine.get(1)).duration(15 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(assemblerRecipes);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { MyMaterial.incoloy903.get(OrePrefixes.plate, 4),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.incoloy903.get(OrePrefixes.plate, 4),
                         MyMaterial.marCeM200.get(OrePrefixes.plate, 4),
                         GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.NiobiumTitanium, 1),
-                        GT_Utility.getIntegratedCircuit(8) },
-                null,
-                ItemRefer.Pressure_Resistant_Wall.get(1),
-                1000,
-                480);
+                        GT_Utility.getIntegratedCircuit(8))
+                .itemOutputs(ItemRefer.Pressure_Resistant_Wall.get(1)).duration(50 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(assemblerRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.Extreme_Heat_Exchanger.get(1),
@@ -1043,32 +1032,31 @@ public class RecipeLoader_02 {
                     7680,
                     false);
 
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { ItemList.Robot_Arm_IV.get(4), ItemRefer.HiC_T1.get(4),
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            ItemList.Robot_Arm_IV.get(4),
+                            ItemRefer.HiC_T1.get(4),
                             ItemList.Tool_DataOrb.get(3),
                             GT_OreDictUnificator.get(OrePrefixes.cableGt08, Materials.Titanium, 4),
                             MyMaterial.hikarium.get(OrePrefixes.gearGt, 4),
-                            MyMaterial.marM200.get(OrePrefixes.plateDouble, 2), ItemRefer.IC2_Ir_Plate.get(2),
-                            MyMaterial.lumiium.get(OrePrefixes.bolt, 48), },
-                    Materials.Palladium.getMolten(1152),
-                    ItemRefer.Precise_Assembler.get(1),
-                    1800,
-                    7680,
-                    false);
+                            MyMaterial.marM200.get(OrePrefixes.plateDouble, 2),
+                            ItemRefer.IC2_Ir_Plate.get(2),
+                            MyMaterial.lumiium.get(OrePrefixes.bolt, 48))
+                    .fluidInputs(Materials.Palladium.getMolten(1152)).itemOutputs(ItemRefer.Precise_Assembler.get(1))
+                    .duration(1 * MINUTES + 30 * SECONDS).eut(TierEU.RECIPE_IV).addTo(assemblerRecipes);
 
-            GT_Values.RA
-                    .addAssemblerRecipe(
-                            new ItemStack[] { ItemList.Casing_ZPM.get(3), ItemList.Robot_Arm_EV.get(2),
-                                    GT_OreDictUnificator
-                                            .get(OrePrefixes.cableGt04, MyMaterial.lumiium.getBridgeMaterial(), 2),
-                                    MyMaterial.marCeM200.get(OrePrefixes.plateDouble, 2), ItemRefer.HiC_T1.get(1),
-                                    MyMaterial.signalium.get(OrePrefixes.bolt, 32),
-                                    MyMaterial.titaniumBetaC.get(OrePrefixes.gearGtSmall, 8) },
-                            Materials.BlackSteel.getMolten(576),
-                            ItemRefer.Precise_Electronic_Unit_T1.get(2),
-                            800,
-                            7680,
-                            false);
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            ItemList.Casing_ZPM.get(3),
+                            ItemList.Robot_Arm_EV.get(2),
+                            GT_OreDictUnificator.get(OrePrefixes.cableGt04, MyMaterial.lumiium.getBridgeMaterial(), 2),
+                            MyMaterial.marCeM200.get(OrePrefixes.plateDouble, 2),
+                            ItemRefer.HiC_T1.get(1),
+                            MyMaterial.signalium.get(OrePrefixes.bolt, 32),
+                            MyMaterial.titaniumBetaC.get(OrePrefixes.gearGtSmall, 8))
+                    .fluidInputs(Materials.BlackSteel.getMolten(576))
+                    .itemOutputs(ItemRefer.Precise_Electronic_Unit_T1.get(2)).duration(40 * SECONDS)
+                    .eut(TierEU.RECIPE_IV).addTo(assemblerRecipes);
 
             MyRecipeAdder.instance.addPreciseAssemblerRecipe(
                     new ItemStack[] { ItemRefer.HiC_T1.get(2),
@@ -1158,27 +1146,31 @@ public class RecipeLoader_02 {
                     100,
                     3);
 
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { ItemList.Casing_UV.get(3), ItemList.Robot_Arm_LuV.get(2),
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            ItemList.Casing_UV.get(3),
+                            ItemList.Robot_Arm_LuV.get(2),
                             GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.ElectrumFlux, 4),
-                            ItemRefer.HiC_T2.get(1), ItemRefer.Precise_Electronic_Unit_T1.get(1),
+                            ItemRefer.HiC_T2.get(1),
+                            ItemRefer.Precise_Electronic_Unit_T1.get(1),
                             MyMaterial.marCeM200.get(OrePrefixes.bolt, 32),
-                            MyMaterial.artheriumSn.get(OrePrefixes.gearGtSmall, 8), },
-                    MyMaterial.adamantiumAlloy.getMolten(1152),
-                    ItemRefer.Precise_Electronic_Unit_T2.get(4),
-                    4800,
-                    122880);
+                            MyMaterial.artheriumSn.get(OrePrefixes.gearGtSmall, 8))
+                    .fluidInputs(MyMaterial.adamantiumAlloy.getMolten(1152))
+                    .itemOutputs(ItemRefer.Precise_Electronic_Unit_T2.get(4)).duration(4 * MINUTES)
+                    .eut(TierEU.RECIPE_ZPM).addTo(assemblerRecipes);
 
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { ItemList.Casing_MAX.get(3), ItemList.Field_Generator_ZPM.get(2),
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            ItemList.Casing_MAX.get(3),
+                            ItemList.Field_Generator_ZPM.get(2),
                             GT_OreDictUnificator.get(OrePrefixes.cableGt04, Materials.Bedrockium, 4),
-                            ItemRefer.HiC_T3.get(1), ItemRefer.Precise_Electronic_Unit_T2.get(1),
+                            ItemRefer.HiC_T3.get(1),
+                            ItemRefer.Precise_Electronic_Unit_T2.get(1),
                             MyMaterial.titaniumBetaC.get(OrePrefixes.bolt, 32),
-                            MyMaterial.dalisenite.get(OrePrefixes.gearGtSmall, 8), },
-                    MyMaterial.artheriumSn.getMolten(1152),
-                    ItemRefer.Precise_Electronic_Unit_T3.get(4),
-                    4800,
-                    491520);
+                            MyMaterial.dalisenite.get(OrePrefixes.gearGtSmall, 8))
+                    .fluidInputs(MyMaterial.artheriumSn.getMolten(1152))
+                    .itemOutputs(ItemRefer.Precise_Electronic_Unit_T3.get(4)).duration(4 * MINUTES)
+                    .eut(TierEU.RECIPE_UV).addTo(assemblerRecipes);
         }
 
         // Compact MK1 Fusion Coil
@@ -1211,16 +1203,18 @@ public class RecipeLoader_02 {
                 800,
                 3);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { ItemList.FusionComputer_LuV.get(48), ItemRefer.HiC_T1.get(8),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemList.FusionComputer_LuV.get(48),
+                        ItemRefer.HiC_T1.get(8),
                         MyMaterial.marCeM200.get(OrePrefixes.plate, 32),
                         GT_OreDictUnificator.get(OrePrefixes.circuit, Materials.Master, 8),
-                        ItemList.Circuit_Wafer_HPIC.get(16), ItemList.Field_Generator_LuV.get(4),
-                        MyMaterial.marM200.get(OrePrefixes.stickLong, 8) },
-                MyMaterial.adamantiumAlloy.getMolten(9216),
-                ItemRefer.Compact_Fusion_MK1.get(1),
-                1200,
-                30000);
+                        ItemList.Circuit_Wafer_HPIC.get(16),
+                        ItemList.Field_Generator_LuV.get(4),
+                        MyMaterial.marM200.get(OrePrefixes.stickLong, 8))
+                .fluidInputs(MyMaterial.adamantiumAlloy.getMolten(9216))
+                .itemOutputs(ItemRefer.Compact_Fusion_MK1.get(1)).duration(1 * MINUTES).eut(TierEU.RECIPE_LuV)
+                .addTo(assemblerRecipes);
 
         GT_Values.RA.addAssemblylineRecipe(
                 ItemRefer.Compact_Fusion_MK1.get(1),
@@ -1265,12 +1259,9 @@ public class RecipeLoader_02 {
                     3);
 
             // Compact MK4 Fusion Disassembly Recipe
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T3.get(1), },
-                    null,
-                    GregtechItemList.Casing_Fusion_Internal.get(3),
-                    600,
-                    (int) TierEU.RECIPE_UEV);
+            GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Compact_Fusion_Coil_T3.get(1))
+                    .itemOutputs(GregtechItemList.Casing_Fusion_Internal.get(3)).duration(30 * SECONDS)
+                    .eut(TierEU.RECIPE_UEV).addTo(assemblerRecipes);
 
             TT_recipeAdder.addResearchableAssemblylineRecipe(
                     ItemRefer.Compact_Fusion_MK3.get(1),
@@ -1322,12 +1313,9 @@ public class RecipeLoader_02 {
                     (int) TierEU.RECIPE_UHV);
 
             // Compact MK5 Fusion Disassembly Recipe
-            GT_Values.RA.addAssemblerRecipe(
-                    new ItemStack[] { ItemRefer.Compact_Fusion_Coil_T4.get(1), },
-                    null,
-                    GregtechItemList.Casing_Fusion_Internal2.get(3),
-                    600,
-                    (int) TierEU.RECIPE_UIV);
+            GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Compact_Fusion_Coil_T4.get(1))
+                    .itemOutputs(GregtechItemList.Casing_Fusion_Internal2.get(3)).duration(1 * MINUTES)
+                    .eut(TierEU.RECIPE_UIV).addTo(assemblerRecipes);
         }
 
         GT_Values.RA.addMultiblockChemicalRecipe(
@@ -1347,14 +1335,13 @@ public class RecipeLoader_02 {
                 100,
                 120);
 
-        GT_Values.RA.addAssemblerRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Plastic, 2),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.pipeHuge, Materials.Plastic, 2),
                         GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Steel, 1),
-                        GT_Utility.getIntegratedCircuit(1) },
-                Materials.Concrete.getMolten(2304),
-                ItemRefer.Coolant_Tower.get(1),
-                200,
-                120);
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Concrete.getMolten(2304)).itemOutputs(ItemRefer.Coolant_Tower.get(1))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_MV).addTo(assemblerRecipes);
     }
 
     public static void InitLoadRecipe() {
