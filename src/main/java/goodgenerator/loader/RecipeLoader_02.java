@@ -3,6 +3,7 @@ package goodgenerator.loader;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 
@@ -88,17 +89,12 @@ public class RecipeLoader_02 {
 
         GT_ModHandler.removeFurnaceSmelting(MyMaterial.dalisenite.get(OrePrefixes.dust)); // :doom:
 
-        GT_Values.RA.addVacuumFreezerRecipe(
-                MyMaterial.dalisenite.get(OrePrefixes.ingotHot, 1),
-                MyMaterial.dalisenite.get(OrePrefixes.ingot, 1),
-                315,
-                120);
-
-        GT_Values.RA.addVacuumFreezerRecipe(
-                MyMaterial.shirabon.get(OrePrefixes.ingotHot, 1),
-                MyMaterial.shirabon.get(OrePrefixes.ingot, 1),
-                2400,
-                1966080);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.dalisenite.get(OrePrefixes.ingotHot, 1))
+                .itemOutputs(MyMaterial.dalisenite.get(OrePrefixes.ingot, 1)).duration(16 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(vacuumFreezerRecipes);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.shirabon.get(OrePrefixes.ingotHot, 1))
+                .itemOutputs(MyMaterial.shirabon.get(OrePrefixes.ingot, 1)).duration(2 * MINUTES).eut(TierEU.RECIPE_UHV)
+                .addTo(vacuumFreezerRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(

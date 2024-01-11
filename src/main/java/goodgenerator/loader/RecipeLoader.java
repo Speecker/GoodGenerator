@@ -7,6 +7,7 @@ import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.loaders.postload.GT_MachineRecipeLoader.solderingMats;
@@ -356,11 +357,9 @@ public class RecipeLoader {
                 480,
                 5000);
 
-        GT_Values.RA.addVacuumFreezerRecipe(
-                MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1),
-                MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1),
-                450,
-                960);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1))
+                .itemOutputs(MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_LuV).addTo(vacuumFreezerRecipes);
 
         CrackRecipeAdder.crackerAdder(
                 MyMaterial.naquadahGas.getFluidOrGas(1000),
@@ -1167,17 +1166,9 @@ public class RecipeLoader {
                 114514,
                 7000);
 
-        GT_Values.RA.addVacuumFreezerRecipe(
-                MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingotHot, 1),
-                MyMaterial.atomicSeparationCatalyst.get(OrePrefixes.ingot, 1),
-                200,
-                30720);
-
-        GT_Values.RA.addVacuumFreezerRecipe(
-                MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingotHot, 1),
-                MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingot, 1),
-                400,
-                30720);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingotHot, 1))
+                .itemOutputs(MyMaterial.extremelyUnstableNaquadah.get(OrePrefixes.ingot, 1)).duration(20 * SECONDS)
+                .eut(TierEU.RECIPE_LuV).addTo(vacuumFreezerRecipes);
 
         GT_Values.RA.addCentrifugeRecipe(
                 GT_Utility.getIntegratedCircuit(1),

@@ -36,6 +36,7 @@ import static goodgenerator.items.MyMaterial.wasteLiquid;
 import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
@@ -548,11 +549,9 @@ public class NaquadahReworkRecipeLoader {
                 400,
                 480);
 
-        GT_Values.RA.addVacuumFreezerRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadah, 1),
-                GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadah, 1),
-                330,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadah, 1))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.ingot, Materials.Naquadah, 1)).duration(16 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(vacuumFreezerRecipes);
     }
 
     public static void SmallRecipeChange() {
