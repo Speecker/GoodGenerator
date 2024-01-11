@@ -34,6 +34,8 @@ import static goodgenerator.items.MyMaterial.towEthyl1Hexanol;
 import static goodgenerator.items.MyMaterial.triniumSulphate;
 import static goodgenerator.items.MyMaterial.wasteLiquid;
 import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
+import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
 import java.lang.reflect.Constructor;
@@ -67,6 +69,7 @@ import gregtech.api.enums.GT_Values;
 import gregtech.api.enums.ItemList;
 import gregtech.api.enums.Materials;
 import gregtech.api.enums.OrePrefixes;
+import gregtech.api.enums.TierEU;
 import gregtech.api.recipe.RecipeMaps;
 import gregtech.api.util.GT_Log;
 import gregtech.api.util.GT_OreDictUnificator;
@@ -446,16 +449,13 @@ public class NaquadahReworkRecipeLoader {
                 9100);
 
         // InPO4 + Ga(OH)3 = InGaP
-        GT_Values.RA.addMixerRecipe(
-                indiumPhosphate.get(OrePrefixes.dust, 6),
-                galliumHydroxide.get(OrePrefixes.dust, 7),
-                GT_Utility.getIntegratedCircuit(2),
-                null,
-                null,
-                null,
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.IndiumGalliumPhosphide, 3),
-                15,
-                7);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        indiumPhosphate.get(OrePrefixes.dust, 6),
+                        galliumHydroxide.get(OrePrefixes.dust, 7),
+                        GT_Utility.getIntegratedCircuit(2))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.IndiumGalliumPhosphide, 3))
+                .duration(15 * TICKS).eut(TierEU.RECIPE_ULV).addTo(mixerRecipes);
 
         GT_Values.RA.addFluidSolidifierRecipe(
                 ItemList.Shape_Mold_Ball.get(0),

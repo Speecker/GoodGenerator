@@ -1,6 +1,7 @@
 package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
+import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.loaders.postload.GT_MachineRecipeLoader.solderingMats;
@@ -112,16 +113,15 @@ public class RecipeLoader {
                 600,
                 480);
 
-        GT_Values.RA.addMixerRecipe(
-                ItemRefer.High_Density_Uranium.get(1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Potassium, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quantium, 4),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.Radon.getGas(1000L),
-                MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(1000),
-                null,
-                200,
-                15360);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.High_Density_Uranium.get(1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Potassium, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quantium, 4),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Radon.getGas(1000L))
+                .fluidOutputs(MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(1000)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_LuV / 2).addTo(mixerRecipes);
 
         GT_Values.RA.addFusionReactorRecipe(
                 MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(10),
@@ -152,27 +152,23 @@ public class RecipeLoader {
                 200,
                 120);
 
-        GT_Values.RA.addMixerRecipe(
-                ItemRefer.High_Density_Thorium.get(1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lithium, 4),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Draconium, 2),
-                GT_Utility.getIntegratedCircuit(2),
-                Materials.Mercury.getFluid(1000L),
-                MyMaterial.thoriumBasedLiquidFuel.getFluidOrGas(4000),
-                null,
-                3000,
-                240);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.High_Density_Thorium.get(1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Lithium, 4),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Draconium, 2),
+                        GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Mercury.getFluid(1000L))
+                .fluidOutputs(MyMaterial.thoriumBasedLiquidFuel.getFluidOrGas(4000))
+                .duration(2 * MINUTES + 30 * SECONDS).eut(TierEU.RECIPE_HV / 2).addTo(mixerRecipes);
 
-        GT_Values.RA.addMixerRecipe(
-                MyMaterial.thoriumBasedLiquidFuel.get(OrePrefixes.cell, 1),
-                GT_Utility.getIntegratedCircuit(1),
-                null,
-                null,
-                Materials.Helium.getPlasma(250L),
-                null,
-                MyMaterial.thoriumBasedLiquidFuelExcited.get(OrePrefixes.cell, 1),
-                120,
-                3840);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        MyMaterial.thoriumBasedLiquidFuel.get(OrePrefixes.cell, 1),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Helium.getPlasma(250L))
+                .itemOutputs(MyMaterial.thoriumBasedLiquidFuelExcited.get(OrePrefixes.cell, 1)).duration(6 * SECONDS)
+                .eut(TierEU.RECIPE_IV / 2).addTo(mixerRecipes);
 
         // Liquid Plutonium Process Line
         GT_Values.RA.stdBuilder()
@@ -195,18 +191,15 @@ public class RecipeLoader {
                 1200,
                 120);
 
-        GT_Values.RA.addMixerRecipe(
-                ItemRefer.High_Density_Plutonium.get(1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neutronium, 8),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Caesium, 16),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2),
-                GT_Utility.getIntegratedCircuit(1),
-                null,
-                null,
-                MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(1000),
-                null,
-                360,
-                30720);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.High_Density_Plutonium.get(1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Neutronium, 8),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Caesium, 16),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Naquadah, 2),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(1000)).duration(18 * SECONDS)
+                .eut(TierEU.RECIPE_LuV).addTo(mixerRecipes);
 
         GT_Values.RA.addFusionReactorRecipe(
                 Materials.Lutetium.getMolten(16),
@@ -338,16 +331,10 @@ public class RecipeLoader {
         for (ItemStack m1 : mat1) {
             for (ItemStack m2 : mat2) {
                 for (ItemStack m3 : mat3) {
-                    GT_Values.RA.addMixerRecipe(
-                            m1,
-                            m2,
-                            m3,
-                            GT_Utility.getIntegratedCircuit(4),
-                            Materials.Naquadah.getMolten(288),
-                            null,
-                            ItemRefer.Raw_Atomic_Separation_Catalyst.get(63),
-                            300,
-                            480);
+                    GT_Values.RA.stdBuilder().itemInputs(m1, m2, m3, GT_Utility.getIntegratedCircuit(4))
+                            .fluidInputs(Materials.Naquadah.getMolten(288))
+                            .itemOutputs(ItemRefer.Raw_Atomic_Separation_Catalyst.get(63)).duration(15 * SECONDS)
+                            .eut(TierEU.RECIPE_HV).addTo(mixerRecipes);
                 }
             }
         }
@@ -778,27 +765,23 @@ public class RecipeLoader {
                 100,
                 120);
 
-        GT_Values.RA.addMixerRecipe(
-                ItemRefer.Aluminum_Nitride_Dust.get(4),
-                WerkstoffLoader.YttriumOxide.get(OrePrefixes.dust, 5),
-                GT_Utility.getIntegratedCircuit(9),
-                null,
-                FluidRegistry.getFluidStack("advancedglue", 1000),
-                null,
-                ItemRefer.Special_Ceramics_Dust.get(9),
-                100,
-                1980);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Aluminum_Nitride_Dust.get(4),
+                        WerkstoffLoader.YttriumOxide.get(OrePrefixes.dust, 5),
+                        GT_Utility.getIntegratedCircuit(9))
+                .fluidInputs(FluidRegistry.getFluidStack("advancedglue", 1000))
+                .itemOutputs(ItemRefer.Special_Ceramics_Dust.get(9)).duration(5 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(mixerRecipes);
 
-        GT_Values.RA.addMixerRecipe(
-                ItemRefer.Aluminum_Nitride_Dust.get(4),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Uraninite, 5),
-                GT_Utility.getIntegratedCircuit(9),
-                null,
-                FluidRegistry.getFluidStack("advancedglue", 1000),
-                null,
-                ItemRefer.Special_Ceramics_Dust.get(9),
-                100,
-                1980);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        ItemRefer.Aluminum_Nitride_Dust.get(4),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Uraninite, 5),
+                        GT_Utility.getIntegratedCircuit(9))
+                .fluidInputs(FluidRegistry.getFluidStack("advancedglue", 1000))
+                .itemOutputs(ItemRefer.Special_Ceramics_Dust.get(9)).duration(5 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(mixerRecipes);
 
         GT_Values.RA.addExtruderRecipe(
                 ItemRefer.Special_Ceramics_Dust.get(2),

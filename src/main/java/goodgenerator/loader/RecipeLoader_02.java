@@ -2,6 +2,7 @@ package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
+import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 
@@ -781,16 +782,12 @@ public class RecipeLoader_02 {
                 2400,
                 120);
 
-        GT_Values.RA.addMixerRecipe(
-                MyMaterial.ether.get(OrePrefixes.cell, 1),
-                GT_Utility.getIntegratedCircuit(1),
-                null,
-                null,
-                MyMaterial.impureFerroceneMixture.getFluidOrGas(7500),
-                MyMaterial.ferroceneWaste.getFluidOrGas(5000),
-                MyMaterial.ferroceneSolution.get(OrePrefixes.cell, 1),
-                800,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.ether.get(OrePrefixes.cell, 1), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(MyMaterial.impureFerroceneMixture.getFluidOrGas(7500))
+                .itemOutputs(MyMaterial.ferroceneSolution.get(OrePrefixes.cell, 1))
+                .fluidOutputs(MyMaterial.ferroceneWaste.getFluidOrGas(5000)).duration(40 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(mixerRecipes);
 
         GT_Values.RA.addUniversalDistillationRecipe(
                 MyMaterial.ferroceneWaste.getFluidOrGas(1000),
@@ -1499,16 +1496,14 @@ public class RecipeLoader_02 {
                 200,
                 7680);
 
-        GT_Values.RA.addMixerRecipe(
-                Materials.Glowstone.getDust(4),
-                Materials.Redstone.getDust(2),
-                Materials.Aluminium.getDust(1),
-                GT_Utility.getIntegratedCircuit(3),
-                null,
-                null,
-                ItemRefer.High_Energy_Mixture.get(4),
-                240,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        Materials.Glowstone.getDust(4),
+                        Materials.Redstone.getDust(2),
+                        Materials.Aluminium.getDust(1),
+                        GT_Utility.getIntegratedCircuit(3))
+                .itemOutputs(ItemRefer.High_Energy_Mixture.get(4)).duration(12 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(mixerRecipes);
 
         GT_Values.RA.addFluidSolidifierRecipe(
                 ItemRefer.High_Energy_Mixture.get(2),
@@ -1517,27 +1512,25 @@ public class RecipeLoader_02 {
                 600,
                 240);
 
-        GT_Values.RA.addMixerRecipe(
-                Materials.AnnealedCopper.getDust(4),
-                Materials.Ardite.getDust(2),
-                Materials.RedAlloy.getDust(2),
-                GT_Utility.getIntegratedCircuit(4),
-                Materials.Redstone.getMolten(288),
-                null,
-                MyMaterial.signalium.get(OrePrefixes.dust, 1),
-                240,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        Materials.AnnealedCopper.getDust(4),
+                        Materials.Ardite.getDust(2),
+                        Materials.RedAlloy.getDust(2),
+                        GT_Utility.getIntegratedCircuit(4))
+                .fluidInputs(Materials.Redstone.getMolten(288))
+                .itemOutputs(MyMaterial.signalium.get(OrePrefixes.dust, 1)).duration(12 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(mixerRecipes);
 
-        GT_Values.RA.addMixerRecipe(
-                Materials.TinAlloy.getDust(4),
-                Materials.SterlingSilver.getDust(2),
-                MyMaterial.lumiinessence.get(OrePrefixes.dust, 2),
-                GT_Utility.getIntegratedCircuit(4),
-                Materials.Glowstone.getMolten(288),
-                null,
-                MyMaterial.lumiium.get(OrePrefixes.dust, 1),
-                240,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        Materials.TinAlloy.getDust(4),
+                        Materials.SterlingSilver.getDust(2),
+                        MyMaterial.lumiinessence.get(OrePrefixes.dust, 2),
+                        GT_Utility.getIntegratedCircuit(4))
+                .fluidInputs(Materials.Glowstone.getMolten(288))
+                .itemOutputs(MyMaterial.lumiium.get(OrePrefixes.dust, 1)).duration(12 * SECONDS).eut(TierEU.RECIPE_MV)
+                .addTo(mixerRecipes);
 
         GT_Values.RA.addFusionReactorRecipe(
                 MyMaterial.enrichedNaquadahAlloy.getMolten(144),
