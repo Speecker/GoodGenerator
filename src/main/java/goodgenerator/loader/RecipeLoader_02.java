@@ -1006,32 +1006,6 @@ public class RecipeLoader_02 {
                 30);
 
         if (LoadedList.GTNH_CORE) {
-            CrackRecipeAdder.addUniversalAssemblerRecipe(
-                    new ItemStack[] { ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
-                            GT_ModHandler.getModItem("dreamcraft", "item.EngravedGoldChip", 16),
-                            ItemList.Circuit_Chip_SoC2.get(8), ItemList.Circuit_Chip_NOR.get(32),
-                            MyMaterial.signalium.get(OrePrefixes.bolt, 32),
-                            GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Aluminium, 8),
-                            GT_ModHandler.getIC2Item("reactorVent", 1L, 1) },
-                    ItemRefer.HiC_T1.get(1),
-                    288,
-                    1200,
-                    7680,
-                    false);
-
-            CrackRecipeAdder.addUniversalAssemblerRecipe(
-                    new ItemStack[] { ItemList.Circuit_Board_Multifiberglass_Elite.get(1),
-                            GT_ModHandler.getModItem("dreamcraft", "item.EngravedGoldChip", 16),
-                            ItemList.Circuit_Chip_SoC2.get(8), ItemList.Circuit_Chip_NOR.get(32),
-                            MyMaterial.signalium.get(OrePrefixes.bolt, 32),
-                            GT_OreDictUnificator.get(OrePrefixes.wireGt01, Materials.Aluminium, 8),
-                            GT_OreDictUnificator.get(OrePrefixes.rotor, Materials.TinAlloy, 1) },
-                    ItemRefer.HiC_T1.get(1),
-                    288,
-                    1200,
-                    7680,
-                    false);
-
             GT_Values.RA.stdBuilder()
                     .itemInputs(
                             ItemList.Robot_Arm_IV.get(4),
