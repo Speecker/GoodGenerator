@@ -34,7 +34,9 @@ import static goodgenerator.items.MyMaterial.towEthyl1Hexanol;
 import static goodgenerator.items.MyMaterial.triniumSulphate;
 import static goodgenerator.items.MyMaterial.wasteLiquid;
 import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
+import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 import static gregtech.common.items.GT_MetaGenerated_Item_01.registerCauldronCleaningFor;
 
@@ -259,16 +261,10 @@ public class NaquadahReworkRecipeLoader {
                 230,
                 200);
 
-        GT_Values.RA.addAutoclaveRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 27),
-                null,
-                naquadahRichSolution.getFluidOrGas(5000),
-                P507.getFluidOrGas(1000),
-                naquadahine.get(OrePrefixes.dust, 30),
-                10000,
-                1000,
-                120,
-                false);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 27))
+                .fluidInputs(naquadahRichSolution.getFluidOrGas(5000))
+                .itemOutputs(naquadahine.get(OrePrefixes.dust, 30)).fluidOutputs(P507.getFluidOrGas(1000))
+                .duration(50 * SECONDS).eut(TierEU.RECIPE_MV).addTo(autoclaveRecipes);
 
         // NqO2 + C = CO2 + Nq
         GT_Values.RA.addBlastRecipe(
@@ -315,16 +311,11 @@ public class NaquadahReworkRecipeLoader {
                 30,
                 7);
 
-        GT_Values.RA.addAutoclaveRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 60),
-                null,
-                enrichedNaquadahRichSolution.getFluidOrGas(10000),
-                P507.getFluidOrGas(2500),
-                concentratedEnrichedNaquadahSludge.get(OrePrefixes.dust, 8),
-                10000,
-                1000,
-                480,
-                false);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 60))
+                .fluidInputs(enrichedNaquadahRichSolution.getFluidOrGas(10000))
+                .itemOutputs(concentratedEnrichedNaquadahSludge.get(OrePrefixes.dust, 8))
+                .fluidOutputs(P507.getFluidOrGas(2500)).duration(50 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(autoclaveRecipes);
 
         MyRecipeAdder.instance.addNeutronActivatorRecipe(
                 null,

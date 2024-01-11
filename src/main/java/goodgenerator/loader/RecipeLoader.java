@@ -1,6 +1,7 @@
 package goodgenerator.loader;
 
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
+import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
 import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
@@ -900,25 +901,21 @@ public class RecipeLoader {
                 40,
                 1);
 
-        GT_Values.RA.addAutoclaveRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Quartzite, 1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 4),
-                Materials.Water.getFluid(1000),
-                ItemRefer.Quartz_Wafer.get(1),
-                3333,
-                6000,
-                30,
-                true);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Quartzite, 1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 4))
+                .fluidInputs(Materials.Water.getFluid(1000)).itemOutputs(ItemRefer.Quartz_Wafer.get(1))
+                .outputChances(3333).requiresCleanRoom().duration(5 * MINUTES).eut(TierEU.RECIPE_LV)
+                .addTo(autoclaveRecipes);
 
-        GT_Values.RA.addAutoclaveRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Quartzite, 1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 4),
-                FluidRegistry.getFluidStack("ic2distilledwater", 1000),
-                ItemRefer.Quartz_Wafer.get(1),
-                10000,
-                1500,
-                30,
-                true);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Quartzite, 1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 4))
+                .fluidInputs(FluidRegistry.getFluidStack("ic2distilledwater", 1000))
+                .itemOutputs(ItemRefer.Quartz_Wafer.get(1)).requiresCleanRoom().duration(1 * MINUTES + 15 * SECONDS)
+                .eut(TierEU.RECIPE_LV).addTo(autoclaveRecipes);
 
         MyRecipeAdder.instance.addPreciseAssemblerRecipe(
                 new ItemStack[] { ItemRefer.Quartz_Wafer.get(1), ItemRefer.Special_Ceramics_Plate.get(2),
