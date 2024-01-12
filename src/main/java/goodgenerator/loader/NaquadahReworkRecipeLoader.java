@@ -41,6 +41,7 @@ import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.maceratorRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -200,14 +201,13 @@ public class NaquadahReworkRecipeLoader {
                 480);
 
         // 2C8H18O + H3PO4 =Na,C2H6O= C16H35O3P + 2H2O
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 2) },
-                new FluidStack[] { towEthyl1Hexanol.getFluidOrGas(2000), Materials.PhosphoricAcid.getFluid(1000),
-                        Materials.Ethanol.getFluid(2000) },
-                new FluidStack[] { P507.getFluidOrGas(1000) },
-                null,
-                1200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sodium, 2))
+                .fluidInputs(
+                        towEthyl1Hexanol.getFluidOrGas(2000),
+                        Materials.PhosphoricAcid.getFluid(1000),
+                        Materials.Ethanol.getFluid(2000))
+                .fluidOutputs(P507.getFluidOrGas(1000)).duration(1 * MINUTES).eut(TierEU.RECIPE_EV)
+                .addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(lowQualityNaquadahSolution.get(OrePrefixes.cell, 36), P507.get(OrePrefixes.cell, 4))
@@ -215,14 +215,11 @@ public class NaquadahReworkRecipeLoader {
                 .fluidOutputs(fluorineRichWasteLiquid.getFluidOrGas(10000)).duration(3 * MINUTES + 20 * SECONDS)
                 .eut(TierEU.RECIPE_EV).addTo(chemicalReactorRecipes);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                null,
-                new FluidStack[] { P507.getFluidOrGas(4000), lowQualityNaquadahSolution.getFluidOrGas(36000), },
-                new FluidStack[] { fluorineRichWasteLiquid.getFluidOrGas(10000),
-                        naquadahAdamantiumSolution.getFluidOrGas(30000) },
-                null,
-                4000,
-                1920);
+        GT_Values.RA.stdBuilder().fluidInputs(P507.getFluidOrGas(4000), lowQualityNaquadahSolution.getFluidOrGas(36000))
+                .fluidOutputs(
+                        fluorineRichWasteLiquid.getFluidOrGas(10000),
+                        naquadahAdamantiumSolution.getFluidOrGas(30000))
+                .duration(3 * MINUTES + 20 * SECONDS).eut(TierEU.RECIPE_EV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.addChemicalRecipe(
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 40),
@@ -277,13 +274,11 @@ public class NaquadahReworkRecipeLoader {
                 .outputChances(6250, 6250, 10000).fluidOutputs(lowQualityNaquadahSolution.getFluidOrGas(9000))
                 .duration(50 * SECONDS).eut(TierEU.RECIPE_EV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { enrichedNaquadahEarth.get(OrePrefixes.dust, 4), },
-                new FluidStack[] { P507.getFluidOrGas(1000), Materials.SulfuricAcid.getFluid(18000) },
-                new FluidStack[] { enrichedNaquadahRichSolution.getFluidOrGas(4000), wasteLiquid.getFluidOrGas(1000) },
-                new ItemStack[] { naquadahEarth.get(OrePrefixes.dust, 1), triniumSulphate.get(OrePrefixes.dust, 1) },
-                400,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(enrichedNaquadahEarth.get(OrePrefixes.dust, 4))
+                .fluidInputs(P507.getFluidOrGas(1000), Materials.SulfuricAcid.getFluid(18000))
+                .fluidOutputs(enrichedNaquadahRichSolution.getFluidOrGas(4000), wasteLiquid.getFluidOrGas(1000))
+                .itemOutputs(naquadahEarth.get(OrePrefixes.dust, 1), triniumSulphate.get(OrePrefixes.dust, 1))
+                .duration(20 * SECONDS).eut(TierEU.RECIPE_EV).addTo(multiblockChemicalReactorRecipes);
 
         // ZnSO4 + 2H = H2SO4 + Zn
         GT_Values.RA.addChemicalRecipe(
@@ -327,13 +322,10 @@ public class NaquadahReworkRecipeLoader {
                 .duration(5 * SECONDS).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 7500).addTo(blastFurnaceRecipes);
 
         // KeSO4 + 2H = Ke + H2SO4
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { triniumSulphate.get(OrePrefixes.dust, 6), },
-                new FluidStack[] { Materials.Hydrogen.getGas(2000) },
-                new FluidStack[] { Materials.SulfuricAcid.getFluid(1000) },
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Trinium, 1), },
-                120,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(triniumSulphate.get(OrePrefixes.dust, 6))
+                .fluidInputs(Materials.Hydrogen.getGas(2000)).fluidOutputs(Materials.SulfuricAcid.getFluid(1000))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Trinium, 1)).duration(6 * SECONDS)
+                .eut(TierEU.RECIPE_HV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(naquadriaEarth.get(OrePrefixes.dust, 4))
                 .fluidInputs(Materials.PhosphoricAcid.getFluid(4000))
@@ -477,13 +469,10 @@ public class NaquadahReworkRecipeLoader {
                 .duration(2 * MINUTES).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 5000).addTo(blastFurnaceRecipes);
 
         // C2H4 + H2O(g) = C2H6O
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(24) },
-                new FluidStack[] { Materials.Ethylene.getGas(1000), FluidRegistry.getFluidStack("steam", 2000) },
-                new FluidStack[] { Materials.Ethanol.getFluid(1000) },
-                null,
-                400,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(24))
+                .fluidInputs(Materials.Ethylene.getGas(1000), FluidRegistry.getFluidStack("steam", 2000))
+                .fluidOutputs(Materials.Ethanol.getFluid(1000)).duration(20 * SECONDS).eut(TierEU.RECIPE_HV)
+                .addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(Materials.Ethylene.getCells(1), GT_Utility.getIntegratedCircuit(24))
                 .fluidInputs(FluidRegistry.getFluidStack("steam", 2000)).itemOutputs(Materials.Ethanol.getCells(1))

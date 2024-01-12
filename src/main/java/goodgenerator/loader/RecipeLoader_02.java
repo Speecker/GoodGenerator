@@ -10,6 +10,7 @@ import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -746,15 +747,14 @@ public class RecipeLoader_02 {
                 200,
                 120);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(2) },
-                new FluidStack[] { MyMaterial.cyclopentadiene.getFluidOrGas(2000),
-                        MyMaterial.ferrousChloride.getFluidOrGas(1000), MyMaterial.diethylamine.getFluidOrGas(8000),
-                        Materials.Ice.getSolid(4000) },
-                new FluidStack[] { MyMaterial.impureFerroceneMixture.getFluidOrGas(15000) },
-                null,
-                2400,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(
+                        MyMaterial.cyclopentadiene.getFluidOrGas(2000),
+                        MyMaterial.ferrousChloride.getFluidOrGas(1000),
+                        MyMaterial.diethylamine.getFluidOrGas(8000),
+                        Materials.Ice.getSolid(4000))
+                .fluidOutputs(MyMaterial.impureFerroceneMixture.getFluidOrGas(15000)).duration(2 * MINUTES)
+                .eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(MyMaterial.ether.get(OrePrefixes.cell, 1), GT_Utility.getIntegratedCircuit(1))
@@ -779,26 +779,25 @@ public class RecipeLoader_02 {
                 120);
 
         if (GTPlusPlus.isModLoaded()) {
-            GT_Values.RA.addMultiblockChemicalRecipe(
-                    new ItemStack[] { MyMaterial.ferrocene.get(OrePrefixes.dust, 4),
-                            Materials.SodiumHydroxide.getDust(8) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("fluid.kerosene", 40000),
-                            Materials.Naphtha.getFluid(3000), MyMaterial.diethylamine.getFluidOrGas(1000) },
-                    new FluidStack[] { MyMaterial.ironedKerosene.getFluidOrGas(44000) },
-                    null,
-                    2400,
-                    1920);
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(MyMaterial.ferrocene.get(OrePrefixes.dust, 4), Materials.SodiumHydroxide.getDust(8))
+                    .fluidInputs(
+                            FluidRegistry.getFluidStack("fluid.kerosene", 40000),
+                            Materials.Naphtha.getFluid(3000),
+                            MyMaterial.diethylamine.getFluidOrGas(1000))
+                    .fluidOutputs(MyMaterial.ironedKerosene.getFluidOrGas(44000)).duration(2 * MINUTES)
+                    .eut(TierEU.RECIPE_EV).addTo(multiblockChemicalReactorRecipes);
         }
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { MyMaterial.ferrocene.get(OrePrefixes.dust, 4), },
-                new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 4000),
-                        Materials.Naphtha.getFluid(40000), Materials.LightFuel.getFluid(3000),
-                        Materials.LPG.getFluid(1000), Materials.Tetranitromethane.getFluid(2000), },
-                new FluidStack[] { MyMaterial.ironedFuel.getFluidOrGas(50000) },
-                null,
-                2400,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ferrocene.get(OrePrefixes.dust, 4))
+                .fluidInputs(
+                        FluidRegistry.getFluidStack("combustionpromotor", 4000),
+                        Materials.Naphtha.getFluid(40000),
+                        Materials.LightFuel.getFluid(3000),
+                        Materials.LPG.getFluid(1000),
+                        Materials.Tetranitromethane.getFluid(2000))
+                .fluidOutputs(MyMaterial.ironedFuel.getFluidOrGas(50000)).duration(2 * MINUTES).eut(TierEU.RECIPE_IV)
+                .addTo(multiblockChemicalReactorRecipes);
 
         GT_ModHandler.addCraftingRecipe(
                 ItemRefer.Combustion_Generator_EV.get(1),
@@ -1251,14 +1250,13 @@ public class RecipeLoader_02 {
                     .eut(TierEU.RECIPE_UIV).addTo(assemblerRecipes);
         }
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { Materials.Antimony.getDust(8), GT_Utility.getIntegratedCircuit(24) },
-                new FluidStack[] { MyMaterial.ether.getFluidOrGas(1000), Materials.Fluorine.getGas(40000),
-                        Materials.Ice.getSolid(8000) },
-                new FluidStack[] { MyMaterial.antimonyPentafluorideSolution.getFluidOrGas(8000) },
-                null,
-                800,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Antimony.getDust(8), GT_Utility.getIntegratedCircuit(24))
+                .fluidInputs(
+                        MyMaterial.ether.getFluidOrGas(1000),
+                        Materials.Fluorine.getGas(40000),
+                        Materials.Ice.getSolid(8000))
+                .fluidOutputs(MyMaterial.antimonyPentafluorideSolution.getFluidOrGas(8000)).duration(40 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.addUniversalDistillationRecipe(
                 MyMaterial.antimonyPentafluorideSolution.getFluidOrGas(4000),

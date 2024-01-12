@@ -1,5 +1,6 @@
 package goodgenerator.loader;
 
+import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.enums.Mods.NewHorizonsCoreMod;
 import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
@@ -11,6 +12,7 @@ import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
 import static gregtech.api.recipe.RecipeMaps.implosionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
+import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
@@ -219,14 +221,14 @@ public class RecipeLoader {
                 220000000);
 
         // Th-232
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 24),
-                        MyMaterial.vanadiumPentoxide.get(OrePrefixes.dust, 0), GT_Utility.getIntegratedCircuit(1) },
-                new FluidStack[] { FluidRegistry.getFluidStack("nitricacid", 6000) },
-                new FluidStack[] { MyMaterial.oxalate.getFluidOrGas(3000), Materials.NitricOxide.getGas(6000) },
-                null,
-                600,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Sugar, 24),
+                        MyMaterial.vanadiumPentoxide.get(OrePrefixes.dust, 0),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(FluidRegistry.getFluidStack("nitricacid", 6000))
+                .fluidOutputs(MyMaterial.oxalate.getFluidOrGas(3000), Materials.NitricOxide.getGas(6000))
+                .duration(30 * SECONDS).eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
         // Th + 2O = ThO2
         GT_Values.RA.stdBuilder().itemInputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Thorium, 1))
@@ -235,15 +237,10 @@ public class RecipeLoader {
                 .eut(TierEU.RECIPE_HV).metadata(COIL_HEAT, 1200).addTo(blastFurnaceRecipes);
 
         // Th + 8HNO3 =HF= Th(NO3)4 + 4NO2 + 4H2O
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { Materials.Thorium.getDust(1), },
-                new FluidStack[] { Materials.HydrofluoricAcid.getFluid(100),
-                        FluidRegistry.getFluidStack("nitricacid", 8000) },
-                new FluidStack[] { MyMaterial.thoriumNitrate.getFluidOrGas(1000),
-                        Materials.NitrogenDioxide.getGas(4000) },
-                null,
-                40,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Thorium.getDust(1))
+                .fluidInputs(Materials.HydrofluoricAcid.getFluid(100), FluidRegistry.getFluidStack("nitricacid", 8000))
+                .fluidOutputs(MyMaterial.thoriumNitrate.getFluidOrGas(1000), Materials.NitrogenDioxide.getGas(4000))
+                .duration(2 * SECONDS).eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
         // 4NaOH + Th(NO3)4 = Th(OH)4 + 4NaNO3
         GT_Values.RA.addChemicalRecipe(
@@ -396,13 +393,10 @@ public class RecipeLoader {
                 800);
 
         // 2C2H6O =H2SO4= C4H10O + H2O
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(2) },
-                new FluidStack[] { Materials.Ethanol.getFluid(1000), Materials.SulfuricAcid.getFluid(1000) },
-                new FluidStack[] { MyMaterial.ether.getFluidOrGas(500), Materials.DilutedSulfuricAcid.getFluid(1500) },
-                null,
-                510,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(2))
+                .fluidInputs(Materials.Ethanol.getFluid(1000), Materials.SulfuricAcid.getFluid(1000))
+                .fluidOutputs(MyMaterial.ether.getFluidOrGas(500), Materials.DilutedSulfuricAcid.getFluid(1500))
+                .duration(25 * SECONDS + 10 * TICKS).eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.addChemicalRecipe(
                 Materials.GasolineRaw.getCells(9),
@@ -425,24 +419,19 @@ public class RecipeLoader {
                 .metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
 
         // Sb + 3Cl = SbCl3
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1),
-                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Antimony, 1), },
-                new FluidStack[] { MyMaterial.ether.getFluidOrGas(1000), Materials.Chlorine.getGas(3000) },
-                new FluidStack[] { MyMaterial.antimonyTrichloride.getFluidOrGas(1000) },
-                null,
-                60,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Antimony, 1))
+                .fluidInputs(MyMaterial.ether.getFluidOrGas(1000), Materials.Chlorine.getGas(3000))
+                .fluidOutputs(MyMaterial.antimonyTrichloride.getFluidOrGas(1000)).duration(3 * SECONDS)
+                .eut(TierEU.RECIPE_LV).addTo(multiblockChemicalReactorRecipes);
 
         // SbCl3 + 2Cl = SbCl5
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1), },
-                new FluidStack[] { MyMaterial.antimonyTrichloride.getFluidOrGas(1000),
-                        Materials.Chlorine.getGas(2000) },
-                new FluidStack[] { MyMaterial.antimonyPentachlorideSolution.getFluidOrGas(1000) },
-                null,
-                180,
-                480);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(MyMaterial.antimonyTrichloride.getFluidOrGas(1000), Materials.Chlorine.getGas(2000))
+                .fluidOutputs(MyMaterial.antimonyPentachlorideSolution.getFluidOrGas(1000)).duration(9 * SECONDS)
+                .eut(TierEU.RECIPE_HV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.addUniversalDistillationRecipe(
                 MyMaterial.antimonyPentachlorideSolution.getFluidOrGas(1000),
@@ -453,25 +442,22 @@ public class RecipeLoader {
                 120);
 
         // SbCl5 + 5HF = SbF5 + 5HCl
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1), },
-                new FluidStack[] { MyMaterial.antimonyPentachloride.getFluidOrGas(1000),
-                        Materials.HydrofluoricAcid.getFluid(5000) },
-                new FluidStack[] { MyMaterial.antimonyPentafluoride.getFluidOrGas(1000),
-                        Materials.HydrochloricAcid.getFluid(5000) },
-                null,
-                420,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(
+                        MyMaterial.antimonyPentachloride.getFluidOrGas(1000),
+                        Materials.HydrofluoricAcid.getFluid(5000))
+                .fluidOutputs(
+                        MyMaterial.antimonyPentafluoride.getFluidOrGas(1000),
+                        Materials.HydrochloricAcid.getFluid(5000))
+                .duration(21 * SECONDS).eut(TierEU.RECIPE_LV).addTo(multiblockChemicalReactorRecipes);
 
         // SbH5 + HF = HSbF6
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1), },
-                new FluidStack[] { MyMaterial.antimonyPentafluoride.getFluidOrGas(1000),
-                        Materials.HydrofluoricAcid.getFluid(1000) },
-                new FluidStack[] { MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000), },
-                null,
-                840,
-                2040);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(
+                        MyMaterial.antimonyPentafluoride.getFluidOrGas(1000),
+                        Materials.HydrofluoricAcid.getFluid(1000))
+                .fluidOutputs(MyMaterial.fluoroantimonicAcid.getFluidOrGas(1000)).duration(42 * SECONDS)
+                .eut(TierEU.RECIPE_EV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -482,15 +468,16 @@ public class RecipeLoader {
                 .itemOutputs(MyMaterial.radioactiveSludge.get(OrePrefixes.dust, 3)).duration(3 * MINUTES)
                 .eut(TierEU.RECIPE_EV).metadata(COIL_HEAT, 3400).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(3),
-                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 8) },
-                new FluidStack[] { MyMaterial.acidNaquadahEmulsion.getFluidOrGas(1000), },
-                new FluidStack[] { MyMaterial.naquadahEmulsion.getFluidOrGas(1000), },
-                new ItemStack[] { GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.AntimonyTrioxide, 1),
-                        WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 4) },
-                240,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_Utility.getIntegratedCircuit(3),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 8))
+                .fluidInputs(MyMaterial.acidNaquadahEmulsion.getFluidOrGas(1000))
+                .fluidOutputs(MyMaterial.naquadahEmulsion.getFluidOrGas(1000))
+                .itemOutputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dustSmall, Materials.AntimonyTrioxide, 1),
+                        WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 4))
+                .duration(12 * SECONDS).eut(TierEU.RECIPE_LV).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.addUniversalDistillationRecipe(
                 MyMaterial.naquadahSolution.getFluidOrGas(20),
@@ -512,16 +499,16 @@ public class RecipeLoader {
                 26000,
                 320000000);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(1),
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
                         GT_OreDictUnificator.get(OrePrefixes.dust, Materials.NetherStar, 4),
-                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.ElectrumFlux, 32), },
-                new FluidStack[] { MyMaterial.naquadahBasedFuelMkI.getFluidOrGas(100),
-                        MyMaterial.naquadahGas.getFluidOrGas(1500) },
-                new FluidStack[] { MyMaterial.naquadahBasedFuelMkII.getFluidOrGas(100) },
-                null,
-                500,
-                525000);
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.ElectrumFlux, 32))
+                .fluidInputs(
+                        MyMaterial.naquadahBasedFuelMkI.getFluidOrGas(100),
+                        MyMaterial.naquadahGas.getFluidOrGas(1500))
+                .fluidOutputs(MyMaterial.naquadahBasedFuelMkII.getFluidOrGas(100)).duration(25 * SECONDS)
+                .eut(TierEU.RECIPE_UHV / 2).addTo(multiblockChemicalReactorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
@@ -785,68 +772,39 @@ public class RecipeLoader {
                 .itemOutputs(ItemRefer.Titanium_Plated_Cylinder.get(1)).duration(15 * SECONDS).eut(TierEU.RECIPE_EV)
                 .addTo(assemblerRecipes);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 2) },
-                new FluidStack[] { FluidRegistry.getFluidStack("liquidoxygen", 1000),
-                        Materials.NitrogenDioxide.getGas(1000) },
-                new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 500) },
-                null,
-                200,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_Utility.getIntegratedCircuit(16),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 2))
+                .fluidInputs(FluidRegistry.getFluidStack("liquidoxygen", 1000), Materials.NitrogenDioxide.getGas(1000))
+                .fluidOutputs(FluidRegistry.getFluidStack("combustionpromotor", 500)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
-        GT_Values.RA.addMultiblockChemicalRecipe(
-                new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                        WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 2) },
-                new FluidStack[] { FluidRegistry.getFluidStack("liquidoxygen", 1000),
-                        Materials.NitrogenDioxide.getGas(1000) },
-                new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 500) },
-                null,
-                200,
-                120);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(GT_Utility.getIntegratedCircuit(16), WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 2))
+                .fluidInputs(FluidRegistry.getFluidStack("liquidoxygen", 1000), Materials.NitrogenDioxide.getGas(1000))
+                .fluidOutputs(FluidRegistry.getFluidStack("combustionpromotor", 500)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
-        if (FluidRegistry.getFluidStack("fluid.hydrogenperoxide", 1000) != null) {
-            GT_Values.RA.addMultiblockChemicalRecipe(
-                    new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                            GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 2) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("fluid.hydrogenperoxide", 1000),
-                            Materials.NitrogenDioxide.getGas(1000) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 2000) },
-                    null,
-                    200,
-                    120);
-
-            GT_Values.RA.addMultiblockChemicalRecipe(
-                    new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                            WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 2) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("fluid.hydrogenperoxide", 1000),
-                            Materials.NitrogenDioxide.getGas(1000) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 2000) },
-                    null,
-                    200,
-                    120);
-        }
-
-        if (FluidRegistry.getFluidStack("hydrogen peroxide", 1000) != null) {
-            GT_Values.RA.addMultiblockChemicalRecipe(
-                    new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                            GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 2) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("hydrogen peroxide", 1000),
-                            Materials.NitrogenDioxide.getGas(1000) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 2000) },
-                    null,
-                    200,
-                    120);
-
-            GT_Values.RA.addMultiblockChemicalRecipe(
-                    new ItemStack[] { GT_Utility.getIntegratedCircuit(16),
-                            WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 2) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("hydrogen peroxide", 1000),
-                            Materials.NitrogenDioxide.getGas(1000) },
-                    new FluidStack[] { FluidRegistry.getFluidStack("combustionpromotor", 2000) },
-                    null,
-                    200,
-                    120);
+        if (GTPlusPlus.isModLoaded()) {
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            GT_Utility.getIntegratedCircuit(16),
+                            GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Saltpeter, 2))
+                    .fluidInputs(
+                            FluidRegistry.getFluidStack("fluid.hydrogenperoxide", 1000),
+                            Materials.NitrogenDioxide.getGas(1000))
+                    .fluidOutputs(FluidRegistry.getFluidStack("combustionpromotor", 2000)).duration(10 * SECONDS)
+                    .eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
+            GT_Values.RA.stdBuilder()
+                    .itemInputs(
+                            GT_Utility.getIntegratedCircuit(16),
+                            WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 2))
+                    .fluidInputs(
+                            FluidRegistry.getFluidStack("fluid.hydrogenperoxide", 1000),
+                            Materials.NitrogenDioxide.getGas(1000))
+                    .fluidOutputs(FluidRegistry.getFluidStack("combustionpromotor", 2000)).duration(10 * SECONDS)
+                    .eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
         }
 
         GT_ModHandler.addCraftingRecipe(
