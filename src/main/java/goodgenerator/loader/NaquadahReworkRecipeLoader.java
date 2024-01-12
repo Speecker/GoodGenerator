@@ -38,6 +38,7 @@ import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
+import static gregtech.api.recipe.RecipeMaps.maceratorRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -170,12 +171,9 @@ public class NaquadahReworkRecipeLoader {
         }
 
         // Fix shit
-        GT_Values.RA.addPulveriserRecipe(
-                lowQualityNaquadriaSolution.get(OrePrefixes.cell, 1),
-                new ItemStack[] { Materials.Tin.getDust(2) },
-                new int[] { 10000 },
-                334,
-                4);
+        GT_Values.RA.stdBuilder().itemInputs(lowQualityNaquadriaSolution.get(OrePrefixes.cell, 1))
+                .itemOutputs(Materials.Tin.getDust(2)).duration(16 * SECONDS + 14 * TICKS).eut(4)
+                .addTo(maceratorRecipes);
 
         // Naquadah Rework Line
         GT_Values.RA.stdBuilder().itemInputs(naquadahEarth.get(OrePrefixes.dust, 2), GT_Utility.getIntegratedCircuit(1))
@@ -446,28 +444,17 @@ public class NaquadahReworkRecipeLoader {
                 100,
                 30);
 
-        GT_Values.RA.addPulveriserRecipe(
-                ItemRefer.Naquadah_Mass.get(1),
-                new ItemStack[] { naquadahEarth.get(OrePrefixes.dust, 1),
-                        enrichedNaquadahEarth.get(OrePrefixes.dust, 1) },
-                new int[] { 10000, 100 },
-                100,
-                2);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Naquadah_Mass.get(1))
+                .itemOutputs(naquadahEarth.get(OrePrefixes.dust, 1), enrichedNaquadahEarth.get(OrePrefixes.dust, 1))
+                .outputChances(10000, 100).duration(5 * SECONDS).eut(2).addTo(maceratorRecipes);
 
-        GT_Values.RA.addPulveriserRecipe(
-                ItemRefer.Enriched_Naquadah_Mass.get(1),
-                new ItemStack[] { enrichedNaquadahEarth.get(OrePrefixes.dust, 1),
-                        naquadriaEarth.get(OrePrefixes.dust, 1) },
-                new int[] { 10000, 100 },
-                100,
-                2);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Enriched_Naquadah_Mass.get(1))
+                .itemOutputs(enrichedNaquadahEarth.get(OrePrefixes.dust, 1), naquadriaEarth.get(OrePrefixes.dust, 1))
+                .outputChances(10000, 100).duration(5 * SECONDS).eut(2).addTo(maceratorRecipes);
 
-        GT_Values.RA.addPulveriserRecipe(
-                ItemRefer.Naquadria_Mass.get(1),
-                new ItemStack[] { naquadriaEarth.get(OrePrefixes.dust, 1), naquadriaEarth.get(OrePrefixes.dust, 1) },
-                new int[] { 10000, 100 },
-                100,
-                2);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Naquadria_Mass.get(1))
+                .itemOutputs(naquadriaEarth.get(OrePrefixes.dust, 1), naquadriaEarth.get(OrePrefixes.dust, 1))
+                .outputChances(10000, 100).duration(5 * SECONDS).eut(2).addTo(maceratorRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
