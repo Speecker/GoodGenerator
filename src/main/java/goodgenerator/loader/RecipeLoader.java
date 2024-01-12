@@ -17,6 +17,8 @@ import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
 import static gregtech.api.util.GT_RecipeConstants.ADDITIVE_AMOUNT;
 import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
+import static gregtech.api.util.GT_RecipeConstants.FUEL_TYPE;
+import static gregtech.api.util.GT_RecipeConstants.FUEL_VALUE;
 import static gregtech.loaders.postload.GT_MachineRecipeLoader.solderingMats;
 
 import net.minecraft.item.ItemStack;
@@ -40,6 +42,7 @@ import gregtech.api.enums.SubTag;
 import gregtech.api.enums.TierEU;
 import gregtech.api.util.GT_ModHandler;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_RecipeConstants;
 import gregtech.api.util.GT_Utility;
 
 public class RecipeLoader {
@@ -408,12 +411,18 @@ public class RecipeLoader {
                 15,
                 120);
 
-        GT_Values.RA.addFuel(MyMaterial.ether.get(OrePrefixes.cell), null, 537, 0);
-        GT_Values.RA.addFuel(MyMaterial.ether.get(OrePrefixes.cell), null, 537, 1);
-        GT_Values.RA.addFuel(MyMaterial.ethanolGasoline.get(OrePrefixes.cell), null, 1100, 0);
-        GT_Values.RA.addFuel(MyMaterial.cyclopentadiene.get(OrePrefixes.cell), null, 70, 1);
-        GT_Values.RA.addFuel(MyMaterial.ironedFuel.get(OrePrefixes.cell), null, 2248, 0);
-        GT_Values.RA.addFuel(MyMaterial.ironedKerosene.get(OrePrefixes.cell), null, 1824, 0);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ether.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 537)
+                .metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ether.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 537)
+                .metadata(FUEL_TYPE, 1).addTo(GT_RecipeConstants.Fuel);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ethanolGasoline.get(OrePrefixes.cell))
+                .metadata(FUEL_VALUE, 1100).metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.cyclopentadiene.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 70)
+                .metadata(FUEL_TYPE, 1).addTo(GT_RecipeConstants.Fuel);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ironedFuel.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 2248)
+                .metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ironedKerosene.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 1824)
+                .metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
 
         // Sb + 3Cl = SbCl3
         GT_Values.RA.addMultiblockChemicalRecipe(
@@ -492,7 +501,8 @@ public class RecipeLoader {
                 20,
                 2040);
 
-        GT_Values.RA.addFuel(MyMaterial.naquadahGas.get(OrePrefixes.cell), null, 1024, 1);
+        GT_Values.RA.stdBuilder().itemInputs(MyMaterial.naquadahGas.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 1024)
+                .metadata(FUEL_TYPE, 1).addTo(GT_RecipeConstants.Fuel);
 
         GT_Values.RA.addFusionReactorRecipe(
                 MyMaterial.lightNaquadahFuel.getFluidOrGas(780),
