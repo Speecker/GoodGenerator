@@ -6,6 +6,7 @@ import static gregtech.api.recipe.RecipeMaps.assemblerRecipes;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
+import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
@@ -1277,185 +1278,105 @@ public class RecipeLoader_02 {
     }
 
     public static void InitLoadRecipe() {
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_U_Depleted_1.get(1),
-                null,
-                null,
-                WerkstoffLoader.Neon.getFluidOrGas(32),
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                Materials.Uranium.getDust(8),
-                Materials.Plutonium.getDust(2),
-                Materials.Graphite.getDust(8),
-                Materials.Uranium235.getDust(1),
-                Materials.Plutonium241.getDust(1),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_U_Depleted_2.get(1),
-                null,
-                null,
-                WerkstoffLoader.Neon.getFluidOrGas(64),
-                ItemRefer.Advanced_Fuel_Rod.get(2),
-                Materials.Uranium.getDust(16),
-                Materials.Plutonium.getDust(4),
-                Materials.Graphite.getDust(16),
-                Materials.Uranium235.getDust(2),
-                Materials.Plutonium241.getDust(2),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_U_Depleted_1.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(1),
+                        Materials.Uranium.getDust(8),
+                        Materials.Plutonium.getDust(2),
+                        Materials.Graphite.getDust(8),
+                        Materials.Uranium235.getDust(1),
+                        Materials.Plutonium241.getDust(1))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000)
+                .fluidOutputs(WerkstoffLoader.Neon.getFluidOrGas(32)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_U_Depleted_4.get(1),
-                null,
-                null,
-                WerkstoffLoader.Neon.getFluidOrGas(128),
-                ItemRefer.Advanced_Fuel_Rod.get(4),
-                Materials.Uranium.getDust(32),
-                Materials.Plutonium.getDust(8),
-                Materials.Graphite.getDust(32),
-                Materials.Uranium235.getDust(4),
-                Materials.Plutonium241.getDust(4),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_U_Depleted_2.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(2),
+                        Materials.Uranium.getDust(16),
+                        Materials.Plutonium.getDust(4),
+                        Materials.Graphite.getDust(16),
+                        Materials.Uranium235.getDust(2),
+                        Materials.Plutonium241.getDust(2))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000)
+                .fluidOutputs(WerkstoffLoader.Neon.getFluidOrGas(64)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_Pu_Depleted_1.get(1),
-                null,
-                null,
-                Materials.Argon.getGas(32),
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                Materials.Plutonium.getDust(5),
-                Materials.Plutonium241.getDust(2),
-                Materials.Carbon.getDust(2),
-                Materials.Uranium.getDust(1),
-                Materials.Uranium235.getDust(1),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_U_Depleted_4.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(4),
+                        Materials.Uranium.getDust(32),
+                        Materials.Plutonium.getDust(8),
+                        Materials.Graphite.getDust(32),
+                        Materials.Uranium235.getDust(4),
+                        Materials.Plutonium241.getDust(4))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000)
+                .fluidOutputs(WerkstoffLoader.Neon.getFluidOrGas(128)).duration(10 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_Pu_Depleted_2.get(1),
-                null,
-                null,
-                Materials.Argon.getGas(64),
-                ItemRefer.Advanced_Fuel_Rod.get(2),
-                Materials.Plutonium.getDust(10),
-                Materials.Plutonium241.getDust(4),
-                Materials.Carbon.getDust(4),
-                Materials.Uranium.getDust(2),
-                Materials.Uranium235.getDust(2),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_Pu_Depleted_1.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(1),
+                        Materials.Plutonium.getDust(5),
+                        Materials.Plutonium241.getDust(2),
+                        Materials.Carbon.getDust(2),
+                        Materials.Uranium.getDust(1),
+                        Materials.Uranium235.getDust(1))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000).fluidOutputs(Materials.Argon.getGas(32))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_Pu_Depleted_4.get(1),
-                null,
-                null,
-                Materials.Argon.getGas(128),
-                ItemRefer.Advanced_Fuel_Rod.get(4),
-                Materials.Plutonium.getDust(20),
-                Materials.Plutonium241.getDust(8),
-                Materials.Carbon.getDust(8),
-                Materials.Uranium.getDust(4),
-                Materials.Uranium235.getDust(4),
-                new int[] { 10000, 10000, 10000, 9000, 5000, 3000 },
-                200,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_Pu_Depleted_2.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(2),
+                        Materials.Plutonium.getDust(10),
+                        Materials.Plutonium241.getDust(4),
+                        Materials.Carbon.getDust(4),
+                        Materials.Uranium.getDust(2),
+                        Materials.Uranium235.getDust(2))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000).fluidOutputs(Materials.Argon.getGas(64))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LPu_Depleted_1.get(1),
-                null,
-                null,
-                MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(250),
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_Pu_Depleted_4.get(1))
+                .itemOutputs(
+                        ItemRefer.Advanced_Fuel_Rod.get(4),
+                        Materials.Plutonium.getDust(20),
+                        Materials.Plutonium241.getDust(8),
+                        Materials.Carbon.getDust(8),
+                        Materials.Uranium.getDust(4),
+                        Materials.Uranium235.getDust(4))
+                .outputChances(10000, 10000, 10000, 9000, 5000, 3000).fluidOutputs(Materials.Argon.getGas(128))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_EV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LPu_Depleted_2.get(1),
-                null,
-                null,
-                MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(500),
-                ItemRefer.Advanced_Fuel_Rod.get(2),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LPu_Depleted_1.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(1))
+                .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(250)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LPu_Depleted_4.get(1),
-                null,
-                null,
-                MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(1000),
-                ItemRefer.Advanced_Fuel_Rod.get(4),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LPu_Depleted_2.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(2))
+                .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(500)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LU_Depleted_1.get(1),
-                null,
-                null,
-                MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(250),
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LPu_Depleted_4.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(4))
+                .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuelDepleted.getFluidOrGas(1000)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LU_Depleted_2.get(1),
-                null,
-                null,
-                MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(500),
-                ItemRefer.Advanced_Fuel_Rod.get(2),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LU_Depleted_1.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(1))
+                .fluidOutputs(MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(250)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                ItemRefer.Fuel_Rod_LU_Depleted_4.get(1),
-                null,
-                null,
-                MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(1000),
-                ItemRefer.Advanced_Fuel_Rod.get(4),
-                null,
-                null,
-                null,
-                null,
-                null,
-                new int[] { 10000 },
-                200,
-                7680);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LU_Depleted_2.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(2))
+                .fluidOutputs(MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(500)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Fuel_Rod_LU_Depleted_4.get(1))
+                .itemOutputs(ItemRefer.Advanced_Fuel_Rod.get(4))
+                .fluidOutputs(MyMaterial.uraniumBasedLiquidFuelDepleted.getFluidOrGas(1000)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_IV).addTo(centrifugeRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(

@@ -37,6 +37,7 @@ import static goodgenerator.main.GG_Config_Loader.EnableNaquadahRework;
 import static gregtech.api.enums.Mods.GTPlusPlus;
 import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
+import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
@@ -269,20 +270,17 @@ public class NaquadahReworkRecipeLoader {
                 .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.ingotHot, Materials.Naquadah, 1))
                 .duration(2 * SECONDS).eut(TierEU.RECIPE_IV).metadata(COIL_HEAT, 5000).addTo(blastFurnaceRecipes);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 27),
-                GT_Utility.getIntegratedCircuit(1),
-                lowQualityNaquadahEmulsion.getFluidOrGas(10000),
-                lowQualityNaquadahSolution.getFluidOrGas(9000),
-                galliumHydroxide.get(OrePrefixes.dust, 64),
-                galliumHydroxide.get(OrePrefixes.dust, 48),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Antimony, 15),
-                null,
-                null,
-                null,
-                new int[] { 6250, 6250, 10000 },
-                1000,
-                1920);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.SodiumHydroxide, 27),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(lowQualityNaquadahEmulsion.getFluidOrGas(10000))
+                .itemOutputs(
+                        galliumHydroxide.get(OrePrefixes.dust, 64),
+                        galliumHydroxide.get(OrePrefixes.dust, 48),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Antimony, 15))
+                .outputChances(6250, 6250, 10000).fluidOutputs(lowQualityNaquadahSolution.getFluidOrGas(9000))
+                .duration(50 * SECONDS).eut(TierEU.RECIPE_EV).addTo(centrifugeRecipes);
 
         GT_Values.RA.addMultiblockChemicalRecipe(
                 new ItemStack[] { enrichedNaquadahEarth.get(OrePrefixes.dust, 4), },
@@ -342,20 +340,12 @@ public class NaquadahReworkRecipeLoader {
                 120,
                 480);
 
-        GT_Values.RA.addCentrifugeRecipe(
-                naquadriaEarth.get(OrePrefixes.dust, 4),
-                null,
-                Materials.PhosphoricAcid.getFluid(4000),
-                null,
-                indiumPhosphate.get(OrePrefixes.dust, 6),
-                lowQualityNaquadriaPhosphate.get(OrePrefixes.dust, 4),
-                null,
-                null,
-                null,
-                null,
-                new int[] { 2000, 10000 },
-                400,
-                122880);
+        GT_Values.RA.stdBuilder().itemInputs(naquadriaEarth.get(OrePrefixes.dust, 4))
+                .fluidInputs(Materials.PhosphoricAcid.getFluid(4000))
+                .itemOutputs(
+                        indiumPhosphate.get(OrePrefixes.dust, 6),
+                        lowQualityNaquadriaPhosphate.get(OrePrefixes.dust, 4))
+                .outputChances(2000, 10000).duration(20 * SECONDS).eut(TierEU.RECIPE_ZPM).addTo(centrifugeRecipes);
 
         // Ga(OH)3 + 3Na = Ga + 3NaOH
         GT_Values.RA.addChemicalRecipe(
