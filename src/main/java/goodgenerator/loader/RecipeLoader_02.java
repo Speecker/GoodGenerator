@@ -13,6 +13,7 @@ import static gregtech.api.recipe.RecipeMaps.distilleryRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidCannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
+import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
@@ -22,6 +23,7 @@ import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
+import static gregtech.api.util.GT_RecipeConstants.FUSION_THRESHOLD;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gregtech.api.util.GT_RecipeConstants.UniversalChemical;
@@ -1432,13 +1434,12 @@ public class RecipeLoader_02 {
                 .itemOutputs(MyMaterial.lumiium.get(OrePrefixes.dust, 1)).duration(12 * SECONDS).eut(TierEU.RECIPE_MV)
                 .addTo(mixerRecipes);
 
-        GT_Values.RA.addFusionReactorRecipe(
-                MyMaterial.enrichedNaquadahAlloy.getMolten(144),
-                WerkstoffLoader.Oganesson.getFluidOrGas(250),
-                MyMaterial.metastableOganesson.getMolten(36),
-                600,
-                491520,
-                1000000000);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(
+                        MyMaterial.enrichedNaquadahAlloy.getMolten(144),
+                        WerkstoffLoader.Oganesson.getFluidOrGas(250))
+                .fluidOutputs(MyMaterial.metastableOganesson.getMolten(36)).duration(30 * SECONDS).eut(TierEU.RECIPE_UV)
+                .metadata(FUSION_THRESHOLD, 1000000000).addTo(fusionRecipes);
 
         MyRecipeAdder.instance.addNeutronActivatorRecipe(
                 null,

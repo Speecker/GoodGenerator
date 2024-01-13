@@ -10,6 +10,7 @@ import static gregtech.api.recipe.RecipeMaps.compressorRecipes;
 import static gregtech.api.recipe.RecipeMaps.electrolyzerRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.recipe.RecipeMaps.formingPressRecipes;
+import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.implosionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
@@ -23,6 +24,7 @@ import static gregtech.api.util.GT_RecipeConstants.AssemblyLine;
 import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 import static gregtech.api.util.GT_RecipeConstants.FUEL_TYPE;
 import static gregtech.api.util.GT_RecipeConstants.FUEL_VALUE;
+import static gregtech.api.util.GT_RecipeConstants.FUSION_THRESHOLD;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_ITEM;
 import static gregtech.api.util.GT_RecipeConstants.RESEARCH_TIME;
 import static gregtech.api.util.GT_RecipeConstants.UniversalChemical;
@@ -145,13 +147,10 @@ public class RecipeLoader {
                 .fluidOutputs(MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(1000)).duration(10 * SECONDS)
                 .eut(TierEU.RECIPE_LuV / 2).addTo(mixerRecipes);
 
-        GT_Values.RA.addFusionReactorRecipe(
-                MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(10),
-                Materials.Hydrogen.getGas(100L),
-                MyMaterial.uraniumBasedLiquidFuelExcited.getFluidOrGas(10),
-                40,
-                7680,
-                200000000);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(MyMaterial.uraniumBasedLiquidFuel.getFluidOrGas(10), Materials.Hydrogen.getGas(100L))
+                .fluidOutputs(MyMaterial.uraniumBasedLiquidFuelExcited.getFluidOrGas(10)).duration(2 * SECONDS)
+                .eut(TierEU.RECIPE_IV).metadata(FUSION_THRESHOLD, 200000000).addTo(fusionRecipes);
 
         // Thorium Liquid Process Line
         GT_Values.RA.stdBuilder()
@@ -219,13 +218,10 @@ public class RecipeLoader {
                 .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(1000)).duration(18 * SECONDS)
                 .eut(TierEU.RECIPE_LuV).addTo(mixerRecipes);
 
-        GT_Values.RA.addFusionReactorRecipe(
-                Materials.Lutetium.getMolten(16),
-                MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(20),
-                MyMaterial.plutoniumBasedLiquidFuelExcited.getFluidOrGas(20),
-                20,
-                15360,
-                220000000);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(Materials.Lutetium.getMolten(16), MyMaterial.plutoniumBasedLiquidFuel.getFluidOrGas(20))
+                .fluidOutputs(MyMaterial.plutoniumBasedLiquidFuelExcited.getFluidOrGas(20)).duration(1 * SECONDS)
+                .eut(TierEU.RECIPE_LuV / 2).metadata(FUSION_THRESHOLD, 220000000).addTo(fusionRecipes);
 
         // Th-232
         GT_Values.RA.stdBuilder()
@@ -483,13 +479,12 @@ public class RecipeLoader {
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.naquadahGas.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 1024)
                 .metadata(FUEL_TYPE, 1).addTo(GT_RecipeConstants.Fuel);
 
-        GT_Values.RA.addFusionReactorRecipe(
-                MyMaterial.lightNaquadahFuel.getFluidOrGas(780),
-                MyMaterial.heavyNaquadahFuel.getFluidOrGas(360),
-                MyMaterial.naquadahBasedFuelMkI.getFluidOrGas(100),
-                500,
-                26000,
-                320000000);
+        GT_Values.RA.stdBuilder()
+                .fluidInputs(
+                        MyMaterial.lightNaquadahFuel.getFluidOrGas(780),
+                        MyMaterial.heavyNaquadahFuel.getFluidOrGas(360))
+                .fluidOutputs(MyMaterial.naquadahBasedFuelMkI.getFluidOrGas(100)).duration(25 * SECONDS)
+                .eut(TierEU.RECIPE_LuV).metadata(FUSION_THRESHOLD, 320000000).addTo(fusionRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
