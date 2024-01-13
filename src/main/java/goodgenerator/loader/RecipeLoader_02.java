@@ -8,6 +8,7 @@ import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
+import static gregtech.api.recipe.RecipeMaps.distilleryRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidCannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
@@ -696,30 +697,15 @@ public class RecipeLoader_02 {
         }
 
         if (GTPlusPlus.isModLoaded()) {
-            GT_Values.RA.addDistilleryRecipe(
-                    24,
-                    FluidRegistry.getFluidStack("fluid.coaltaroil", 100),
-                    MyMaterial.cyclopentadiene.getFluidOrGas(30),
-                    100,
-                    120,
-                    false);
-        } else {
-            GT_Values.RA.addDistilleryRecipe(
-                    24,
-                    FluidRegistry.getFluidStack("fluid.coaltar", 300),
-                    MyMaterial.cyclopentadiene.getFluidOrGas(100),
-                    100,
-                    120,
-                    false);
+            GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(24))
+                    .fluidInputs(FluidRegistry.getFluidStack("fluid.coaltaroil", 100))
+                    .fluidOutputs(MyMaterial.cyclopentadiene.getFluidOrGas(30)).duration(5 * SECONDS)
+                    .eut(TierEU.RECIPE_MV).addTo(distilleryRecipes);
         }
 
-        GT_Values.RA.addDistilleryRecipe(
-                24,
-                Materials.WoodTar.getFluid(500),
-                MyMaterial.cyclopentadiene.getFluidOrGas(20),
-                100,
-                120,
-                false);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(24))
+                .fluidInputs(Materials.WoodTar.getFluid(500)).fluidOutputs(MyMaterial.cyclopentadiene.getFluidOrGas(20))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_MV).addTo(distilleryRecipes);
 
         // FeCl2 + Cl = FeCl3
         GT_Values.RA.stdBuilder()
