@@ -8,6 +8,7 @@ import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidCannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
@@ -816,21 +817,15 @@ public class RecipeLoader_02 {
                         'W', GT_OreDictUnificator.get(OrePrefixes.cableGt01, Materials.Tungsten, 1), 'P',
                         ItemList.Electric_Piston_IV, 'H', ItemList.Hull_IV, 'M', ItemList.Electric_Motor_IV });
 
-        GT_Values.RA.addFluidCannerRecipe(
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                ItemRefer.Fuel_Rod_LU_1.get(1),
-                MyMaterial.uraniumBasedLiquidFuelExcited.getFluidOrGas(250),
-                null,
-                100,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Advanced_Fuel_Rod.get(1))
+                .fluidInputs(MyMaterial.uraniumBasedLiquidFuelExcited.getFluidOrGas(250))
+                .itemOutputs(ItemRefer.Fuel_Rod_LU_1.get(1)).duration(5 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(fluidCannerRecipes);
 
-        GT_Values.RA.addFluidCannerRecipe(
-                ItemRefer.Advanced_Fuel_Rod.get(1),
-                ItemRefer.Fuel_Rod_LPu_1.get(1),
-                MyMaterial.plutoniumBasedLiquidFuelExcited.getFluidOrGas(250),
-                null,
-                100,
-                1920);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Advanced_Fuel_Rod.get(1))
+                .fluidInputs(MyMaterial.plutoniumBasedLiquidFuelExcited.getFluidOrGas(250))
+                .itemOutputs(ItemRefer.Fuel_Rod_LPu_1.get(1)).duration(5 * SECONDS).eut(TierEU.RECIPE_EV)
+                .addTo(fluidCannerRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
