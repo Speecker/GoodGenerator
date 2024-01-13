@@ -565,46 +565,48 @@ public class RecipeLoader_02 {
                 .itemOutputs(ItemRefer.YOTTank_Cell_T8.get(1)).eut(TierEU.RECIPE_UIV).duration(50 * SECONDS)
                 .addTo(AssemblyLine);
 
-        GT_Values.RA.stdBuilder().metadata(RESEARCH_ITEM, ItemRefer.YOTTank_Cell_T8.get(1))
-                .metadata(RESEARCH_TIME, 18 * HOURS)
-                .itemInputs(
-                        GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 2),
-                        ItemRefer.Fluid_Storage_Core_T9.get(2),
-                        new Object[] { OrePrefixes.circuit.get(Materials.Piko), 4L },
-                        new Object[] { OrePrefixes.circuit.get(Materials.Piko), 4L },
-                        ItemList.Electric_Pump_UIV.get(8),
-                        GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 12),
-                        GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.CosmicNeutronium, 12),
-                        GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.DraconiumAwakened, 12),
-                        GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Infinity, 32),
-                        GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Infinity, 32))
-                .fluidInputs(
-                        Materials.DraconiumAwakened.getMolten(14400),
-                        FluidRegistry.getFluidStack("supercoolant", 46080),
-                        Materials.Lubricant.getFluid(46080))
-                .itemOutputs(ItemRefer.YOTTank_Cell_T9.get(1)).eut(TierEU.RECIPE_UMV).duration(50 * SECONDS)
-                .addTo(AssemblyLine);
+        if (NewHorizonsCoreMod.isModLoaded()) {
+            GT_Values.RA.stdBuilder().metadata(RESEARCH_ITEM, ItemRefer.YOTTank_Cell_T8.get(1))
+                    .metadata(RESEARCH_TIME, 18 * HOURS)
+                    .itemInputs(
+                            GT_OreDictUnificator.get(OrePrefixes.frameGt, Materials.Infinity, 2),
+                            ItemRefer.Fluid_Storage_Core_T9.get(2),
+                            new Object[] { OrePrefixes.circuit.get(Materials.Piko), 4L },
+                            new Object[] { OrePrefixes.circuit.get(Materials.Piko), 4L },
+                            ItemList.Electric_Pump_UIV.get(8),
+                            GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.CosmicNeutronium, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.DraconiumAwakened, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Infinity, 32),
+                            GT_OreDictUnificator.get(OrePrefixes.plate, Materials.Infinity, 32))
+                    .fluidInputs(
+                            Materials.DraconiumAwakened.getMolten(14400),
+                            FluidRegistry.getFluidStack("supercoolant", 46080),
+                            Materials.Lubricant.getFluid(46080))
+                    .itemOutputs(ItemRefer.YOTTank_Cell_T9.get(1)).eut(TierEU.RECIPE_UMV).duration(50 * SECONDS)
+                    .addTo(AssemblyLine);
 
-        GT_Values.RA.stdBuilder().metadata(RESEARCH_ITEM, ItemRefer.YOTTank_Cell_T9.get(1))
-                .metadata(RESEARCH_TIME, 36 * HOURS)
-                .itemInputs(
-                        GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 2),
-                        ItemRefer.Fluid_Storage_Core_T10.get(2),
-                        new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 6L },
-                        new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 6L },
-                        ItemList.Electric_Pump_UMV.get(8),
-                        GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 64),
-                        GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.CosmicNeutronium, 12),
-                        GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.DraconiumAwakened, 12),
-                        GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.SpaceTime, 5),
-                        GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.SpaceTime, 5))
-                .fluidInputs(
-                        Materials.DraconiumAwakened.getMolten(14400),
-                        MaterialsUEVplus.TranscendentMetal.getMolten(1440),
-                        FluidRegistry.getFluidStack("supercoolant", 46080),
-                        Materials.Lubricant.getFluid(46080))
-                .itemOutputs(ItemRefer.YOTTank_Cell_T10.get(1)).eut(TierEU.RECIPE_UXV).duration(50 * SECONDS)
-                .addTo(AssemblyLine);
+            GT_Values.RA.stdBuilder().metadata(RESEARCH_ITEM, ItemRefer.YOTTank_Cell_T9.get(1))
+                    .metadata(RESEARCH_TIME, 36 * HOURS)
+                    .itemInputs(
+                            GT_OreDictUnificator.get(OrePrefixes.frameGt, MaterialsUEVplus.SpaceTime, 2),
+                            ItemRefer.Fluid_Storage_Core_T10.get(2),
+                            new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 6L },
+                            new Object[] { OrePrefixes.circuit.get(Materials.Quantum), 6L },
+                            ItemList.Electric_Pump_UMV.get(8),
+                            GT_OreDictUnificator.get(OrePrefixes.pipeLarge, Materials.NetherStar, 64),
+                            GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.CosmicNeutronium, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.plateDouble, Materials.DraconiumAwakened, 12),
+                            GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.SpaceTime, 5),
+                            GT_OreDictUnificator.get(OrePrefixes.plate, MaterialsUEVplus.SpaceTime, 5))
+                    .fluidInputs(
+                            Materials.DraconiumAwakened.getMolten(14400),
+                            MaterialsUEVplus.TranscendentMetal.getMolten(1440),
+                            FluidRegistry.getFluidStack("supercoolant", 46080),
+                            Materials.Lubricant.getFluid(46080))
+                    .itemOutputs(ItemRefer.YOTTank_Cell_T10.get(1)).eut(TierEU.RECIPE_UXV).duration(50 * SECONDS)
+                    .addTo(AssemblyLine);
+        }
 
         // Craft 2x64X Tier to 1X+1 Tier
         GT_Values.RA.stdBuilder()
