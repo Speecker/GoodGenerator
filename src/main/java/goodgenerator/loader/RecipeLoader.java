@@ -419,13 +419,13 @@ public class RecipeLoader {
                 .fluidOutputs(MyMaterial.antimonyPentachlorideSolution.getFluidOrGas(1000)).duration(9 * SECONDS)
                 .eut(TierEU.RECIPE_HV).addTo(multiblockChemicalReactorRecipes);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 MyMaterial.antimonyPentachlorideSolution.getFluidOrGas(1000),
                 new FluidStack[] { MyMaterial.ether.getFluidOrGas(1000),
                         MyMaterial.antimonyPentachloride.getFluidOrGas(1000) },
-                null,
-                600,
-                120);
+                GT_Values.NI,
+                30 * SECONDS,
+                TierEU.RECIPE_MV);
 
         // SbCl5 + 5HF = SbF5 + 5HCl
         GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1))
@@ -465,14 +465,14 @@ public class RecipeLoader {
                         WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 4))
                 .duration(12 * SECONDS).eut(TierEU.RECIPE_LV).addTo(multiblockChemicalReactorRecipes);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 MyMaterial.naquadahSolution.getFluidOrGas(20),
                 new FluidStack[] { MyMaterial.naquadahAsphalt.getFluidOrGas(2),
                         MyMaterial.heavyNaquadahFuel.getFluidOrGas(5), MyMaterial.lightNaquadahFuel.getFluidOrGas(10),
                         FluidRegistry.getFluidStack("water", 10), MyMaterial.naquadahGas.getFluidOrGas(60) },
-                null,
-                20,
-                2040);
+                GT_Values.NI,
+                1 * SECONDS,
+                TierEU.RECIPE_EV);
 
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.naquadahGas.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 1024)
                 .metadata(FUEL_TYPE, 1).addTo(GT_RecipeConstants.Fuel);

@@ -1,6 +1,8 @@
 package goodgenerator.util;
 
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
+import static gregtech.api.recipe.RecipeMaps.distillationTowerRecipes;
+import static gregtech.api.recipe.RecipeMaps.distilleryRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.wiremillRecipes;
@@ -23,6 +25,7 @@ import gregtech.api.enums.TierEU;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Cable;
 import gregtech.api.metatileentity.implementations.GT_MetaPipeEntity_Fluid;
 import gregtech.api.util.GT_OreDictUnificator;
+import gregtech.api.util.GT_RecipeBuilder;
 import gregtech.api.util.GT_Utility;
 
 public class CrackRecipeAdder {
@@ -66,7 +69,7 @@ public class CrackRecipeAdder {
             actOutput[j] = new FluidStack(tmp1, tmp2);
         }
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        addUniversalDistillationRecipe(
                 FluidRegistry.getFluidStack("lightlycracked" + name, 1000),
                 actOutput,
                 outputItem,
@@ -79,7 +82,7 @@ public class CrackRecipeAdder {
             actOutput[j] = new FluidStack(tmp1, tmp2);
         }
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        addUniversalDistillationRecipe(
                 FluidRegistry.getFluidStack("moderatelycracked" + name, 1000),
                 actOutput,
                 outputItem,
@@ -92,7 +95,7 @@ public class CrackRecipeAdder {
             actOutput[j] = new FluidStack(tmp1, tmp2);
         }
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        addUniversalDistillationRecipe(
                 FluidRegistry.getFluidStack("heavilycracked" + name, 1000),
                 actOutput,
                 outputItem,
@@ -111,6 +114,44 @@ public class CrackRecipeAdder {
             GT_Values.RA.stdBuilder().itemInputs(input, GT_Utility.getIntegratedCircuit(1)).itemOutputs(output)
                     .duration(duration * TICKS).eut(EUt).metadata(COIL_HEAT, level).addTo(blastFurnaceRecipes);
         }
+    }
+
+    public static void addUniversalDistillationRecipewithCircuit(FluidStack aInput, ItemStack[] aCircuit,
+            FluidStack[] aOutputs, ItemStack aOutput2, int aDuration, long aEUt) {
+        for (int i = 0; i < Math.min(aOutputs.length, 11); i++) {
+            GT_RecipeBuilder buildDistillation = GT_Values.RA.stdBuilder()
+                    .itemInputs(GT_Utility.getIntegratedCircuit(i + 1));
+            if (aOutput2 != GT_Values.NI) {
+                buildDistillation.itemOutputs(aOutput2);
+            }
+            buildDistillation.fluidInputs(aInput).fluidOutputs(aOutputs[i]).duration(2 * aDuration).eut(aEUt / 4)
+                    .addTo(distilleryRecipes);
+        }
+        GT_RecipeBuilder buildDT = GT_Values.RA.stdBuilder().itemInputs(aCircuit);
+        if (aOutput2 != GT_Values.NI) {
+            buildDT.itemOutputs(aOutput2);
+        }
+        buildDT.fluidInputs(aInput).fluidOutputs(aOutputs).duration(aDuration).eut(aEUt)
+                .addTo(distillationTowerRecipes);
+    }
+
+    public static void addUniversalDistillationRecipe(FluidStack aInput, FluidStack[] aOutputs, ItemStack aOutput2,
+            int aDuration, long aEUt) {
+        for (int i = 0; i < Math.min(aOutputs.length, 11); i++) {
+            GT_RecipeBuilder buildDistillation = GT_Values.RA.stdBuilder()
+                    .itemInputs(GT_Utility.getIntegratedCircuit(i + 1));
+            if (aOutput2 != GT_Values.NI) {
+                buildDistillation.itemOutputs(aOutput2);
+            }
+            buildDistillation.fluidInputs(aInput).fluidOutputs(aOutputs[i]).duration(2 * aDuration).eut(aEUt / 4)
+                    .addTo(distilleryRecipes);
+        }
+        GT_RecipeBuilder buildDT = GT_Values.RA.stdBuilder();
+        if (aOutput2 != GT_Values.NI) {
+            buildDT.itemOutputs(aOutput2);
+        }
+        buildDT.fluidInputs(aInput).fluidOutputs(aOutputs).duration(aDuration).eut(aEUt)
+                .addTo(distillationTowerRecipes);
     }
 
     public static FluidStack copyFluidWithAmount(FluidStack fluid, int amount) {

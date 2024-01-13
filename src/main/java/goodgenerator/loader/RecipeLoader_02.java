@@ -741,20 +741,20 @@ public class RecipeLoader_02 {
                 .fluidOutputs(MyMaterial.ferroceneWaste.getFluidOrGas(5000)).duration(40 * SECONDS)
                 .eut(TierEU.RECIPE_MV).addTo(mixerRecipes);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 MyMaterial.ferroceneWaste.getFluidOrGas(1000),
                 new FluidStack[] { Materials.Water.getFluid(400), MyMaterial.diethylamine.getFluidOrGas(800),
                         MyMaterial.ether.getFluidOrGas(500) },
-                null,
-                600,
-                120);
+                GT_Values.NI,
+                30 * SECONDS,
+                TierEU.RECIPE_MV);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 MyMaterial.ferroceneSolution.getFluidOrGas(2000),
                 new FluidStack[] { MyMaterial.ether.getFluidOrGas(1000) },
                 MyMaterial.ferrocene.get(OrePrefixes.dust, 1),
-                600,
-                120);
+                30 * SECONDS,
+                TierEU.RECIPE_MV);
 
         if (GTPlusPlus.isModLoaded()) {
             GT_Values.RA.stdBuilder()
@@ -1230,13 +1230,13 @@ public class RecipeLoader_02 {
                 .fluidOutputs(MyMaterial.antimonyPentafluorideSolution.getFluidOrGas(8000)).duration(40 * SECONDS)
                 .eut(TierEU.RECIPE_IV).addTo(multiblockChemicalReactorRecipes);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 MyMaterial.antimonyPentafluorideSolution.getFluidOrGas(4000),
                 new FluidStack[] { MyMaterial.antimonyPentafluoride.getFluidOrGas(4000),
                         MyMaterial.ether.getFluidOrGas(500) },
-                null,
-                100,
-                120);
+                GT_Values.NI,
+                5 * SECONDS,
+                TierEU.RECIPE_MV);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(

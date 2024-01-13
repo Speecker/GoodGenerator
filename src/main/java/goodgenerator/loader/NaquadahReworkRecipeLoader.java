@@ -75,6 +75,7 @@ import com.github.bartimaeusnek.bartworks.system.material.GT_Enhancement.Platinu
 import com.github.bartimaeusnek.bartworks.system.material.WerkstoffLoader;
 
 import goodgenerator.main.GoodGenerator;
+import goodgenerator.util.CrackRecipeAdder;
 import goodgenerator.util.ItemRefer;
 import goodgenerator.util.MyRecipeAdder;
 import gregtech.api.enums.GT_Values;
@@ -227,13 +228,13 @@ public class NaquadahReworkRecipeLoader {
                 .itemOutputs(WerkstoffLoader.Fluorspar.get(OrePrefixes.dust, 60)).duration(50 * SECONDS)
                 .eut(TierEU.RECIPE_MV).addTo(UniversalChemical);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 wasteLiquid.getFluidOrGas(10000),
                 new FluidStack[] { Materials.SaltWater.getFluid(3000), FluidRegistry.getFluidStack("phenol", 2000),
                         Materials.HydrochloricAcid.getFluid(5000) },
                 GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Chrome, 3),
-                300,
-                480);
+                15 * SECONDS,
+                TierEU.RECIPE_HV);
 
         MyRecipeAdder.instance.addNeutronActivatorRecipe(
                 new FluidStack[] { naquadahAdamantiumSolution.getFluidOrGas(3000) },
@@ -371,13 +372,13 @@ public class NaquadahReworkRecipeLoader {
                 .itemOutputs(ItemList.Cell_Empty.get(3)).duration(25 * SECONDS).eut(TierEU.RECIPE_EV)
                 .addTo(UniversalChemical);
 
-        GT_Values.RA.addUniversalDistillationRecipe(
+        CrackRecipeAdder.addUniversalDistillationRecipe(
                 lowQualityNaquadriaSolution.getFluidOrGas(7000),
                 new FluidStack[] { P507.getFluidOrGas(1000), naquadriaRichSolution.getFluidOrGas(5400),
                         Materials.DilutedSulfuricAcid.getFluid(12000) },
                 enrichedNaquadahEarth.get(OrePrefixes.dust, 2),
-                500,
-                7680);
+                25 * SECONDS,
+                TierEU.RECIPE_IV);
 
         // Nq*(SO4)2 + 2Mg = Nq* + 2MgSO4
         GT_Values.RA.stdBuilder()
