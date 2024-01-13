@@ -39,6 +39,7 @@ import static gregtech.api.recipe.RecipeMaps.autoclaveRecipes;
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalReactorRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.maceratorRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
@@ -412,26 +413,17 @@ public class NaquadahReworkRecipeLoader {
                 .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.IndiumGalliumPhosphide, 3))
                 .duration(15 * TICKS).eut(TierEU.RECIPE_ULV).addTo(mixerRecipes);
 
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Ball.get(0),
-                naquadahGoo.getFluidOrGas(72),
-                ItemRefer.Naquadah_Mass.get(1),
-                100,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Ball.get(0)).fluidInputs(naquadahGoo.getFluidOrGas(72))
+                .itemOutputs(ItemRefer.Naquadah_Mass.get(1)).duration(5 * SECONDS).eut(TierEU.RECIPE_LV)
+                .addTo(fluidSolidifierRecipes);
 
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Ball.get(0),
-                enrichedNaquadahGoo.getFluidOrGas(72),
-                ItemRefer.Enriched_Naquadah_Mass.get(1),
-                100,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Ball.get(0))
+                .fluidInputs(enrichedNaquadahGoo.getFluidOrGas(72)).itemOutputs(ItemRefer.Enriched_Naquadah_Mass.get(1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_LV).addTo(fluidSolidifierRecipes);
 
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Ball.get(0),
-                naquadriaGoo.getFluidOrGas(72),
-                ItemRefer.Naquadria_Mass.get(1),
-                100,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Ball.get(0))
+                .fluidInputs(naquadriaGoo.getFluidOrGas(72)).itemOutputs(ItemRefer.Naquadria_Mass.get(1))
+                .duration(5 * SECONDS).eut(TierEU.RECIPE_LV).addTo(fluidSolidifierRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Naquadah_Mass.get(1))
                 .itemOutputs(naquadahEarth.get(OrePrefixes.dust, 1), enrichedNaquadahEarth.get(OrePrefixes.dust, 1))

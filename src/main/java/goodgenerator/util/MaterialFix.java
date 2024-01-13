@@ -2,6 +2,7 @@ package goodgenerator.util;
 
 import static gregtech.api.recipe.RecipeMaps.benderRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.hammerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
@@ -23,22 +24,16 @@ public class MaterialFix {
         if (material.hasItemType(OrePrefixes.ingot)) {
             GT_Values.RA.stdBuilder().itemInputs(material.get(OrePrefixes.ingot)).fluidOutputs(material.getMolten(144))
                     .duration(1 * SECONDS + 12 * TICKS).eut(8).addTo(fluidExtractionRecipes);
-            GT_Values.RA.addFluidSolidifierRecipe(
-                    ItemList.Shape_Mold_Ingot.get(0),
-                    material.getMolten(144),
-                    material.get(OrePrefixes.ingot),
-                    32,
-                    48);
+            GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Ingot.get(0)).fluidInputs(material.getMolten(144))
+                    .itemOutputs(material.get(OrePrefixes.ingot)).duration(1 * SECONDS + 12 * TICKS)
+                    .eut(TierEU.RECIPE_MV / 2).addTo(fluidSolidifierRecipes);
         }
         if (material.hasItemType(OrePrefixes.plate)) {
             GT_Values.RA.stdBuilder().itemInputs(material.get(OrePrefixes.plate)).fluidOutputs(material.getMolten(144))
                     .duration(1 * SECONDS + 12 * TICKS).eut(8).addTo(fluidExtractionRecipes);
-            GT_Values.RA.addFluidSolidifierRecipe(
-                    ItemList.Shape_Mold_Plate.get(0),
-                    material.getMolten(144),
-                    material.get(OrePrefixes.plate),
-                    32,
-                    48);
+            GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Plate.get(0)).fluidInputs(material.getMolten(144))
+                    .itemOutputs(material.get(OrePrefixes.plate)).duration(1 * SECONDS + 12 * TICKS)
+                    .eut(TierEU.RECIPE_MV / 2).addTo(fluidSolidifierRecipes);
         }
         if (material.hasItemType(OrePrefixes.gearGtSmall)) {
             GT_Values.RA.stdBuilder().itemInputs(material.get(OrePrefixes.gearGtSmall))
@@ -186,22 +181,18 @@ public class MaterialFix {
             }
             if (tMaterial.hasItemType(OrePrefixes.stick)) {
                 if (tMaterial.hasItemType(OrePrefixes.cellMolten)) {
-                    GT_Values.RA.addFluidSolidifierRecipe(
-                            ItemList.Shape_Mold_Rod.get(0),
-                            tMaterial.getMolten(72),
-                            tMaterial.get(OrePrefixes.stick, 1),
-                            (int) Math.max(tMaterial.getStats().getMass() >> 1, 1L),
-                            480);
+                    GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Rod.get(0))
+                            .fluidInputs(tMaterial.getMolten(72)).itemOutputs(tMaterial.get(OrePrefixes.stick, 1))
+                            .duration(Math.max(tMaterial.getStats().getMass() >> 1, 1L) * TICKS).eut(TierEU.RECIPE_HV)
+                            .addTo(fluidSolidifierRecipes);
                 }
             }
             if (tMaterial.hasItemType(OrePrefixes.stickLong)) {
                 if (tMaterial.hasItemType(OrePrefixes.cellMolten)) {
-                    GT_Values.RA.addFluidSolidifierRecipe(
-                            ItemList.Shape_Mold_Rod_Long.get(0),
-                            tMaterial.getMolten(144),
-                            tMaterial.get(OrePrefixes.stickLong, 1),
-                            (int) Math.max(tMaterial.getStats().getMass(), 1L),
-                            480);
+                    GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Rod_Long.get(0))
+                            .fluidInputs(tMaterial.getMolten(144)).itemOutputs(tMaterial.get(OrePrefixes.stickLong, 1))
+                            .duration(Math.max(tMaterial.getStats().getMass(), 1L) * TICKS).eut(TierEU.RECIPE_HV)
+                            .addTo(fluidSolidifierRecipes);
                 }
                 if (tMaterial.hasItemType(OrePrefixes.stick)) {
                     GT_ModHandler.addCraftingRecipe(

@@ -2,6 +2,7 @@ package goodgenerator.util;
 
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.wiremillRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeBuilder.TICKS;
@@ -195,36 +196,23 @@ public class CrackRecipeAdder {
                 .itemInputs(material.get(OrePrefixes.ingot, 12), ItemList.Shape_Extruder_Pipe_Huge.get(0))
                 .itemOutputs(material.get(OrePrefixes.pipeHuge, 1)).duration(material.getStats().getMass() * 24 * TICKS)
                 .eut(TierEU.RECIPE_MV).addTo(extruderRecipes);
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Pipe_Tiny.get(0),
-                material.getMolten(72),
-                material.get(OrePrefixes.pipeTiny, 1),
-                (int) material.getStats().getMass(),
-                30);
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Pipe_Small.get(0),
-                material.getMolten(144),
-                material.get(OrePrefixes.pipeSmall, 1),
-                (int) material.getStats().getMass() * 2,
-                30);
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Pipe_Medium.get(0),
-                material.getMolten(432),
-                material.get(OrePrefixes.pipeMedium, 1),
-                (int) material.getStats().getMass() * 6,
-                30);
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Pipe_Large.get(0),
-                material.getMolten(864),
-                material.get(OrePrefixes.pipeLarge, 1),
-                (int) material.getStats().getMass() * 12,
-                30);
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemList.Shape_Mold_Pipe_Huge.get(0),
-                material.getMolten(1728),
-                material.get(OrePrefixes.pipeHuge, 1),
-                (int) material.getStats().getMass() * 24,
-                30);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Pipe_Tiny.get(0)).fluidInputs(material.getMolten(72))
+                .itemOutputs(material.get(OrePrefixes.pipeTiny, 1)).duration(material.getStats().getMass() * TICKS)
+                .eut(TierEU.RECIPE_LV).addTo(fluidSolidifierRecipes);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Pipe_Small.get(0)).fluidInputs(material.getMolten(144))
+                .itemOutputs(material.get(OrePrefixes.pipeSmall, 1)).duration(material.getStats().getMass() * 2 * TICKS)
+                .eut(TierEU.RECIPE_LV).addTo(fluidSolidifierRecipes);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Pipe_Medium.get(0))
+                .fluidInputs(material.getMolten(432)).itemOutputs(material.get(OrePrefixes.pipeMedium, 1))
+                .duration(material.getStats().getMass() * 6 * TICKS).eut(TierEU.RECIPE_LV)
+                .addTo(fluidSolidifierRecipes);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Pipe_Large.get(0)).fluidInputs(material.getMolten(864))
+                .itemOutputs(material.get(OrePrefixes.pipeLarge, 1))
+                .duration(material.getStats().getMass() * 12 * TICKS).eut(TierEU.RECIPE_LV)
+                .addTo(fluidSolidifierRecipes);
+        GT_Values.RA.stdBuilder().itemInputs(ItemList.Shape_Mold_Pipe_Huge.get(0)).fluidInputs(material.getMolten(1728))
+                .itemOutputs(material.get(OrePrefixes.pipeHuge, 1)).duration(material.getStats().getMass() * 24 * TICKS)
+                .eut(TierEU.RECIPE_LV).addTo(fluidSolidifierRecipes);
     }
 
     public static void registerWire(int ID, Werkstoff material, int aAmperage, int aVoltage, int aLoss, boolean cover) {

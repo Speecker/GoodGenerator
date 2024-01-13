@@ -9,6 +9,7 @@ import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
+import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
@@ -1385,12 +1386,10 @@ public class RecipeLoader_02 {
                 .itemOutputs(ItemRefer.High_Energy_Mixture.get(4)).duration(12 * SECONDS).eut(TierEU.RECIPE_MV)
                 .addTo(mixerRecipes);
 
-        GT_Values.RA.addFluidSolidifierRecipe(
-                ItemRefer.High_Energy_Mixture.get(2),
-                Materials.PhosphoricAcid.getFluid(4000),
-                MyMaterial.lumiinessence.get(OrePrefixes.dust, 1),
-                600,
-                240);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.High_Energy_Mixture.get(2))
+                .fluidInputs(Materials.PhosphoricAcid.getFluid(4000))
+                .itemOutputs(MyMaterial.lumiinessence.get(OrePrefixes.dust, 1)).duration(30 * SECONDS)
+                .eut(TierEU.RECIPE_HV / 2).addTo(fluidSolidifierRecipes);
 
         GT_Values.RA.stdBuilder()
                 .itemInputs(
