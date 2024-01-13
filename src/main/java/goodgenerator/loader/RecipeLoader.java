@@ -21,6 +21,7 @@ import static gregtech.api.util.GT_RecipeConstants.ADDITIVE_AMOUNT;
 import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
 import static gregtech.api.util.GT_RecipeConstants.FUEL_TYPE;
 import static gregtech.api.util.GT_RecipeConstants.FUEL_VALUE;
+import static gregtech.api.util.GT_RecipeConstants.UniversalChemical;
 import static gregtech.loaders.postload.GT_MachineRecipeLoader.solderingMats;
 
 import net.minecraft.item.ItemStack;
@@ -243,47 +244,35 @@ public class RecipeLoader {
                 .duration(2 * SECONDS).eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
         // 4NaOH + Th(NO3)4 = Th(OH)4 + 4NaNO3
-        GT_Values.RA.addChemicalRecipe(
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.SodiumHydroxide.getDust(12),
-                MyMaterial.thoriumNitrate.getFluidOrGas(1000),
-                null,
-                MyMaterial.thoriumHydroxide.get(OrePrefixes.dust, 9),
-                WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 20),
-                200,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1), Materials.SodiumHydroxide.getDust(12))
+                .fluidInputs(MyMaterial.thoriumNitrate.getFluidOrGas(1000))
+                .itemOutputs(
+                        MyMaterial.thoriumHydroxide.get(OrePrefixes.dust, 9),
+                        WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 20))
+                .duration(10 * SECONDS).eut(TierEU.RECIPE_MV).addTo(UniversalChemical);
+
         // 2 NaNO3 + H2SO4 = Na2SO4 + 2HNO3
-        GT_Values.RA.addChemicalRecipe(
-                GT_Utility.getIntegratedCircuit(1),
-                WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 10),
-                Materials.SulfuricAcid.getFluid(1000),
-                Materials.NitricAcid.getFluid(2000),
-                WerkstoffLoader.Sodiumsulfate.get(OrePrefixes.dust, 7),
-                null,
-                200,
-                480);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(GT_Utility.getIntegratedCircuit(1), WerkstoffLoader.SodiumNitrate.get(OrePrefixes.dust, 10))
+                .fluidInputs(Materials.SulfuricAcid.getFluid(1000)).fluidOutputs(Materials.NitricAcid.getFluid(2000))
+                .itemOutputs(WerkstoffLoader.Sodiumsulfate.get(OrePrefixes.dust, 7)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_HV).addTo(UniversalChemical);
 
         // Th(OH)4 + 4HF = ThF4 + 4H2O
-        GT_Values.RA.addChemicalRecipe(
-                MyMaterial.thoriumHydroxide.get(OrePrefixes.dust, 9),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.HydrofluoricAcid.getFluid(4000),
-                MyMaterial.thoriumTetrafluoride.getFluidOrGas(1000),
-                null,
-                null,
-                400,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.thoriumHydroxide.get(OrePrefixes.dust, 9), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.HydrofluoricAcid.getFluid(4000))
+                .fluidOutputs(MyMaterial.thoriumTetrafluoride.getFluidOrGas(1000)).duration(20 * SECONDS)
+                .eut(TierEU.RECIPE_LV).addTo(UniversalChemical);
 
         // Zn + 2Cl = ZnCl2
-        GT_Values.RA.addChemicalRecipe(
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 1),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.Chlorine.getGas(2000),
-                null,
-                MyMaterial.zincChloride.get(OrePrefixes.dust, 3),
-                null,
-                100,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Zinc, 1),
+                        GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Chlorine.getGas(2000))
+                .itemOutputs(MyMaterial.zincChloride.get(OrePrefixes.dust, 3)).duration(5 * SECONDS)
+                .eut(TierEU.RECIPE_LV).addTo(UniversalChemical);
 
         // ZnCl2 + 3Ca + ThF4 = ZnTh + CaCl2 + 2CaF2
         GT_Values.RA.stdBuilder()
@@ -398,12 +387,9 @@ public class RecipeLoader {
                 .fluidOutputs(MyMaterial.ether.getFluidOrGas(500), Materials.DilutedSulfuricAcid.getFluid(1500))
                 .duration(25 * SECONDS + 10 * TICKS).eut(TierEU.RECIPE_MV).addTo(multiblockChemicalReactorRecipes);
 
-        GT_Values.RA.addChemicalRecipe(
-                Materials.GasolineRaw.getCells(9),
-                Materials.Ethanol.getCells(1),
-                MyMaterial.ethanolGasoline.get(OrePrefixes.cell, 10),
-                15,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.GasolineRaw.getCells(9), Materials.Ethanol.getCells(1))
+                .itemOutputs(MyMaterial.ethanolGasoline.get(OrePrefixes.cell, 10)).duration(15 * TICKS)
+                .eut(TierEU.RECIPE_MV).addTo(UniversalChemical);
 
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.ether.get(OrePrefixes.cell)).metadata(FUEL_VALUE, 537)
                 .metadata(FUEL_TYPE, 0).addTo(GT_RecipeConstants.Fuel);
@@ -718,14 +704,13 @@ public class RecipeLoader {
                 .duration(15 * SECONDS).eut(TierEU.RECIPE_ZPM).addTo(assemblerRecipes);
 
         // Ca + O = CaO
-        GT_Values.RA.addChemicalRecipe(
-                GT_Utility.getIntegratedCircuit(1),
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Calcium, 1),
-                Materials.Oxygen.getGas(1000),
-                null,
-                GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 2),
-                10,
-                30);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(
+                        GT_Utility.getIntegratedCircuit(1),
+                        GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Calcium, 1))
+                .fluidInputs(Materials.Oxygen.getGas(1000))
+                .itemOutputs(GT_OreDictUnificator.get(OrePrefixes.dust, Materials.Quicklime, 2)).duration(10 * TICKS)
+                .eut(TierEU.RECIPE_LV).addTo(UniversalChemical);
 
         // AlN = Al + N
         GT_Values.RA.stdBuilder().itemInputs(ItemRefer.Aluminum_Nitride_Dust.get(2))

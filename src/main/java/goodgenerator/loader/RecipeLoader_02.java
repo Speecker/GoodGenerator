@@ -18,6 +18,7 @@ import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.MINUTES;
 import static gregtech.api.util.GT_RecipeBuilder.SECONDS;
 import static gregtech.api.util.GT_RecipeConstants.COIL_HEAT;
+import static gregtech.api.util.GT_RecipeConstants.UniversalChemical;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -721,33 +722,22 @@ public class RecipeLoader_02 {
                 false);
 
         // FeCl2 + Cl = FeCl3
-        GT_Values.RA.addChemicalRecipe(
-                MyMaterial.ferrousChloride.get(OrePrefixes.cell, 1),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.Chlorine.getGas(1000),
-                null,
-                Materials.IronIIIChloride.getCells(1),
-                40);
+        GT_Values.RA.stdBuilder()
+                .itemInputs(MyMaterial.ferrousChloride.get(OrePrefixes.cell, 1), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Chlorine.getGas(1000)).itemOutputs(Materials.IronIIIChloride.getCells(1))
+                .duration(2 * SECONDS).eut(TierEU.RECIPE_LV).addTo(UniversalChemical);
 
         // FeCl3 + H = FeCl2 + HCl
-        GT_Values.RA.addChemicalRecipe(
-                Materials.IronIIIChloride.getCells(1),
-                GT_Utility.getIntegratedCircuit(7),
-                Materials.Hydrogen.getGas(1000),
-                Materials.HydrochloricAcid.getFluid(1000),
-                MyMaterial.ferrousChloride.get(OrePrefixes.cell, 1),
-                80,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.IronIIIChloride.getCells(1), GT_Utility.getIntegratedCircuit(7))
+                .fluidInputs(Materials.Hydrogen.getGas(1000)).fluidOutputs(Materials.HydrochloricAcid.getFluid(1000))
+                .itemOutputs(MyMaterial.ferrousChloride.get(OrePrefixes.cell, 1)).duration(4 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(UniversalChemical);
 
         // NH3 + 2C2H6O = C4H11N + 2H2O
-        GT_Values.RA.addChemicalRecipe(
-                Materials.Ammonia.getCells(1),
-                GT_Utility.getIntegratedCircuit(1),
-                Materials.Ethanol.getFluid(2000),
-                Materials.Water.getFluid(2000),
-                MyMaterial.diethylamine.get(OrePrefixes.cell, 1),
-                200,
-                120);
+        GT_Values.RA.stdBuilder().itemInputs(Materials.Ammonia.getCells(1), GT_Utility.getIntegratedCircuit(1))
+                .fluidInputs(Materials.Ethanol.getFluid(2000)).fluidOutputs(Materials.Water.getFluid(2000))
+                .itemOutputs(MyMaterial.diethylamine.get(OrePrefixes.cell, 1)).duration(10 * SECONDS)
+                .eut(TierEU.RECIPE_MV).addTo(UniversalChemical);
 
         GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(2))
                 .fluidInputs(
