@@ -16,6 +16,7 @@ import static gregtech.api.recipe.RecipeMaps.fluidSolidifierRecipes;
 import static gregtech.api.recipe.RecipeMaps.fusionRecipes;
 import static gregtech.api.recipe.RecipeMaps.mixerRecipes;
 import static gregtech.api.recipe.RecipeMaps.multiblockChemicalReactorRecipes;
+import static gregtech.api.recipe.RecipeMaps.plasmaForgeRecipes;
 import static gregtech.api.recipe.RecipeMaps.unpackagerRecipes;
 import static gregtech.api.recipe.RecipeMaps.vacuumFreezerRecipes;
 import static gregtech.api.util.GT_RecipeBuilder.HOURS;
@@ -1450,16 +1451,14 @@ public class RecipeLoader_02 {
                 1100,
                 1000);
 
-        GT_Values.RA.addPlasmaForgeRecipe(
-                new ItemStack[] { ItemRefer.HiC_T5.get(0) },
-                new FluidStack[] { MyMaterial.metastableOganesson.getMolten(1152),
-                        MyMaterial.preciousMetalAlloy.getMolten(2304), MaterialsUEVplus.SpaceTime.getMolten(288),
-                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(5000) },
-                new ItemStack[] {},
-                new FluidStack[] { MyMaterial.shirabon.getMolten(144) },
-                200,
-                1500000000,
-                13500);
+        GT_Values.RA.stdBuilder().itemInputs(ItemRefer.HiC_T5.get(0))
+                .fluidInputs(
+                        MyMaterial.metastableOganesson.getMolten(1152),
+                        MyMaterial.preciousMetalAlloy.getMolten(2304),
+                        MaterialsUEVplus.SpaceTime.getMolten(288),
+                        MaterialsUEVplus.DimensionallyTranscendentResidue.getFluid(5000))
+                .fluidOutputs(MyMaterial.shirabon.getMolten(144)).duration(10 * SECONDS).eut(1500000000)
+                .metadata(COIL_HEAT, 13500).addTo(plasmaForgeRecipes);
     }
 
     public static void FinishLoadRecipe() {
