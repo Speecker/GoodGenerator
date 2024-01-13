@@ -1,6 +1,7 @@
 package goodgenerator.util;
 
 import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
+import static gregtech.api.recipe.RecipeMaps.crackingRecipes;
 import static gregtech.api.recipe.RecipeMaps.distillationTowerRecipes;
 import static gregtech.api.recipe.RecipeMaps.distilleryRecipes;
 import static gregtech.api.recipe.RecipeMaps.extruderRecipes;
@@ -41,27 +42,17 @@ public class CrackRecipeAdder {
         FluidStack[] actOutput = new FluidStack[num];
         name = inputFluid.getFluid().getName().replaceAll(" ", "");
 
-        GT_Values.RA.addCrackingRecipe(
-                1,
-                inputFluid,
-                cracker,
-                FluidRegistry.getFluidStack("lightlycracked" + name, 1000),
-                (int) (Duration * 0.8),
-                EUt);
-        GT_Values.RA.addCrackingRecipe(
-                2,
-                inputFluid,
-                cracker,
-                FluidRegistry.getFluidStack("moderatelycracked" + name, 1000),
-                Duration,
-                EUt);
-        GT_Values.RA.addCrackingRecipe(
-                3,
-                inputFluid,
-                cracker,
-                FluidRegistry.getFluidStack("heavilycracked" + name, 1000),
-                (int) (Duration * 1.2),
-                EUt);
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(1)).fluidInputs(inputFluid, cracker)
+                .fluidOutputs(FluidRegistry.getFluidStack("lightlycracked" + name, 1000))
+                .duration(Math.max((long) (Duration * 0.8), 1L) * TICKS).eut(EUt).addTo(crackingRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(2)).fluidInputs(inputFluid, cracker)
+                .fluidOutputs(FluidRegistry.getFluidStack("moderatelycracked" + name, 1000))
+                .duration(Math.max((long) (Duration), 1L) * TICKS).eut(EUt).addTo(crackingRecipes);
+
+        GT_Values.RA.stdBuilder().itemInputs(GT_Utility.getIntegratedCircuit(3)).fluidInputs(inputFluid, cracker)
+                .fluidOutputs(FluidRegistry.getFluidStack("heavilycracked" + name, 1000))
+                .duration(Math.max((long) (Duration * 1.2), 1L) * TICKS).eut(EUt).addTo(crackingRecipes);
 
         for (int i = num - 1, j = 0; i >= 0; i--, j++) {
             Fluid tmp1 = outputFluids[i].getFluid();
