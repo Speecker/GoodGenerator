@@ -109,7 +109,6 @@ public class RecipeLoader_02 {
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.shirabon, 600, 31457280, 13000, true);
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.atomicSeparationCatalyst, 35000, 120, 5000, false);
 
-
         GT_ModHandler.removeFurnaceSmelting(MyMaterial.dalisenite.get(OrePrefixes.dust)); // :doom:
 
         GT_Values.RA.stdBuilder().itemInputs(MyMaterial.dalisenite.get(OrePrefixes.ingotHot, 1))
