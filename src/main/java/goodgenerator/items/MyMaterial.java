@@ -252,7 +252,7 @@ public class MyMaterial implements Runnable {
             new short[] { 0xe8, 0x5e, 0x0c },
             "Atomic Separation Catalyst",
             "the melting core...",
-            new Werkstoff.Stats().setMeltingPoint(5000).setBlastFurnace(true),
+            new Werkstoff.Stats().setMeltingPoint(5000),
             Werkstoff.Types.COMPOUND,
             new Werkstoff.GenerationFeatures().disable().onlyDust().addMolten().addMetalItems()
                     .addSimpleMetalWorkingItems().addCraftingMetalWorkingItems().addMultipleIngotMetalWorkingItems(),

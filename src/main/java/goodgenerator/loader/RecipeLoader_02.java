@@ -107,6 +107,8 @@ public class RecipeLoader_02 {
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.enrichedNaquadahAlloy, 2400, 7864320, 11000, true);
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.metastableOganesson, 600, 7864320, 12000, true);
         CrackRecipeAdder.reAddBlastRecipe(MyMaterial.shirabon, 600, 31457280, 13000, true);
+        CrackRecipeAdder.reAddBlastRecipe(MyMaterial.atomicSeparationCatalyst, 35000, 120, 5000, false);
+
 
         GT_ModHandler.removeFurnaceSmelting(MyMaterial.dalisenite.get(OrePrefixes.dust)); // :doom:
 
