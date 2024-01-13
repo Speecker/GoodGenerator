@@ -8,6 +8,7 @@ import static gregtech.api.recipe.RecipeMaps.blastFurnaceRecipes;
 import static gregtech.api.recipe.RecipeMaps.cannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.centrifugeRecipes;
 import static gregtech.api.recipe.RecipeMaps.chemicalBathRecipes;
+import static gregtech.api.recipe.RecipeMaps.distillationTowerRecipes;
 import static gregtech.api.recipe.RecipeMaps.distilleryRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidCannerRecipes;
 import static gregtech.api.recipe.RecipeMaps.fluidExtractionRecipes;
@@ -677,13 +678,12 @@ public class RecipeLoader_02 {
                 .itemOutputs(WerkstoffLoader.Tiberium.get(OrePrefixes.gem, 1)).duration(20 * SECONDS)
                 .eut(TierEU.RECIPE_EV).addTo(chemicalBathRecipes);
 
-        GT_Values.RA.addDistillationTowerRecipe(
-                Materials.HeavyFuel.getFluid(1000),
-                new FluidStack[] { Materials.Toluene.getFluid(400), Materials.Benzene.getFluid(400),
-                        Materials.Phenol.getFluid(250) },
-                null,
-                120,
-                480);
+        GT_Values.RA.stdBuilder().fluidInputs(Materials.HeavyFuel.getFluid(1000))
+                .fluidOutputs(
+                        Materials.Toluene.getFluid(400),
+                        Materials.Benzene.getFluid(400),
+                        Materials.Phenol.getFluid(250))
+                .duration(6 * SECONDS).eut(TierEU.RECIPE_HV).addTo(distillationTowerRecipes);
 
         GT_Values.RA.stdBuilder().itemInputs(Materials.Coal.getGems(1)).itemOutputs(Materials.Ash.getDust(1))
                 .outputChances(10).fluidOutputs(FluidRegistry.getFluidStack("fluid.coaltar", 250)).duration(3 * SECONDS)
