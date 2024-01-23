@@ -216,7 +216,7 @@ public class UniversalChemicalFuelEngine extends GT_MetaTileEntity_TooltipMultiB
         result = processFuel(tFluids, RecipeMaps.gasTurbineFuels, PromoterAmount, GAS_EFFICIENCY_COEFFICIENT, 1);
         if (result.wasSuccessful()) return result;
 
-        if (GTPlusPlus.isModLoaded()){
+        if (GTPlusPlus.isModLoaded()) {
             result = processFuel(tFluids, GTPPRecipeMaps.rocketFuels, PromoterAmount, ROCKET_EFFICIENCY_COEFFICIENT, 3);
             if (result.wasSuccessful()) return result;
         }
