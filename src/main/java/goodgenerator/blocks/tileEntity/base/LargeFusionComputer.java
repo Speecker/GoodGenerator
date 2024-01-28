@@ -5,6 +5,8 @@ import static gregtech.api.enums.Textures.BlockIcons.*;
 import static gregtech.api.util.GT_StructureUtility.ofFrame;
 import static gregtech.api.util.GT_Utility.filterValidMTEs;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -41,6 +43,7 @@ import gregtech.api.interfaces.metatileentity.IMetaTileEntity;
 import gregtech.api.interfaces.tileentity.IGregTechTileEntity;
 import gregtech.api.interfaces.tileentity.IOverclockDescriptionProvider;
 import gregtech.api.logic.ProcessingLogic;
+import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Energy;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Input;
 import gregtech.api.metatileentity.implementations.GT_MetaTileEntity_Hatch_Output;
@@ -274,27 +277,22 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
             }
             if (mStartUpCheck < 0) {
                 if (mMachine) {
-                    long mStoredEUt = aBaseMetaTileEntity.getStoredEU();
-                    long energyToMove = getSingleHatchPower();
-                    if (this.mEnergyHatches != null) {
-                        for (GT_MetaTileEntity_Hatch_Energy tHatch : filterValidMTEs(mEnergyHatches)) {
-                            if (aBaseMetaTileEntity.getStoredEU() + energyToMove < maxEUStore()
-                                    && tHatch.getBaseMetaTileEntity().decreaseStoredEnergyUnits(energyToMove, false)) {
-                                aBaseMetaTileEntity.increaseStoredEnergyUnits(energyToMove, true);
-                            }
-                        }
-                    }
-                    if (this.eEnergyMulti != null) {
-                        for (GT_MetaTileEntity_Hatch_EnergyMulti tHatch : filterValidMTEs(eEnergyMulti)) {
-                            if (aBaseMetaTileEntity.getStoredEU() + energyToMove < maxEUStore()
-                                    && tHatch.getBaseMetaTileEntity().decreaseStoredEnergyUnits(energyToMove, false)) {
-                                aBaseMetaTileEntity.increaseStoredEnergyUnits(energyToMove, true);
-                            }
-                        }
-                    }
-                    if (mStoredEUt <= 0 && mMaxProgresstime > 0) {
+                    if (aBaseMetaTileEntity.getStoredEU() <= 0 && mMaxProgresstime > 0) {
                         criticalStopMachine();
                     }
+
+                    long energyLimit = getSingleHatchPower();
+                    List<GT_MetaTileEntity_Hatch> hatches = getExoticAndNormalEnergyHatchList();
+                    for (GT_MetaTileEntity_Hatch hatch : filterValidMTEs(hatches)) {
+                        long consumableEnergy = Math.min(hatch.getEUVar(), energyLimit);
+                        long receivedEnergy = Math
+                                .min(consumableEnergy, maxEUStore() - aBaseMetaTileEntity.getStoredEU());
+                        if (receivedEnergy > 0) {
+                            hatch.getBaseMetaTileEntity().decreaseStoredEnergyUnits(receivedEnergy, false);
+                            aBaseMetaTileEntity.increaseStoredEnergyUnits(receivedEnergy, true);
+                        }
+                    }
+
                     if (mMaxProgresstime > 0) {
                         this.getBaseMetaTileEntity().decreaseStoredEnergyUnits(-lEUt, true);
                         if (mMaxProgresstime > 0 && ++mProgresstime >= mMaxProgresstime) {
@@ -586,7 +584,7 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
                         + EnumChatFormatting.RESET,
                 StatCollector.translateToLocal("GT5U.fusion.req") + ": "
                         + EnumChatFormatting.RED
-                        + GT_Utility.formatNumbers(-lEUt)
+                        + GT_Utility.formatNumbers(lEUt)
                         + EnumChatFormatting.RESET
                         + "EU/t",
                 StatCollector.translateToLocal("GT5U.multiblock.energy") + ": "
