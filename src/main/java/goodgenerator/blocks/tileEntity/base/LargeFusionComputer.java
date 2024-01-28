@@ -499,14 +499,12 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
     private boolean addEnergyInjector(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
         IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
-        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Energy) {
-            GT_MetaTileEntity_Hatch_Energy tHatch = (GT_MetaTileEntity_Hatch_Energy) aMetaTileEntity;
-            if (tHatch.mTier < hatchTier()) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Energy tHatch) {
+            if (tHatch.getTierForStructure() < hatchTier()) return false;
             tHatch.updateTexture(aBaseCasingIndex);
             return mEnergyHatches.add(tHatch);
-        } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_EnergyMulti) {
-            GT_MetaTileEntity_Hatch_EnergyMulti tHatch = (GT_MetaTileEntity_Hatch_EnergyMulti) aMetaTileEntity;
-            if (tHatch.mTier < hatchTier()) return false;
+        } else if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_EnergyMulti tHatch) {
+            if (tHatch.getTierForStructure() < hatchTier()) return false;
             tHatch.updateTexture(aBaseCasingIndex);
             return eEnergyMulti.add(tHatch);
         }
@@ -516,19 +514,21 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
     private boolean addFluidIO(IGregTechTileEntity aBaseMetaTileEntity, int aBaseCasingIndex) {
         IMetaTileEntity aMetaTileEntity = aBaseMetaTileEntity.getMetaTileEntity();
         if (aMetaTileEntity == null) return false;
+        if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch hatch) {
+            hatch.updateTexture(aBaseCasingIndex);
+            hatch.updateCraftingIcon(this.getMachineCraftingIcon());
+        }
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Input tInput) {
             if (tInput.getTierForStructure() < hatchTier()) return false;
-            tInput.updateTexture(aBaseCasingIndex);
             tInput.mRecipeMap = getRecipeMap();
             return mInputHatches.add(tInput);
         }
         if (aMetaTileEntity instanceof GT_MetaTileEntity_Hatch_Output tOutput) {
             if (tOutput.getTierForStructure() < hatchTier()) return false;
-            tOutput.updateTexture(aBaseCasingIndex);
             return mOutputHatches.add(tOutput);
         }
         if (aMetaTileEntity instanceof IDualInputHatch tInput) {
-            tInput.updateTexture(aBaseCasingIndex);
+            tInput.updateCraftingIcon(this.getMachineCraftingIcon());
             return mDualInputHatches.add(tInput);
         }
         return false;
