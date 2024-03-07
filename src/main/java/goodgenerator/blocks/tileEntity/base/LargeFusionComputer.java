@@ -326,6 +326,7 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
                                             < this.mLastRecipe.mSpecialValue + this.lEUt) {
                                         mMaxProgresstime = 0;
                                         turnCasingActive(false);
+                                        criticalStopMachine();
                                     }
                                     getBaseMetaTileEntity().decreaseStoredEnergyUnits(
                                             this.mLastRecipe.mSpecialValue + this.lEUt,
