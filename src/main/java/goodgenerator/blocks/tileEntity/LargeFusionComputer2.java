@@ -42,10 +42,10 @@ public class LargeFusionComputer2 extends LargeFusionComputer {
         tt.addMachineType("Fusion Reactor").addInfo("Millions of nuclear.")
                 .addInfo("Controller block for the Compact Fusion Reactor MK-II.")
                 .addInfo(
-                        EnumChatFormatting.BLUE + GT_Utility.formatNumbers(getSingleHatchPower())
+                        EnumChatFormatting.AQUA + GT_Utility.formatNumbers(getSingleHatchPower())
                                 + EnumChatFormatting.GRAY
-                                + "EU/t and "
-                                + EnumChatFormatting.BLUE
+                                + " EU/t and "
+                                + EnumChatFormatting.AQUA
                                 + GT_Utility.formatNumbers(capableStartupCanonical() / 32 / M)
                                 + "M"
                                 + EnumChatFormatting.GRAY

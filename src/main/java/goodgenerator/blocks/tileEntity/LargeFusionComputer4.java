@@ -46,10 +46,10 @@ public class LargeFusionComputer4 extends LargeFusionComputerPP {
         tt.addMachineType("Fusion Reactor").addInfo("Galaxy Collapse.")
                 .addInfo("Controller block for the Compact Fusion Reactor MK-IV Prototype.")
                 .addInfo(
-                        EnumChatFormatting.BLUE + GT_Utility.formatNumbers(getSingleHatchPower())
+                        EnumChatFormatting.AQUA + GT_Utility.formatNumbers(getSingleHatchPower())
                                 + EnumChatFormatting.GRAY
-                                + "EU/t and "
-                                + EnumChatFormatting.BLUE
+                                + " EU/t and "
+                                + EnumChatFormatting.AQUA
                                 + GT_Utility.formatNumbers(capableStartupCanonical() / 32 / M)
                                 + "M"
                                 + EnumChatFormatting.GRAY

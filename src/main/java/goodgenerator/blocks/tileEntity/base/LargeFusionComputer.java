@@ -356,7 +356,7 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
      * @return The power one hatch can deliver to the reactor
      */
     protected long getSingleHatchPower() {
-        return GT_Values.V[tier()] * getMaxPara() * extraPara(100);
+        return GT_Values.V[tier()] * getMaxPara() * extraPara(100) / 32;
     }
 
     public boolean turnCasingActive(boolean status) {
