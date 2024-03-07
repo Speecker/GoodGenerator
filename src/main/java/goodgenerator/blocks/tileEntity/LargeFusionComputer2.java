@@ -147,11 +147,6 @@ public class LargeFusionComputer2 extends LargeFusionComputer {
     }
 
     @Override
-    public int tierOverclock() {
-        return 2;
-    }
-
-    @Override
     public String[] getStructureDescription(ItemStack stackSize) {
         return DescTextLocalization.addText("LargeFusion2.hint", 9);
     }
