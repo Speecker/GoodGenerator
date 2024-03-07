@@ -69,6 +69,7 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
         implements IConstructable, ISurvivalConstructable, IOverclockDescriptionProvider {
 
     public static final String MAIN_NAME = "largeFusion";
+    public static final int M = 1_000_000;
     private boolean isLoadedChunk;
     public GT_Recipe mLastRecipe;
     public int para;
@@ -140,7 +141,9 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
     public abstract int tier();
 
     @Override
-    public abstract long maxEUStore();
+    public long maxEUStore() {
+        return capableStartupCanonical() * (Math.min(32, this.mEnergyHatches.size() + this.eEnergyMulti.size())) / 32L;
+    }
 
     /**
      * Unlike {@link #maxEUStore()}, this provides theoretical limit of startup EU, without considering the amount of
@@ -354,7 +357,7 @@ public abstract class LargeFusionComputer extends GT_MetaTileEntity_TooltipMulti
      * @return The power one hatch can deliver to the reactor
      */
     protected long getSingleHatchPower() {
-        return 2048L * tierOverclock() * getMaxPara() * extraPara(100);
+        return GT_Values.V[tier()] * getMaxPara() * extraPara(100);
     }
 
     public boolean turnCasingActive(boolean status) {
