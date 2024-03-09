@@ -24,6 +24,7 @@ import com.gtnewhorizon.structurelib.alignment.constructable.ISurvivalConstructa
 import com.gtnewhorizon.structurelib.structure.IStructureDefinition;
 import com.gtnewhorizon.structurelib.structure.ISurvivalBuildEnvironment;
 import com.gtnewhorizon.structurelib.structure.StructureDefinition;
+import com.gtnewhorizons.modularui.api.NumberFormatMUI;
 import com.gtnewhorizons.modularui.common.widget.DynamicPositionedColumn;
 import com.gtnewhorizons.modularui.common.widget.FakeSyncWidget;
 import com.gtnewhorizons.modularui.common.widget.SlotWidget;
@@ -68,6 +69,7 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected int height = 0;
     protected int eV = 0, mCeil = 0, mFloor = 0;
     private GT_Recipe lastRecipe;
+    protected static final NumberFormatMUI numberFormat = new NumberFormatMUI();
     final XSTR R = new XSTR();
 
     private static final IIconContainer textureFontOn = new Textures.BlockIcons.CustomIcon("icons/NeutronActivator_On");
@@ -444,23 +446,10 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                         new TextWidget(StatCollector.translateToLocal("gui.NeutronActivator.0"))
                                 .setDefaultColor(COLOR_TEXT_WHITE.get()))
                 .widget(
-                        TextWidget.dynamicString(() -> processNumber(eV) + "eV").setSynced(false)
+                        new TextWidget().setStringSupplier(() -> numberFormat.formatWithSuffix(eV) + "eV")
                                 .setDefaultColor(COLOR_TEXT_WHITE.get())
                                 .setEnabled(widget -> getBaseMetaTileEntity().getErrorDisplayID() == 0))
                 .widget(new FakeSyncWidget.IntegerSyncer(() -> eV, val -> eV = val));
-    }
-
-    private String processNumber(int num) {
-        float num2;
-        num2 = ((float) num) / 1000F;
-        if (num2 <= 0) {
-            return String.format("%d", num);
-        }
-        if (num2 < 1000.0) {
-            return String.format("%.1fK", num2);
-        }
-        num2 /= 1000F;
-        return String.format("%.1fM", num2);
     }
 
     private enum NeutronHatchElement implements IHatchElement<NeutronActivator> {
