@@ -34,7 +34,6 @@ import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronAccelerator;
 import goodgenerator.blocks.tileEntity.GTMetaTileEntity.NeutronSensor;
 import goodgenerator.blocks.tileEntity.base.GT_MetaTileEntity_TooltipMultiBlockBase_EM;
 import goodgenerator.loader.Loaders;
-import goodgenerator.util.CharExchanger;
 import goodgenerator.util.DescTextLocalization;
 import goodgenerator.util.ItemRefer;
 import gregtech.api.GregTech_API;
@@ -346,12 +345,7 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             if (this.eV > maxNeutronKineticEnergy()) doExplosion(4 * 32);
 
             for (NeutronSensor tHatch : mNeutronSensor) {
-                String tText = tHatch.getText();
-                if (CharExchanger.isValidCompareExpress(rawProcessExp(tText))) {
-                    if (CharExchanger.compareExpression(rawProcessExp(tText), eV)) {
-                        tHatch.outputRedstoneSignal();
-                    } else tHatch.stopOutputRedstoneSignal();
-                }
+                tHatch.updateRedstoneOutput(this.eV);
             }
 
             if (mProgresstime < mMaxProgresstime && (eV > mCeil || eV < mFloor)) {
@@ -360,26 +354,6 @@ public class NeutronActivator extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             }
             endRecipeProcessing();
         }
-    }
-
-    public static String rawProcessExp(String exp) {
-        StringBuilder ret = new StringBuilder();
-        for (char c : exp.toCharArray()) {
-            if (exp.length() - ret.length() == 3) {
-                if (Character.isDigit(c)) ret.append(c);
-                else {
-                    if (c == 'K' || c == 'k') {
-                        ret.append("000");
-                    }
-                    if (c == 'M' || c == 'm') {
-                        ret.append("000000");
-                    }
-                }
-                break;
-            }
-            ret.append(c);
-        }
-        return ret.toString();
     }
 
     @Override
