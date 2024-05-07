@@ -74,6 +74,9 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected IStructureDefinition<YottaFluidTank> multiDefinition = null;
     protected final ArrayList<YOTTAHatch> mYottaHatch = new ArrayList<>();
 
+    private static final BigInteger ONE_HUNDRED = BigInteger.valueOf(100);
+    private static final BigInteger FIVE = BigInteger.valueOf(5);
+
     /** Tank capacity */
     public BigInteger mStorage = BigInteger.ZERO;
     /** Amount of fluid millibuckets currently in the tank */
@@ -87,6 +90,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected final String YOTTANK_MID = mName + "mid";
     protected final String YOTTANK_TOP = mName + "top";
     protected final NumberFormatMUI numberFormat = new NumberFormatMUI();
+    private int workTickCounter = 0;
 
     private static final BigInteger MAX_INT_BIGINT = BigInteger.valueOf(Integer.MAX_VALUE);
 
@@ -168,7 +172,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
 
     /**
      * Attempts to remove {@code amount} of fluid from the tank if possible, does not do partial removals.
-     * 
+     *
      * @param amount The millibucket amount of the fluid to remove
      * @return True if successfully removed amount, false if no fluid was removed.
      */
@@ -185,7 +189,7 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     /**
      * Attempts to put {@code amount} of fluid into the tank if possible, fails if there's not enough space for all of
      * it.
-     * 
+     *
      * @param amount The millibucket amount of the fluid to insert
      * @return True if successfully added the given amount of fluid to the tank, false if failed.
      */
@@ -357,8 +361,6 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                                 + EnumChatFormatting.RESET) };
     }
 
-    static final BigInteger ONE_HUNDRED = BigInteger.valueOf(100);
-
     private String getPercent() {
         if (mStorage.signum() == 0) return "0";
         return mStorageCurrent.multiply(ONE_HUNDRED).divide(mStorage).toString();
@@ -401,6 +403,12 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     public boolean onRunningTick(ItemStack aStack) {
         super.onRunningTick(aStack);
         if (this.getBaseMetaTileEntity().isServerSide()) {
+            ++workTickCounter;
+            if (workTickCounter < 20) {
+                return true;
+            }
+            workTickCounter = 0;
+
             List<FluidStack> tStore = getStoredFluids();
             for (FluidStack tFluid : tStore) {
                 if (tFluid == null) continue;
@@ -435,8 +443,8 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             }
 
             if (StringUtils.isNotEmpty(mFluidName)) {
-                int outputAmount = mStorageCurrent.divide(ONE_HUNDRED).min(MAX_INT_BIGINT).max(BigInteger.ONE)
-                        .intValueExact();
+                // Try to drain 1% of the tank per tick, so 20% per second aka 1/5
+                int outputAmount = mStorageCurrent.divide(FIVE).min(MAX_INT_BIGINT).max(BigInteger.ONE).intValueExact();
                 final int originalOutputAmount = outputAmount;
 
                 final FluidStack fluidToOutput = FluidRegistry.getFluidStack(mFluidName, outputAmount);
