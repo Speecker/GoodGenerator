@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import com.github.bartimaeusnek.bartworks.API.BorosilicateGlass;
@@ -73,8 +74,10 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected IStructureDefinition<YottaFluidTank> multiDefinition = null;
     protected final ArrayList<YOTTAHatch> mYottaHatch = new ArrayList<>();
 
-    public BigInteger mStorage = new BigInteger("0", 10);
-    public BigInteger mStorageCurrent = new BigInteger("0", 10);
+    /** Tank capacity */
+    public BigInteger mStorage = BigInteger.ZERO;
+    /** Amount of fluid millibuckets currently in the tank */
+    public BigInteger mStorageCurrent = BigInteger.ZERO;
     public String mFluidName = "";
     public String mLockedFluidName = "";
     protected boolean isFluidLocked = false;
@@ -84,6 +87,8 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     protected final String YOTTANK_MID = mName + "mid";
     protected final String YOTTANK_TOP = mName + "top";
     protected final NumberFormatMUI numberFormat = new NumberFormatMUI();
+
+    private static final BigInteger MAX_INT_BIGINT = BigInteger.valueOf(Integer.MAX_VALUE);
 
     protected boolean voidExcessEnabled = false;
 
@@ -112,15 +117,14 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
     }
 
     public String getFluidName() {
-        if (mFluidName == null || mFluidName.equals("") || FluidRegistry.getFluidStack(mFluidName, 1) == null)
+        if (StringUtils.isEmpty(mFluidName) || !FluidRegistry.isFluidRegistered(mFluidName))
             return StatCollector.translateToLocal("scanner.info.YOTTank.empty");
         return FluidRegistry.getFluidStack(mFluidName, 1).getLocalizedName();
     }
 
     public String getLockedFluidName() {
         if (!isFluidLocked) return StatCollector.translateToLocal("scanner.info.YOTTank.none");
-        if (mLockedFluidName == null || mLockedFluidName.equals("")
-                || FluidRegistry.getFluidStack(mLockedFluidName, 1) == null)
+        if (StringUtils.isEmpty(mLockedFluidName) || !FluidRegistry.isFluidRegistered(mLockedFluidName))
             return StatCollector.translateToLocal("scanner.info.YOTTank.next");
         return FluidRegistry.getFluidStack(mLockedFluidName, 1).getLocalizedName();
     }
@@ -162,31 +166,48 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return voidExcessEnabled;
     }
 
+    /**
+     * Attempts to remove {@code amount} of fluid from the tank if possible, does not do partial removals.
+     * 
+     * @param amount The millibucket amount of the fluid to remove
+     * @return True if successfully removed amount, false if no fluid was removed.
+     */
     public boolean reduceFluid(long amount) {
-        BigInteger tmp = new BigInteger(amount + "");
-        if (mStorageCurrent.compareTo(tmp) < 0) {
+        final BigInteger bigAmount = BigInteger.valueOf(amount);
+        if (mStorageCurrent.compareTo(bigAmount) < 0) {
             return false;
         } else {
-            mStorageCurrent = mStorageCurrent.subtract(tmp);
+            mStorageCurrent = mStorageCurrent.subtract(bigAmount);
             return true;
         }
     }
 
+    /**
+     * Attempts to put {@code amount} of fluid into the tank if possible, fails if there's not enough space for all of
+     * it.
+     * 
+     * @param amount The millibucket amount of the fluid to insert
+     * @return True if successfully added the given amount of fluid to the tank, false if failed.
+     */
     public boolean addFluid(long amount) {
-        BigInteger tmp = new BigInteger(amount + "");
-        if (mStorage.subtract(mStorageCurrent).compareTo(tmp) < 0) {
+        final BigInteger bigAmount = BigInteger.valueOf(amount);
+        final BigInteger newTotal = mStorageCurrent.add(bigAmount);
+        if (newTotal.compareTo(mStorage) > 0) {
             return false;
         } else {
-            mStorageCurrent = mStorageCurrent.add(tmp);
+            mStorageCurrent = newTotal;
             return true;
         }
     }
+
+    // Avoid allocating a new array on every query
+    private final FluidTankInfo[] tankInfoCache = new FluidTankInfo[1];
 
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection aSide) {
-        int fluidSize = mStorageCurrent.compareTo(new BigInteger(Integer.MAX_VALUE + "")) > 0 ? Integer.MAX_VALUE
-                : mStorageCurrent.intValue();
-        return new FluidTankInfo[] { new FluidTankInfo(FluidRegistry.getFluidStack(mFluidName, fluidSize), fluidSize) };
+        int fluidSize = mStorageCurrent.compareTo(MAX_INT_BIGINT) > 0 ? Integer.MAX_VALUE : mStorageCurrent.intValue();
+        tankInfoCache[0] = new FluidTankInfo(FluidRegistry.getFluidStack(mFluidName, fluidSize), fluidSize);
+        return tankInfoCache;
     }
 
     @Override
@@ -336,9 +357,11 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
                                 + EnumChatFormatting.RESET) };
     }
 
+    static final BigInteger ONE_HUNDRED = BigInteger.valueOf(100);
+
     private String getPercent() {
         if (mStorage.signum() == 0) return "0";
-        return String.valueOf(mStorageCurrent.multiply(new BigInteger("100")).divide(mStorage));
+        return mStorageCurrent.multiply(ONE_HUNDRED).divide(mStorage).toString();
     }
 
     @Override
@@ -357,11 +380,21 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return tt;
     }
 
+    private static final BigInteger[] storageWithCells;
+
+    static {
+        storageWithCells = new BigInteger[10];
+        final BigInteger baseStorage = BigInteger.valueOf(1_000_000);
+        final BigInteger storageMultiplier = BigInteger.valueOf(100);
+        BigInteger currentStorage = baseStorage;
+        for (int i = 0; i < 10; i++) {
+            storageWithCells[i] = currentStorage;
+            currentStorage = currentStorage.multiply(storageMultiplier);
+        }
+    }
+
     public BigInteger calStorage(int meta) {
-        StringBuilder cap = new StringBuilder();
-        cap.append("1000000");
-        for (int i = 0; i < meta; ++i) cap.append("00");
-        return new BigInteger(cap.toString());
+        return storageWithCells[meta];
     }
 
     @Override
@@ -372,56 +405,71 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
             for (FluidStack tFluid : tStore) {
                 if (tFluid == null) continue;
                 if (isFluidLocked) {
-                    if (mLockedFluidName != null && !mLockedFluidName.equals("")) {
+                    if (StringUtils.isNotEmpty(mLockedFluidName)) {
                         if (!tFluid.getFluid().getName().equals(mLockedFluidName)) continue;
                     } else {
                         mLockedFluidName = tFluid.getFluid().getName();
                     }
                 }
-                if (mFluidName == null || mFluidName.equals("") || tFluid.getFluid().getName().equals(mFluidName)) {
-                    if (mFluidName == null || mFluidName.equals("")) {
+                if (StringUtils.isEmpty(mFluidName) || tFluid.getFluid().getName().equals(mFluidName)) {
+                    if (StringUtils.isEmpty(mFluidName)) {
                         mFluidName = tFluid.getFluid().getName();
                     }
-                    if (mStorageCurrent.add(new BigInteger(tFluid.amount + "")).compareTo(mStorage) < 0) {
+                    if (addFluid(tFluid.amount)) {
                         mStorageCurrent = mStorageCurrent.add(new BigInteger(tFluid.amount + ""));
                         tFluid.amount = 0;
                     } else {
-                        BigInteger delta = mStorage.subtract(mStorageCurrent);
-                        mStorageCurrent = mStorageCurrent.add(delta);
                         if (voidExcessEnabled) {
                             tFluid.amount = 0;
                         } else {
-                            tFluid.amount -= delta.intValue();
+                            final BigInteger delta = mStorage.subtract(mStorageCurrent);
+                            tFluid.amount -= delta.intValueExact();
                         }
+                        mStorageCurrent = mStorage;
                     }
                 }
             }
-            BigInteger outputAmount = mStorageCurrent.divide(new BigInteger("100", 10));
-            if (outputAmount.compareTo(new BigInteger(Integer.MAX_VALUE + "", 10)) > 0)
-                outputAmount = new BigInteger(Integer.MAX_VALUE + "");
-            if (outputAmount.compareTo(BigInteger.ONE) <= 0) outputAmount = new BigInteger("1", 10);
 
-            if (mStorageCurrent.compareTo(BigInteger.ZERO) <= 0) mFluidName = "";
+            if (mStorageCurrent.compareTo(BigInteger.ZERO) <= 0) {
+                mFluidName = "";
+            }
 
-            if (mFluidName != null && !mFluidName.equals("")) {
-                for (GT_MetaTileEntity_Hatch outputHatch : mOutputHatches) {
-                    FluidStack tHatchFluid = outputHatch.mFluid;
-                    FluidStack tOutput = FluidRegistry.getFluidStack(mFluidName, outputAmount.intValue());
-                    if (tHatchFluid != null && tHatchFluid.isFluidEqual(tOutput)) {
-                        int leftSpace = outputHatch.getCapacity() - tHatchFluid.amount;
-                        if (leftSpace < tOutput.amount) {
-                            if (reduceFluid(leftSpace)) tHatchFluid.amount += leftSpace;
+            if (StringUtils.isNotEmpty(mFluidName)) {
+                int outputAmount = mStorageCurrent.divide(ONE_HUNDRED).min(MAX_INT_BIGINT).max(BigInteger.ONE)
+                        .intValueExact();
+                final int originalOutputAmount = outputAmount;
+
+                final FluidStack fluidToOutput = FluidRegistry.getFluidStack(mFluidName, outputAmount);
+                for (final GT_MetaTileEntity_Hatch outputHatch : mOutputHatches) {
+                    final FluidStack fluidInHatch = outputHatch.mFluid;
+
+                    final int remainingHatchSpace;
+                    if (fluidInHatch != null) {
+                        if (fluidInHatch.isFluidEqual(fluidToOutput)) {
+                            remainingHatchSpace = outputHatch.getCapacity() - fluidInHatch.amount;
                         } else {
-                            if (reduceFluid(tOutput.amount)) tHatchFluid.amount += tOutput.amount;
+                            continue;
                         }
-                    } else if (tHatchFluid == null) {
-                        int leftSpace = outputHatch.getCapacity();
-                        if (leftSpace < tOutput.amount) {
-                            if (reduceFluid(leftSpace))
-                                outputHatch.fill(FluidRegistry.getFluidStack(mFluidName, leftSpace), true);
-                        } else {
-                            if (reduceFluid(tOutput.amount)) outputHatch.fill(tOutput, true);
-                        }
+                    } else {
+                        remainingHatchSpace = outputHatch.getCapacity();
+                    }
+
+                    final int amountToFillHatch = Math.min(remainingHatchSpace, outputAmount);
+                    if (amountToFillHatch <= 0) {
+                        continue;
+                    }
+                    final FluidStack fillStack = fluidToOutput.copy();
+                    fillStack.amount = amountToFillHatch;
+                    final int transferredAmount = outputHatch.fill(fillStack, true);
+                    outputAmount -= transferredAmount;
+                }
+
+                final int totalDrainedAmount = originalOutputAmount - outputAmount;
+                if (totalDrainedAmount > 0) {
+                    mStorageCurrent = mStorageCurrent.subtract(BigInteger.valueOf(totalDrainedAmount));
+                    if (mStorageCurrent.signum() < 0) {
+                        throw new IllegalStateException(
+                                "YOTTank drained beyond its fluid amount, indicating logic bug: " + mStorageCurrent);
                     }
                 }
             }
