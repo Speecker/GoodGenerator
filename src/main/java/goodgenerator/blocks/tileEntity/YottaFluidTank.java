@@ -139,6 +139,24 @@ public class YottaFluidTank extends GT_MetaTileEntity_TooltipMultiBlockBase_EM
         return mLockedFluid.getLocalizedName();
     }
 
+    // some way to call setFluidName(draggedFluid) from a selected fluid dragged into a field (like with a super tank) FluidStack mLockedFluid
+    /* WIP
+    @Override
+    public void setLockedFluidName(String lockedFluidName) {
+        lockedFluidName = GT_Utility.isStringInvalid(lockedFluidName) ? null : lockedFluidName;
+        this.lockedFluidName = lockedFluidName;
+        if (lockedFluidName != null) {
+            Fluid fluid = FluidRegistry.getFluid(lockedFluidName); // import net.minecraftforge.fluids.Fluid;
+            if (fluid != null) {
+                // create new FluidStack, otherwise existing 0-amount FluidStack will
+                // prevent new fluid from being locked
+                setFillableStack(new FluidStack(fluid, getFluidAmount()));
+                isFluidLocked = true;
+                mLockedFluid = ;
+            }
+    }
+    */
+    
     @Override
     public void loadNBTData(NBTTagCompound aNBT) {
         String tAmount = aNBT.getString("mStorage");
